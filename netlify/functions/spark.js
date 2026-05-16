@@ -59,7 +59,7 @@ exports.handler = async (event) => {
         "anthropic-version": "2023-06-01"
       },
       body: JSON.stringify({
-        model: "claude-3-5-haiku-latest",
+        model: "claude-haiku-4-5",
         max_tokens: 800,
         temperature: 0.7,
         system: "You generate concise productivity suggestions for a notes/tasks app. Return only valid JSON with a string summary and exactly 3 suggestions. Each suggestion has type note|task, title, body, label work|home|ideas|personal, optional color sun|mint|sky|rose|ink, optional priority low|normal|high, optional dueOffsetDays 1-14.",
