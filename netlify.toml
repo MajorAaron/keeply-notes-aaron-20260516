@@ -1,5 +1,16 @@
 [build]
   publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/items"
+  to = "/.netlify/functions/items"
+  status = 200
+
+[[redirects]]
+  from = "/api/spark"
+  to = "/.netlify/functions/spark"
+  status = 200
 
 [[headers]]
   for = "/*"

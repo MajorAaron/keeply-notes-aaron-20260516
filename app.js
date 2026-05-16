@@ -1,5 +1,6 @@
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
+const API_URL = "/api/items";
 const dayMs = 86400000;
 
 const seedNotes = [
@@ -11,7 +12,8 @@ const seedNotes = [
     color: "sky",
     pinned: true,
     status: "active",
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   },
   {
     id: crypto.randomUUID(),
@@ -21,7 +23,8 @@ const seedNotes = [
     color: "mint",
     pinned: false,
     status: "active",
-    createdAt: new Date(Date.now() - dayMs).toISOString()
+    createdAt: new Date(Date.now() - dayMs).toISOString(),
+    updatedAt: new Date(Date.now() - dayMs).toISOString()
   },
   {
     id: crypto.randomUUID(),
@@ -31,7 +34,8 @@ const seedNotes = [
     color: "sun",
     pinned: true,
     status: "active",
-    createdAt: new Date(Date.now() - dayMs * 2).toISOString()
+    createdAt: new Date(Date.now() - dayMs * 2).toISOString(),
+    updatedAt: new Date(Date.now() - dayMs * 2).toISOString()
   }
 ];
 
@@ -45,7 +49,8 @@ const seedTasks = [
     dueAt: toDateInput(new Date()),
     completed: false,
     status: "active",
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   },
   {
     id: crypto.randomUUID(),
@@ -56,7 +61,8 @@ const seedTasks = [
     dueAt: toDateInput(new Date(Date.now() + dayMs)),
     completed: true,
     status: "active",
-    createdAt: new Date(Date.now() - dayMs).toISOString()
+    createdAt: new Date(Date.now() - dayMs).toISOString(),
+    updatedAt: new Date(Date.now() - dayMs).toISOString()
   }
 ];
 
@@ -64,6 +70,11 @@ const loaded = loadData();
 const state = {
   notes: loaded.notes,
   tasks: loaded.tasks,
+  hasLocalData: loaded.hasLocalData,
+  syncReady: false,
+  syncTimer: 0,
+  syncInFlight: false,
+  dirtyWhileLoading: false,
   view: "active",
   label: "all",
   query: "",
@@ -82,6 +93,10 @@ const els = {
   taskFields: document.querySelector("#taskFields"),
   colorDots: document.querySelector(".color-dots"),
   labelInput: document.querySelector("#labelInput"),
+  sparkButton: document.querySelector("#sparkButton"),
+  sparkPanel: document.querySelector("#sparkPanel"),
+  sparkStatus: document.querySelector("#sparkStatus"),
+  sparkSuggestions: document.querySelector("#sparkSuggestions"),
   addButton: document.querySelector("#addButton"),
   addButtonLabel: document.querySelector("#addButtonLabel"),
   quickAddButton: document.querySelector("#quickAddButton"),
@@ -111,29 +126,111 @@ function loadData() {
       const parsed = JSON.parse(saved);
       return {
         notes: Array.isArray(parsed.notes) ? parsed.notes : seedNotes,
-        tasks: Array.isArray(parsed.tasks) ? parsed.tasks : seedTasks
+        tasks: Array.isArray(parsed.tasks) ? parsed.tasks : seedTasks,
+        hasLocalData: true
       };
     } catch {
-      return { notes: seedNotes, tasks: seedTasks };
+      return { notes: seedNotes, tasks: seedTasks, hasLocalData: false };
     }
   }
 
   const legacyNotes = localStorage.getItem(LEGACY_NOTES_KEY);
-  if (!legacyNotes) return { notes: seedNotes, tasks: seedTasks };
+  if (!legacyNotes) return { notes: seedNotes, tasks: seedTasks, hasLocalData: false };
 
   try {
     const parsed = JSON.parse(legacyNotes);
     return {
       notes: Array.isArray(parsed) ? parsed : seedNotes,
-      tasks: seedTasks
+      tasks: seedTasks,
+      hasLocalData: Array.isArray(parsed)
     };
   } catch {
-    return { notes: seedNotes, tasks: seedTasks };
+    return { notes: seedNotes, tasks: seedTasks, hasLocalData: false };
   }
 }
 
 function saveData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks }));
+  state.hasLocalData = true;
+  if (!state.syncReady) state.dirtyWhileLoading = true;
+  queueRemoteSave();
+}
+
+async function loadRemoteData() {
+  try {
+    const response = await fetch(API_URL, { headers: { accept: "application/json" } });
+    if (!response.ok) throw new Error(`Sync returned ${response.status}`);
+
+    const data = await response.json();
+    const remoteNotes = Array.isArray(data.notes) ? data.notes : [];
+    const remoteTasks = Array.isArray(data.tasks) ? data.tasks : [];
+    const hasRemoteData = remoteNotes.length > 0 || remoteTasks.length > 0;
+
+    state.syncReady = true;
+
+    if (hasRemoteData) {
+      state.notes = state.dirtyWhileLoading ? mergeByUpdatedAt(remoteNotes, state.notes) : remoteNotes;
+      state.tasks = state.dirtyWhileLoading ? mergeByUpdatedAt(remoteTasks, state.tasks) : remoteTasks;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks }));
+      render();
+      if (state.dirtyWhileLoading) queueRemoteSave(true);
+      state.dirtyWhileLoading = false;
+      showToast("Synced");
+      return;
+    }
+
+    if (state.hasLocalData) {
+      queueRemoteSave(true);
+    }
+    state.dirtyWhileLoading = false;
+  } catch (error) {
+    console.warn("Keeply sync unavailable", error);
+    showToast("Offline mode");
+  }
+}
+
+function mergeByUpdatedAt(remoteItems, localItems) {
+  const items = new Map(remoteItems.map((item) => [item.id, item]));
+
+  for (const localItem of localItems) {
+    const remoteItem = items.get(localItem.id);
+    if (!remoteItem || new Date(localItem.updatedAt || localItem.createdAt) > new Date(remoteItem.updatedAt || remoteItem.createdAt)) {
+      items.set(localItem.id, localItem);
+    }
+  }
+
+  return [...items.values()];
+}
+
+function queueRemoteSave(immediate = false) {
+  window.clearTimeout(state.syncTimer);
+  if (!state.syncReady) return;
+
+  state.syncTimer = window.setTimeout(syncRemoteData, immediate ? 0 : 350);
+}
+
+async function syncRemoteData() {
+  if (state.syncInFlight) {
+    queueRemoteSave(true);
+    return;
+  }
+
+  state.syncInFlight = true;
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "PUT",
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify({ notes: state.notes, tasks: state.tasks })
+    });
+
+    if (!response.ok) throw new Error(`Sync returned ${response.status}`);
+  } catch (error) {
+    console.warn("Keeply sync failed", error);
+    showToast("Saved locally");
+  } finally {
+    state.syncInFlight = false;
+  }
 }
 
 function addItem() {
@@ -153,6 +250,8 @@ function addNote() {
     return;
   }
 
+  const now = new Date().toISOString();
+
   state.notes.unshift({
     id: crypto.randomUUID(),
     title: title || "Untitled",
@@ -161,7 +260,8 @@ function addNote() {
     color: state.color,
     pinned: false,
     status: "active",
-    createdAt: new Date().toISOString()
+    createdAt: now,
+    updatedAt: now
   });
 
   clearComposer();
@@ -181,6 +281,8 @@ function addTask() {
     return;
   }
 
+  const now = new Date().toISOString();
+
   state.tasks.unshift({
     id: crypto.randomUUID(),
     title,
@@ -190,7 +292,8 @@ function addTask() {
     dueAt: els.dueInput.value,
     completed: false,
     status: "active",
-    createdAt: new Date().toISOString()
+    createdAt: now,
+    updatedAt: now
   });
 
   clearComposer();
@@ -207,6 +310,7 @@ function clearComposer() {
   els.bodyInput.value = "";
   els.dueInput.value = "";
   els.priorityInput.value = "normal";
+  hideSparkPanel();
 }
 
 function getVisibleNotes() {
@@ -405,17 +509,207 @@ function attachSwipe(node, note) {
 }
 
 function updateNote(id, patch, message) {
-  state.notes = state.notes.map((note) => (note.id === id ? { ...note, ...patch } : note));
+  state.notes = state.notes.map((note) => (note.id === id ? { ...note, ...patch, updatedAt: new Date().toISOString() } : note));
   saveData();
   render();
   showToast(message);
 }
 
 function updateTask(id, patch, message) {
-  state.tasks = state.tasks.map((task) => (task.id === id ? { ...task, ...patch } : task));
+  state.tasks = state.tasks.map((task) => (task.id === id ? { ...task, ...patch, updatedAt: new Date().toISOString() } : task));
   saveData();
   render();
   showToast(message);
+}
+
+async function sparkIdeas() {
+  const title = els.titleInput.value.trim();
+  const body = els.bodyInput.value.trim();
+  if (!title && !body && state.notes.length + state.tasks.length === 0) {
+    showToast("Add a draft or save a few items first");
+    els.bodyInput.focus();
+    return;
+  }
+
+  setSparkLoading(true);
+
+  try {
+    const response = await fetch("/api/spark", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        draft: {
+          mode: state.composerMode,
+          title,
+          body,
+          label: els.labelInput.value
+        },
+        items: getSparkContext()
+      })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Spark failed");
+
+    renderSpark(data);
+  } catch (error) {
+    showToast(error.message);
+    renderSparkError(error.message);
+  } finally {
+    clearSparkLoading();
+  }
+}
+
+function getSparkContext() {
+  const notes = state.notes
+    .filter((note) => note.status === "active")
+    .slice(0, 8)
+    .map((note) => ({
+      type: "note",
+      title: note.title,
+      body: note.body,
+      label: note.label
+    }));
+  const tasks = state.tasks
+    .filter((task) => task.status === "active")
+    .slice(0, 8)
+    .map((task) => ({
+      type: "task",
+      title: task.title,
+      body: task.details,
+      label: task.label,
+      priority: task.priority,
+      dueAt: task.dueAt
+    }));
+
+  return [...notes, ...tasks]
+    .sort((a, b) => (a.title > b.title ? 1 : -1))
+    .slice(0, 12);
+}
+
+function setSparkLoading(loading) {
+  els.sparkButton.disabled = loading;
+  els.sparkButton.textContent = loading ? "Sparking..." : "Spark";
+  els.sparkPanel.hidden = false;
+  els.sparkPanel.classList.toggle("loading", loading);
+  if (loading) {
+    els.sparkStatus.textContent = "Thinking";
+    els.sparkSuggestions.replaceChildren(renderSparkSkeleton(), renderSparkSkeleton(), renderSparkSkeleton());
+  }
+}
+
+function clearSparkLoading() {
+  els.sparkButton.disabled = false;
+  els.sparkButton.textContent = "Spark";
+  els.sparkPanel.classList.remove("loading");
+}
+
+function renderSpark(data) {
+  const suggestions = Array.isArray(data.suggestions) ? data.suggestions : [];
+  els.sparkPanel.hidden = false;
+  els.sparkStatus.textContent = suggestions.length ? "Ready" : "Empty";
+  els.sparkSuggestions.replaceChildren(...suggestions.map(renderSparkSuggestion));
+  if (data.summary) showToast(data.summary);
+}
+
+function renderSparkError(message) {
+  const card = document.createElement("article");
+  card.className = "spark-card spark-error";
+  const title = document.createElement("h3");
+  title.textContent = "Spark is waiting";
+  const body = document.createElement("p");
+  body.textContent = message;
+  card.append(title, body);
+  els.sparkPanel.hidden = false;
+  els.sparkStatus.textContent = "Offline";
+  els.sparkSuggestions.replaceChildren(card);
+}
+
+function renderSparkSuggestion(suggestion) {
+  const card = document.createElement("article");
+  card.className = "spark-card";
+  card.dataset.type = suggestion.type;
+  card.dataset.color = suggestion.color || "sun";
+
+  const meta = document.createElement("div");
+  meta.className = "spark-meta";
+  meta.textContent = `${suggestion.type || "note"} · ${suggestion.label || "ideas"}`;
+
+  const title = document.createElement("h3");
+  title.textContent = suggestion.title || "Untitled";
+
+  const body = document.createElement("p");
+  body.textContent = suggestion.body || "No extra details";
+
+  const action = document.createElement("button");
+  action.type = "button";
+  action.className = "spark-add";
+  action.textContent = suggestion.type === "task" ? "Add task" : "Add note";
+  action.addEventListener("click", () => addSparkSuggestion(suggestion));
+
+  card.append(meta, title, body, action);
+  return card;
+}
+
+function renderSparkSkeleton() {
+  const card = document.createElement("article");
+  card.className = "spark-card skeleton";
+  card.innerHTML = "<span></span><strong></strong><p></p>";
+  return card;
+}
+
+function addSparkSuggestion(suggestion) {
+  const now = new Date().toISOString();
+
+  if (suggestion.type === "task") {
+    state.tasks.unshift({
+      id: crypto.randomUUID(),
+      title: suggestion.title || "Untitled",
+      details: suggestion.body || "",
+      label: suggestion.label || "ideas",
+      priority: suggestion.priority || "normal",
+      dueAt: toDateInput(new Date(Date.now() + dayMs * getDueOffset(suggestion))),
+      completed: false,
+      status: "active",
+      createdAt: now,
+      updatedAt: now
+    });
+    state.view = "tasks";
+    setComposerMode("task");
+    syncNav();
+    saveData();
+    render();
+    showToast("Spark task added");
+    return;
+  }
+
+  state.notes.unshift({
+    id: crypto.randomUUID(),
+    title: suggestion.title || "Untitled",
+    body: suggestion.body || "",
+    label: suggestion.label || "ideas",
+    color: suggestion.color || "sun",
+    pinned: false,
+    status: "active",
+    createdAt: now,
+    updatedAt: now
+  });
+  state.view = "active";
+  syncNav();
+  saveData();
+  render();
+  showToast("Spark note added");
+}
+
+function getDueOffset(suggestion) {
+  const offset = Number.parseInt(suggestion.dueOffsetDays, 10);
+  if (Number.isNaN(offset)) return 0;
+  return Math.min(14, Math.max(0, offset));
+}
+
+function hideSparkPanel() {
+  els.sparkPanel.hidden = true;
+  els.sparkStatus.textContent = "";
+  els.sparkSuggestions.replaceChildren();
 }
 
 function setComposerMode(mode) {
@@ -512,6 +806,7 @@ document.querySelectorAll(".mode-button").forEach((button) => {
 });
 
 els.addButton.addEventListener("click", addItem);
+els.sparkButton.addEventListener("click", sparkIdeas);
 els.quickAddButton.addEventListener("click", () => {
   els.titleInput.focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -535,3 +830,4 @@ document.addEventListener("keydown", (event) => {
 });
 
 render();
+loadRemoteData();
