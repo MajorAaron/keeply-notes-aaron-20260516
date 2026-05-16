@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f8d75f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Keeply" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Keeply Notes & Tasks</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="phone-shell">
+      <aside class="rail" aria-label="Notebook sections">
+        <button class="rail-button active" data-view="active" aria-label="Notes">
+          <span class="icon icon-notes"></span>
+        </button>
+        <button class="rail-button" data-view="tasks" aria-label="Tasks">
+          <span class="icon icon-check"></span>
+        </button>
+        <button class="rail-button" data-view="archive" aria-label="Archive">
+          <span class="icon icon-archive"></span>
+        </button>
+        <button class="rail-button" data-view="trash" aria-label="Trash">
+          <span class="icon icon-trash"></span>
+        </button>
+      </aside>
+
+      <main class="app" aria-live="polite">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Keeply</p>
+            <h1 id="viewTitle">Notes</h1>
+          </div>
+          <button class="avatar-button" id="themeButton" aria-label="Change theme color">
+            <span class="avatar-mark"></span>
+          </button>
+        </header>
+
+        <section class="search-panel">
+          <label class="search-box">
+            <span class="icon icon-search"></span>
+            <input id="searchInput" type="search" autocomplete="off" placeholder="Search notes" />
+          </label>
+          <button class="layout-button" id="layoutButton" aria-label="Toggle compact layout">
+            <span class="icon icon-grid"></span>
+          </button>
+        </section>
+
+        <nav class="chips" aria-label="Labels">
+          <button class="chip active" data-label="all">All</button>
+          <button class="chip" data-label="work">Work</button>
+          <button class="chip" data-label="home">Home</button>
+          <button class="chip" data-label="ideas">Ideas</button>
+          <button class="chip" data-label="personal">Personal</button>
+        </nav>
+
+        <section class="composer" aria-label="Create item">
+          <div class="composer-mode" role="tablist" aria-label="Item type">
+            <button class="mode-button active" data-mode="note" role="tab" aria-selected="true">Note</button>
+            <button class="mode-button" data-mode="task" role="tab" aria-selected="false">Task</button>
+          </div>
+          <input id="titleInput" class="composer-title" placeholder="Title" maxlength="90" />
+          <textarea id="bodyInput" class="composer-body" placeholder="Take a note..." rows="3"></textarea>
+          <div class="task-fields" id="taskFields" hidden>
+            <label>
+              <span>Due</span>
+              <input id="dueInput" type="date" />
+            </label>
+            <label>
+              <span>Priority</span>
+              <select id="priorityInput">
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+              </select>
+            </label>
+          </div>
+          <div class="composer-tools">
+            <div class="color-dots" aria-label="Note color">
+              <button class="dot active" data-color="sun" aria-label="Sun note color"></button>
+              <button class="dot" data-color="mint" aria-label="Mint note color"></button>
+              <button class="dot" data-color="sky" aria-label="Sky note color"></button>
+              <button class="dot" data-color="rose" aria-label="Rose note color"></button>
+              <button class="dot" data-color="ink" aria-label="Ink note color"></button>
+            </div>
+            <select id="labelInput" aria-label="Note label">
+              <option value="ideas">Ideas</option>
+              <option value="work">Work</option>
+              <option value="home">Home</option>
+              <option value="personal">Personal</option>
+            </select>
+            <button id="addButton" class="primary-button">
+              <span class="icon icon-plus"></span>
+              <span id="addButtonLabel">Add</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="stats-row" aria-label="Note summary">
+          <div>
+            <strong id="totalCount">0</strong>
+            <span id="totalLabel">Total</span>
+          </div>
+          <div>
+            <strong id="pinnedCount">0</strong>
+            <span id="middleLabel">Pinned</span>
+          </div>
+          <div>
+            <strong id="todayCount">0</strong>
+            <span id="rightLabel">Today</span>
+          </div>
+        </section>
+
+        <section class="notes-region">
+          <div class="section-heading" id="pinnedHeading">Pinned</div>
+          <div class="notes-grid" id="pinnedNotes"></div>
+          <div class="section-heading" id="othersHeading">Others</div>
+          <div class="notes-grid" id="notesGrid"></div>
+          <div class="task-list" id="taskList"></div>
+          <div class="empty-state" id="emptyState">
+            <img src="/assets/empty-notes.svg" alt="" />
+            <h2>No notes here</h2>
+            <p>Create one, change filters, or restore something from archive.</p>
+          </div>
+        </section>
+      </main>
+
+      <button class="fab" id="quickAddButton" aria-label="Quick add note">
+        <span class="icon icon-plus"></span>
+      </button>
+    </div>
+
+    <template id="noteTemplate">
+      <article class="note-card">
+        <div class="note-swipe-cue"></div>
+        <div class="note-card-head">
+          <span class="note-label"></span>
+          <button class="icon-button pin-action" aria-label="Pin note">
+            <span class="icon icon-pin"></span>
+          </button>
+        </div>
+        <h3></h3>
+        <p></p>
+        <div class="note-card-foot">
+          <time></time>
+          <div class="note-actions">
+            <button class="icon-button archive-action" aria-label="Archive note">
+              <span class="icon icon-archive"></span>
+            </button>
+            <button class="icon-button trash-action" aria-label="Delete note">
+              <span class="icon icon-trash"></span>
+            </button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="taskTemplate">
+      <article class="task-card">
+        <button class="task-check" aria-label="Complete task">
+          <span class="icon icon-check"></span>
+        </button>
+        <div class="task-main">
+          <div class="task-meta">
+            <span class="task-label"></span>
+            <span class="task-priority"></span>
+            <time></time>
+          </div>
+          <h3></h3>
+          <p></p>
+        </div>
+        <div class="task-actions">
+          <button class="icon-button archive-action" aria-label="Archive task">
+            <span class="icon icon-archive"></span>
+          </button>
+          <button class="icon-button trash-action" aria-label="Delete task">
+            <span class="icon icon-trash"></span>
+          </button>
+        </div>
+      </article>
+    </template>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

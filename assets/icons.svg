@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="notes" viewBox="0 0 24 24">
+    <path d="M6 3h12a2 2 0 0 1 2 2v10.7a2 2 0 0 1-.6 1.4l-3.3 3.3a2 2 0 0 1-1.4.6H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2 5h8v2H8V8Zm0 4h7v2H8v-2Zm0 4h4v2H8v-2Zm8 2.6 2.6-2.6H16v2.6Z"/>
+  </symbol>
+  <symbol id="archive" viewBox="0 0 24 24">
+    <path d="M4 4h16v5H4V4Zm2 7h12v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-8Zm4 2v2h4v-2h-4Z"/>
+  </symbol>
+  <symbol id="trash" viewBox="0 0 24 24">
+    <path d="M9 3h6l1 2h4v2H4V5h4l1-2Zm-2 6h10l-.7 11a2 2 0 0 1-2 1.9H9.7a2 2 0 0 1-2-1.9L7 9Z"/>
+  </symbol>
+  <symbol id="search" viewBox="0 0 24 24">
+    <path d="M10.5 4a6.5 6.5 0 0 1 5.1 10.5l4 4-1.6 1.6-4-4A6.5 6.5 0 1 1 10.5 4Zm0 2.3a4.2 4.2 0 1 0 0 8.4 4.2 4.2 0 0 0 0-8.4Z"/>
+  </symbol>
+  <symbol id="grid" viewBox="0 0 24 24">
+    <path d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z"/>
+  </symbol>
+  <symbol id="plus" viewBox="0 0 24 24">
+    <path d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7V4Z"/>
+  </symbol>
+  <symbol id="pin" viewBox="0 0 24 24">
+    <path d="m15 3 6 6-2 2-1.4-1.4-4.1 4.1.5 4.3-2 2-3.8-3.8L4.4 20 3 18.6l3.8-3.8L3 11l2-2 4.3.5 4.1-4.1L12 4l3-1Z"/>
+  </symbol>
+</svg>

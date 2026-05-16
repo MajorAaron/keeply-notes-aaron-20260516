@@ -1,0 +1,17 @@
+{
+  "name": "Keeply Notes & Tasks",
+  "short_name": "Keeply",
+  "description": "A mobile-first notes and task app for quick capture, reminders, and follow-through.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff2b4",
+  "theme_color": "#f8d75f",
+  "icons": [
+    {
+      "src": "/assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

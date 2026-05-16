@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" role="img" aria-label="Stack of empty notes">
+  <rect x="50" y="38" width="146" height="106" rx="22" fill="#82d7a2" opacity=".9"/>
+  <rect x="72" y="20" width="146" height="118" rx="24" fill="#f8d75f"/>
+  <path d="M172 138v-30c0-9 7-16 16-16h30" fill="#d49e2f"/>
+  <path d="M102 62h72M102 88h54" stroke="#232426" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="58" cy="139" r="12" fill="#f0969a"/>
+  <circle cx="211" cy="42" r="9" fill="#81c7ee"/>
+</svg>
