@@ -1,3 +1,20 @@
+## 2026-05-17 14:06:18 MDT
+
+- Added card duplication actions for Keeply notes and tasks.
+- Note and task cards now include a `Copy` action that creates a fresh active duplicate.
+- Copied notes keep their label, color, body, and image while reopening as unpinned active notes.
+- Copied tasks keep their label, priority, due date, and details while reopening as unchecked active tasks.
+- Added `duplicate-items.mjs` and `test/duplicate-items.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-duplicate-cards`, title `Duplicate Cards`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed with 59 tests; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secret assignments or tokens; local matches were only localStorage key constants.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
+- Git status: feature commit `149101c` (`Add card duplication actions`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
+- Netlify production deploy succeeded via the generated MCP deploy command. Deploy `6a0a1f95b332df6d49ba8b1a` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 81 scanned files.
+- Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
+
 ## 2026-05-17 13:05:21 MDT
 
 - Added mobile-friendly card share actions for Keeply notes and tasks.
