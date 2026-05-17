@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-archive-completed-tasks",
+    title: "Archive Completed Tasks",
+    bullets: [
+      "Tasks now include a one-tap cleanup action for completed work.",
+      "Archived completed tasks leave the active task list while staying recoverable.",
+      "The cleanup toast includes Undo so accidental bulk cleanup is easy to reverse."
+    ]
+  },
+  {
     id: "2026-05-17-undo-cleanup-actions",
     title: "Undo Cleanup Actions",
     bullets: [

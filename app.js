@@ -5,6 +5,7 @@ import { getTaskDueShortcutDate, getVisibleTaskDueShortcuts } from "./task-due-s
 import { getTaskPriorityShortcutValue, getVisibleTaskPriorityShortcuts } from "./task-priority-shortcuts.mjs";
 import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask } from "./note-followups.mjs";
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
+import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -152,6 +153,9 @@ const els = {
   askSummary: document.querySelector("#askSummary"),
   askAnswer: document.querySelector("#askAnswer"),
   taskFilters: document.querySelector("#taskFilters"),
+  taskBulkActions: document.querySelector("#taskBulkActions"),
+  archiveCompletedButton: document.querySelector("#archiveCompletedButton"),
+  archiveCompletedCount: document.querySelector("#archiveCompletedCount"),
   whatsNewBackdrop: document.querySelector("#whatsNewBackdrop"),
   whatsNewDialog: document.querySelector("#whatsNewDialog"),
   whatsNewTitle: document.querySelector("#whatsNewTitle"),
@@ -424,6 +428,7 @@ function render() {
   els.notesGrid.hidden = showTasks;
   els.taskList.hidden = !showTasks && !showMixedArchive;
   els.taskFilters.hidden = !showTasks;
+  els.taskBulkActions.hidden = !showTasks;
   els.pinnedNotes.replaceChildren(...pinned.map(renderNote));
   els.notesGrid.replaceChildren(...others.map(renderNote));
   els.taskList.replaceChildren(...tasks.map(renderTask));
@@ -439,6 +444,7 @@ function render() {
 
   renderStats();
   renderTaskFilters();
+  renderTaskBulkActions();
 }
 
 function renderStats() {
@@ -473,6 +479,32 @@ function renderTaskFilters() {
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", String(active));
     button.querySelector(".task-filter-count").textContent = count;
+  });
+}
+
+function renderTaskBulkActions() {
+  const completedCount = state.tasks.filter((task) => task.status === "active" && task.completed).length;
+  els.archiveCompletedCount.textContent = `${completedCount} done`;
+  els.archiveCompletedButton.disabled = completedCount === 0;
+}
+
+function archiveCompletedTasksWithUndo() {
+  const previousTasks = state.tasks.map((task) => ({ ...task }));
+  const result = archiveCompletedTasks(state.tasks, { now: new Date().toISOString() });
+
+  if (result.archived.length === 0) {
+    showToast("No completed tasks");
+    return;
+  }
+
+  state.tasks = result.tasks;
+  saveData();
+  render();
+  showUndoToast(`${result.archived.length} completed archived`, () => {
+    state.tasks = previousTasks;
+    saveData();
+    render();
+    showToast("Tasks restored");
   });
 }
 
@@ -1786,6 +1818,7 @@ els.sparkButton.addEventListener("click", sparkIdeas);
 els.focusButton.addEventListener("click", briefFocus);
 els.sweepButton.addEventListener("click", sweepItems);
 els.askForm.addEventListener("submit", askKeeply);
+els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.quickAddButton.addEventListener("click", () => {
   els.titleInput.focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
