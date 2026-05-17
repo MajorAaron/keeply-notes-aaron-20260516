@@ -14,6 +14,21 @@
 - Netlify production deploy succeeded from the pushed commit. Deploy `6a0a0f36ca989f0008a5849b` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, commit `b96890dc03cb4abe4befcf7380c085541e439f56`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 72 scanned files.
 - Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
 
+## 2026-05-17 13:00:04 MDT
+
+- Added remembered workspace preferences for Keeply.
+- Keeply now stores the last section, selected label, task date filter, compact layout setting, and morning/evening paper theme in localStorage and restores them on load.
+- Added `view-preferences.mjs` and `test/view-preferences.test.mjs` for preference normalization, safe parsing, and app-state serialization.
+- Preserved and completed the already-wired search-highlight strand by including `search-highlights.mjs`, `test/search-highlights.test.mjs`, and the package test coverage needed by the existing app imports.
+- Updated What's New metadata with latest id `2026-05-17-remember-workspace`, title `Remembered Workspace`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed with 52 tests; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secret assignments or tokens.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
+- Git status: feature commit `b0e60d8` (`Remember Keeply workspace`) was created locally, but `git push origin main` failed because DNS cannot resolve `github.com`.
+- Netlify deployment limit: direct Netlify CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`; connector-generated `@netlify/mcp` deploy command failed because DNS cannot resolve `registry.npmjs.org`.
+- No production deploy id or URL was produced from this run.
+
 ## 2026-05-17 09:06:42 MDT
 
 - Added quick task label shortcuts to active task cards.
