@@ -1426,6 +1426,20 @@ select {
   color: #9b2a2f;
 }
 
+.search-highlight {
+  padding: 0 2px;
+  border-radius: 6px;
+  background: rgba(248, 215, 95, 0.72);
+  color: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.note-card[data-color="ink"] .search-highlight {
+  background: rgba(248, 215, 95, 0.88);
+  color: var(--ink);
+}
+
 .task-actions {
   display: flex;
   gap: 4px;

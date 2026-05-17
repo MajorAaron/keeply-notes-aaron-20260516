@@ -1833,7 +1833,7 @@ function hideSparkPanel() {
   els.sparkSuggestions.replaceChildren();
 }
 
-function setComposerMode(mode) {
+function setComposerMode(mode, options = {}) {
   state.composerMode = mode;
   els.taskFields.hidden = mode !== "task";
   els.colorDots.hidden = mode === "task";
@@ -1848,7 +1848,17 @@ function setComposerMode(mode) {
     button.setAttribute("aria-selected", String(active));
   });
   renderTaskComposerPresets();
-  saveComposerDraft();
+  if (options.saveDraft !== false) saveComposerDraft();
+}
+
+function saveViewPreferences() {
+  localStorage.setItem(VIEW_PREFERENCES_KEY, JSON.stringify(buildViewPreferences(state)));
+}
+
+function applyViewPreferences() {
+  document.body.classList.toggle("night", state.theme === "night");
+  syncNav();
+  setComposerMode(state.composerMode, { saveDraft: false });
 }
 
 function getComposerDraft() {
@@ -2030,6 +2040,7 @@ document.querySelectorAll(".rail-button").forEach((button) => {
   button.addEventListener("click", () => {
     state.view = button.dataset.view;
     if (state.view === "tasks") setComposerMode("task");
+    saveViewPreferences();
     syncNav();
     render();
   });
@@ -2038,6 +2049,7 @@ document.querySelectorAll(".rail-button").forEach((button) => {
 document.querySelectorAll(".chip").forEach((button) => {
   button.addEventListener("click", () => {
     state.label = button.dataset.label;
+    saveViewPreferences();
     document.querySelectorAll(".chip").forEach((chip) => chip.classList.toggle("active", chip === button));
     render();
   });
@@ -2046,6 +2058,7 @@ document.querySelectorAll(".chip").forEach((button) => {
 document.querySelectorAll(".task-filter").forEach((button) => {
   button.addEventListener("click", () => {
     state.taskWindow = button.dataset.window;
+    saveViewPreferences();
     render();
   });
 });
@@ -2099,12 +2112,15 @@ els.searchInput.addEventListener("input", (event) => {
 });
 els.layoutButton.addEventListener("click", () => {
   state.compact = !state.compact;
+  saveViewPreferences();
   render();
   showToast(state.compact ? "Compact list" : "Card grid");
 });
 els.themeButton.addEventListener("click", () => {
-  document.body.classList.toggle("night");
-  showToast(document.body.classList.contains("night") ? "Evening paper" : "Morning paper");
+  state.theme = state.theme === "night" ? "morning" : "night";
+  document.body.classList.toggle("night", state.theme === "night");
+  saveViewPreferences();
+  showToast(state.theme === "night" ? "Evening paper" : "Morning paper");
 });
 els.whatsNewDismiss.addEventListener("click", dismissWhatsNew);
 els.whatsNewBackdrop.addEventListener("click", (event) => {
@@ -2116,6 +2132,7 @@ document.addEventListener("keydown", (event) => {
   if ((event.metaKey || event.ctrlKey) && event.key === "Enter") addItem();
 });
 
+applyViewPreferences();
 render();
 restoreComposerDraft();
 loadRemoteData();

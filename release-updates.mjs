@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-remember-workspace",
+    title: "Remembered Workspace",
+    bullets: [
+      "Keeply now restores your last section, label, and task date filter after reload.",
+      "Compact layout and evening paper choices stay on this device.",
+      "Mobile triage can pick up where you left off without resetting the view."
+    ]
+  },
+  {
     id: "2026-05-17-clear-active-filters",
     title: "Clear Active Filters",
     bullets: [
