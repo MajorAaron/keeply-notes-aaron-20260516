@@ -10,7 +10,7 @@
 - Verification: `npm test` passed with 60 tests; `git diff --check` passed.
 - Secret scan of changed app/test/metadata/style/package files found no committed API key or token patterns.
 - Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
-- Git status: feature commit `4fbd600` (`Add card editing flow`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Git status: feature commit `4fbd600` (`Add card editing flow`) and log commit `4fe078a` (`Log card editing automation`) were pushed to `origin main`; unrelated untracked `backups/` and `duplicate-undo.mjs` were left untouched.
 - Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
 - Netlify production deploy succeeded via the generated MCP deploy command after one failed connector-command attempt. Deploy `6a0a2da4fd2fdbbc0182c737` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 83 scanned files.
 - Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
