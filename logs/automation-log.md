@@ -256,4 +256,4 @@
 - Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
 - Git status: feature commit `7992938` (`Add label count chips`) was pushed to `origin main`.
 - Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
-- Netlify MCP deployment succeeded. Deploy `6a09cb0efa13889f2b48405b` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
+- Netlify MCP deployment succeeded. Initial feature deploy `6a09cb0efa13889f2b48405b` and final current-tree deploy `6a09cb8b9cd8f9b356a565af` are ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
