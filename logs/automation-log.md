@@ -1,3 +1,19 @@
+## 2026-05-17 12:56:44 MDT
+
+- Added an active filter reset row for Keeply.
+- When search, a non-All label, or a task date filter is active, Keeply now shows a compact summary of the active filters.
+- The new `Clear filters` action resets search, label, and task date filters in one tap so empty mobile views are easier to recover from.
+- Added `active-filters.mjs` and `test/active-filters.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-clear-active-filters`, title `Clear Active Filters`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed with 44 tests; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secret assignments or tokens; local matches were false-positive task/search text.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
+- Git status: feature commit `b96890d` (`Add active filter reset`) was pushed to `origin main`; unrelated uncommitted `view-preferences` and `search-highlights` work was left untouched.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
+- Netlify production deploy succeeded from the pushed commit. Deploy `6a0a0f36ca989f0008a5849b` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, commit `b96890dc03cb4abe4befcf7380c085541e439f56`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 72 scanned files.
+- Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
+
 ## 2026-05-17 09:06:42 MDT
 
 - Added quick task label shortcuts to active task cards.
