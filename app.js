@@ -1,5 +1,8 @@
+import { latestUpdate } from "./release-updates.mjs";
+
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
+const UPDATE_SEEN_KEY = "keeply-last-seen-update";
 const API_URL = "/api/items";
 const dayMs = 86400000;
 
@@ -93,6 +96,7 @@ const els = {
   taskFields: document.querySelector("#taskFields"),
   colorDots: document.querySelector(".color-dots"),
   labelInput: document.querySelector("#labelInput"),
+  shapeButton: document.querySelector("#shapeButton"),
   sparkButton: document.querySelector("#sparkButton"),
   sparkPanel: document.querySelector("#sparkPanel"),
   sparkStatus: document.querySelector("#sparkStatus"),
@@ -114,6 +118,28 @@ const els = {
   totalLabel: document.querySelector("#totalLabel"),
   middleLabel: document.querySelector("#middleLabel"),
   rightLabel: document.querySelector("#rightLabel"),
+  focusBrief: document.querySelector("#focusBrief"),
+  focusButton: document.querySelector("#focusButton"),
+  focusTitle: document.querySelector("#focusTitle"),
+  focusSummary: document.querySelector("#focusSummary"),
+  focusList: document.querySelector("#focusList"),
+  smartSweep: document.querySelector("#smartSweep"),
+  sweepButton: document.querySelector("#sweepButton"),
+  sweepTitle: document.querySelector("#sweepTitle"),
+  sweepSummary: document.querySelector("#sweepSummary"),
+  sweepList: document.querySelector("#sweepList"),
+  askKeeply: document.querySelector("#askKeeply"),
+  askForm: document.querySelector("#askForm"),
+  askInput: document.querySelector("#askInput"),
+  askButton: document.querySelector("#askButton"),
+  askTitle: document.querySelector("#askTitle"),
+  askSummary: document.querySelector("#askSummary"),
+  askAnswer: document.querySelector("#askAnswer"),
+  whatsNewBackdrop: document.querySelector("#whatsNewBackdrop"),
+  whatsNewDialog: document.querySelector("#whatsNewDialog"),
+  whatsNewTitle: document.querySelector("#whatsNewTitle"),
+  whatsNewList: document.querySelector("#whatsNewList"),
+  whatsNewDismiss: document.querySelector("#whatsNewDismiss"),
   toast: document.querySelector("#toast"),
   noteTemplate: document.querySelector("#noteTemplate"),
   taskTemplate: document.querySelector("#taskTemplate")
@@ -396,6 +422,486 @@ function renderStats() {
   els.rightLabel.textContent = "Today";
 }
 
+function renderFocusBrief(brief) {
+  const items = Array.isArray(brief.items) ? brief.items : [];
+  els.focusTitle.textContent = brief.title || "Focus brief";
+  els.focusSummary.textContent = brief.summary || "Keep the day moving with one clear next step.";
+  els.focusList.replaceChildren(...items.slice(0, 4).map(renderFocusItem));
+}
+
+function renderFocusItem(item) {
+  const row = document.createElement("article");
+  row.className = "focus-item";
+  row.dataset.priority = item.priority || "normal";
+
+  const priority = document.createElement("span");
+  priority.className = "focus-priority";
+  priority.textContent = item.priority || "normal";
+
+  const content = document.createElement("div");
+  const title = document.createElement("h3");
+  title.textContent = item.title || "Next action";
+  const action = document.createElement("p");
+  action.textContent = item.action || "Pick one small action and do it next.";
+
+  content.append(title, action);
+  row.append(priority, content);
+  return row;
+}
+
+async function briefFocus() {
+  const context = getFocusContext();
+  if (context.tasks.length + context.notes.length === 0) {
+    showToast("Add a few active items first");
+    return;
+  }
+
+  setFocusLoading(true);
+
+  try {
+    const response = await fetch("/api/brief", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(context)
+    });
+    const brief = await response.json();
+    if (!response.ok) throw new Error(brief.error || "Brief failed");
+    renderFocusBrief(brief);
+    showToast("Focus brief ready");
+  } catch (error) {
+    renderFocusBrief(buildLocalFocusBrief(context));
+    showToast("Local brief ready");
+  } finally {
+    setFocusLoading(false);
+  }
+}
+
+function getFocusContext() {
+  const activeTasks = state.tasks
+    .filter((task) => task.status === "active" && !task.completed)
+    .sort(compareTasks)
+    .slice(0, 8)
+    .map((task) => ({
+      title: task.title,
+      body: task.details,
+      label: task.label,
+      priority: task.priority,
+      dueAt: task.dueAt
+    }));
+
+  const activeNotes = state.notes
+    .filter((note) => note.status === "active")
+    .sort((a, b) => Number(b.pinned) - Number(a.pinned) || new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt))
+    .slice(0, 8)
+    .map((note) => ({
+      title: note.title,
+      body: note.body,
+      label: note.label,
+      pinned: note.pinned
+    }));
+
+  return { tasks: activeTasks, notes: activeNotes };
+}
+
+function buildLocalFocusBrief(context) {
+  const overdue = context.tasks.find((task) => task.dueAt && task.dueAt < toDateInput(new Date()));
+  const high = context.tasks.find((task) => task.priority === "high");
+  const nextTask = overdue || high || context.tasks[0];
+  const pinnedNote = context.notes.find((note) => note.pinned) || context.notes[0];
+  const items = [];
+
+  if (nextTask) {
+    items.push({
+      priority: nextTask.priority || "normal",
+      title: nextTask.title,
+      action: nextTask.dueAt ? `Move this before ${formatDueDate(nextTask.dueAt).toLowerCase()}.` : "Turn this into the first concrete action."
+    });
+  }
+
+  if (pinnedNote) {
+    items.push({
+      priority: pinnedNote.pinned ? "high" : "normal",
+      title: pinnedNote.title,
+      action: "Review the note and decide whether it needs a task."
+    });
+  }
+
+  return {
+    title: nextTask ? "Start with the nearest task" : "Review your strongest note",
+    summary: `${context.tasks.length} open tasks and ${context.notes.length} active notes are in view.`,
+    items
+  };
+}
+
+function setFocusLoading(loading) {
+  els.focusButton.disabled = loading;
+  els.focusButton.textContent = loading ? "Briefing..." : "Brief me";
+  els.focusBrief.classList.toggle("loading", loading);
+}
+
+function renderSweep(sweep) {
+  const suggestions = Array.isArray(sweep.suggestions) ? sweep.suggestions : [];
+  els.sweepTitle.textContent = sweep.title || "Smart sweep";
+  els.sweepSummary.textContent = sweep.summary || "A few tidy-up moves are ready.";
+  els.sweepList.replaceChildren(...suggestions.slice(0, 4).map(renderSweepItem));
+}
+
+function renderSweepItem(suggestion) {
+  const row = document.createElement("article");
+  row.className = "sweep-item";
+  row.dataset.action = suggestion.action || "review";
+
+  const badge = document.createElement("span");
+  badge.className = "sweep-action";
+  badge.textContent = getSweepActionLabel(suggestion.action);
+
+  const content = document.createElement("div");
+  const title = document.createElement("h3");
+  title.textContent = suggestion.title || "Review item";
+  const reason = document.createElement("p");
+  reason.textContent = suggestion.reason || "This item looks ready for a quick cleanup.";
+  content.append(title, reason);
+
+  const apply = document.createElement("button");
+  apply.type = "button";
+  apply.className = "sweep-apply";
+  apply.textContent = "Apply";
+  apply.addEventListener("click", () => applySweepSuggestion(suggestion));
+
+  row.append(badge, content, apply);
+  return row;
+}
+
+async function sweepItems() {
+  const context = getSweepContext();
+  if (context.notes.length + context.tasks.length === 0) {
+    showToast("Nothing active to sweep");
+    return;
+  }
+
+  setSweepLoading(true);
+
+  try {
+    const response = await fetch("/api/sweep", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(context)
+    });
+    const sweep = await response.json();
+    if (!response.ok) throw new Error(sweep.error || "Sweep failed");
+    renderSweep(sweep);
+    showToast("Sweep ready");
+  } catch (error) {
+    renderSweep(buildLocalSweep(context));
+    showToast("Local sweep ready");
+  } finally {
+    setSweepLoading(false);
+  }
+}
+
+function getSweepContext() {
+  const notes = state.notes
+    .filter((note) => note.status === "active")
+    .sort((a, b) => new Date(a.updatedAt || a.createdAt) - new Date(b.updatedAt || b.createdAt))
+    .slice(0, 12)
+    .map((note) => ({
+      id: note.id,
+      type: "note",
+      title: note.title,
+      body: note.body,
+      label: note.label,
+      pinned: note.pinned,
+      createdAt: note.createdAt,
+      updatedAt: note.updatedAt
+    }));
+
+  const tasks = state.tasks
+    .filter((task) => task.status === "active")
+    .sort(compareTasks)
+    .slice(0, 12)
+    .map((task) => ({
+      id: task.id,
+      type: "task",
+      title: task.title,
+      body: task.details,
+      label: task.label,
+      priority: task.priority,
+      dueAt: task.dueAt,
+      completed: task.completed,
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt
+    }));
+
+  return { notes, tasks };
+}
+
+function buildLocalSweep(context) {
+  const staleNote = context.notes.find((note) => !note.pinned) || context.notes[0];
+  const looseNote = context.notes.find((note) => note.body && !note.pinned);
+  const overdueTask = context.tasks.find((task) => task.dueAt && task.dueAt < toDateInput(new Date()) && !task.completed);
+  const suggestions = [];
+
+  if (overdueTask) {
+    suggestions.push({
+      action: "snooze_task",
+      targetId: overdueTask.id,
+      targetType: "task",
+      title: overdueTask.title,
+      reason: "It is overdue, so move it to tomorrow or decide it is no longer active."
+    });
+  }
+
+  if (looseNote) {
+    suggestions.push({
+      action: "create_task",
+      targetId: looseNote.id,
+      targetType: "note",
+      title: looseNote.title,
+      reason: "This note reads like it could use a follow-up task.",
+      taskTitle: `Follow up: ${looseNote.title}`.slice(0, 70),
+      taskBody: looseNote.body
+    });
+  }
+
+  if (staleNote && !suggestions.some((item) => item.targetId === staleNote.id)) {
+    suggestions.push({
+      action: "archive_note",
+      targetId: staleNote.id,
+      targetType: "note",
+      title: staleNote.title,
+      reason: "It is unpinned and older than the rest of the active stack."
+    });
+  }
+
+  return {
+    title: "A few quick cleanup moves",
+    summary: `${context.notes.length} notes and ${context.tasks.length} tasks were reviewed locally.`,
+    suggestions
+  };
+}
+
+function applySweepSuggestion(suggestion) {
+  const action = suggestion.action;
+  const now = new Date().toISOString();
+
+  if (action === "archive_note") {
+    updateNote(suggestion.targetId, { status: "archive", pinned: false }, "Note archived");
+  } else if (action === "pin_note") {
+    updateNote(suggestion.targetId, { pinned: true }, "Note pinned");
+  } else if (action === "raise_task") {
+    updateTask(suggestion.targetId, { priority: "high" }, "Task raised");
+  } else if (action === "snooze_task") {
+    updateTask(suggestion.targetId, { dueAt: toDateInput(new Date(Date.now() + dayMs)) }, "Task snoozed");
+  } else if (action === "create_task") {
+    const source = state.notes.find((note) => note.id === suggestion.targetId);
+    state.tasks.unshift({
+      id: crypto.randomUUID(),
+      title: suggestion.taskTitle || `Follow up: ${source?.title || "note"}`,
+      details: suggestion.taskBody || source?.body || suggestion.reason || "",
+      label: source?.label || "ideas",
+      priority: "normal",
+      dueAt: toDateInput(new Date(Date.now() + dayMs)),
+      completed: false,
+      status: "active",
+      createdAt: now,
+      updatedAt: now
+    });
+    saveData();
+    render();
+    showToast("Task created");
+  } else {
+    showToast("Nothing to apply");
+    return;
+  }
+
+  removeAppliedSweep(suggestion);
+}
+
+function removeAppliedSweep(suggestion) {
+  const next = [...els.sweepList.querySelectorAll(".sweep-item")].filter((item) => {
+    return item.querySelector("h3")?.textContent !== (suggestion.title || "Review item");
+  });
+  els.sweepList.replaceChildren(...next);
+  if (next.length === 0) {
+    els.sweepTitle.textContent = "Sweep complete";
+    els.sweepSummary.textContent = "The suggested cleanup moves have been handled.";
+  }
+}
+
+function getSweepActionLabel(action) {
+  if (action === "archive_note") return "Archive";
+  if (action === "pin_note") return "Pin";
+  if (action === "create_task") return "Task";
+  if (action === "raise_task") return "Raise";
+  if (action === "snooze_task") return "Snooze";
+  return "Review";
+}
+
+function setSweepLoading(loading) {
+  els.sweepButton.disabled = loading;
+  els.sweepButton.textContent = loading ? "Sweeping..." : "Sweep";
+  els.smartSweep.classList.toggle("loading", loading);
+}
+
+async function askKeeply(event) {
+  event.preventDefault();
+  const question = els.askInput.value.trim();
+  if (!question) {
+    showToast("Ask a question first");
+    els.askInput.focus();
+    return;
+  }
+
+  const context = getAskContext();
+  if (context.items.length === 0) {
+    showToast("Save a few items first");
+    return;
+  }
+
+  setAskLoading(true);
+
+  try {
+    const response = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ question, items: context.items })
+    });
+    const answer = await response.json();
+    if (!response.ok) throw new Error(answer.error || "Ask failed");
+    renderAskAnswer(answer);
+    showToast("Answer ready");
+  } catch (error) {
+    renderAskAnswer(buildLocalAskAnswer(question, context.items));
+    showToast("Local answer ready");
+  } finally {
+    setAskLoading(false);
+  }
+}
+
+function getAskContext() {
+  const notes = state.notes
+    .filter((note) => note.status === "active")
+    .map((note) => ({
+      id: note.id,
+      type: "note",
+      title: note.title,
+      body: note.body,
+      label: note.label,
+      pinned: note.pinned,
+      updatedAt: note.updatedAt || note.createdAt
+    }));
+  const tasks = state.tasks
+    .filter((task) => task.status === "active")
+    .map((task) => ({
+      id: task.id,
+      type: "task",
+      title: task.title,
+      body: task.details,
+      label: task.label,
+      priority: task.priority,
+      dueAt: task.dueAt,
+      completed: task.completed,
+      updatedAt: task.updatedAt || task.createdAt
+    }));
+
+  return {
+    items: [...notes, ...tasks]
+      .sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0))
+      .slice(0, 24)
+  };
+}
+
+function buildLocalAskAnswer(question, items) {
+  const terms = tokenize(question);
+  const scored = items
+    .map((item) => ({
+      item,
+      score: scoreAskItem(item, terms)
+    }))
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((entry) => entry.item);
+
+  const sources = scored.length ? scored : items.slice(0, 2);
+  const first = sources[0];
+
+  return {
+    title: sources.length ? "Best local match" : "Nothing active yet",
+    answer: first
+      ? `${first.title} looks most relevant. ${first.body || "It has no extra details saved yet."}`
+      : "Save a few notes or tasks, then ask again.",
+    nextStep: first?.type === "task" ? "Open Tasks and check whether this needs action today." : "Pin or shape the matching note if it needs follow-up.",
+    sources: sources.map((item) => ({
+      id: item.id,
+      type: item.type,
+      title: item.title,
+      label: item.label
+    }))
+  };
+}
+
+function tokenize(value) {
+  return String(value || "")
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((term) => term.length > 2);
+}
+
+function scoreAskItem(item, terms) {
+  const haystack = `${item.title} ${item.body} ${item.label} ${item.priority || ""}`.toLowerCase();
+  return terms.reduce((score, term) => score + (haystack.includes(term) ? 1 : 0), item.pinned ? 0.5 : 0);
+}
+
+function renderAskAnswer(answer) {
+  const card = document.createElement("article");
+  card.className = "ask-card";
+
+  const title = document.createElement("h3");
+  title.textContent = answer.title || "Keeply answer";
+
+  const body = document.createElement("p");
+  body.textContent = answer.answer || "No answer was found in the active Keeply items.";
+
+  const next = document.createElement("div");
+  next.className = "ask-next";
+  next.textContent = answer.nextStep || "Save another note or ask a narrower question.";
+
+  const sources = document.createElement("div");
+  sources.className = "ask-sources";
+  for (const source of Array.isArray(answer.sources) ? answer.sources.slice(0, 4) : []) {
+    const badge = document.createElement("button");
+    badge.type = "button";
+    badge.className = "ask-source";
+    badge.textContent = `${source.type || "item"} · ${source.title || "Untitled"}`;
+    badge.addEventListener("click", () => jumpToSource(source));
+    sources.append(badge);
+  }
+
+  card.append(title, body, next, sources);
+  els.askAnswer.replaceChildren(card);
+}
+
+function jumpToSource(source) {
+  if (!source?.id) return;
+  state.view = source.type === "task" ? "tasks" : "active";
+  state.label = "all";
+  state.query = source.title || "";
+  els.searchInput.value = state.query;
+  document.querySelectorAll(".chip").forEach((chip) => chip.classList.toggle("active", chip.dataset.label === "all"));
+  syncNav();
+  render();
+  requestAnimationFrame(() => {
+    document.querySelector(`[data-id="${CSS.escape(source.id)}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+}
+
+function setAskLoading(loading) {
+  els.askButton.disabled = loading;
+  els.askButton.textContent = loading ? "Asking..." : "Ask";
+  els.askKeeply.classList.toggle("loading", loading);
+}
+
 function renderNote(note) {
   const node = els.noteTemplate.content.firstElementChild.cloneNode(true);
   node.dataset.id = note.id;
@@ -520,6 +1026,96 @@ function updateTask(id, patch, message) {
   saveData();
   render();
   showToast(message);
+}
+
+async function shapeDraft() {
+  const title = els.titleInput.value.trim();
+  const body = els.bodyInput.value.trim();
+  if (!title && !body) {
+    showToast("Write a rough capture first");
+    els.bodyInput.focus();
+    return;
+  }
+
+  setShapeLoading(true);
+
+  try {
+    const response = await fetch("/api/shape", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        draft: {
+          mode: state.composerMode,
+          title,
+          body,
+          label: els.labelInput.value
+        }
+      })
+    });
+    const shape = await response.json();
+    if (!response.ok) throw new Error(shape.error || "Shape failed");
+    applyDraftShape(shape);
+    showToast(shape.summary || "Draft shaped");
+  } catch (error) {
+    applyDraftShape(buildLocalDraftShape({ title, body, mode: state.composerMode, label: els.labelInput.value }));
+    showToast("Local shape applied");
+  } finally {
+    setShapeLoading(false);
+  }
+}
+
+function applyDraftShape(shape) {
+  const mode = shape.type === "task" ? "task" : "note";
+  setComposerMode(mode);
+  els.titleInput.value = shape.title || els.titleInput.value.trim() || "Untitled";
+  els.bodyInput.value = shape.body || els.bodyInput.value.trim();
+  els.labelInput.value = ["work", "home", "ideas", "personal"].includes(shape.label) ? shape.label : els.labelInput.value;
+
+  if (mode === "task") {
+    els.priorityInput.value = ["low", "normal", "high"].includes(shape.priority) ? shape.priority : "normal";
+    els.dueInput.value = toDateInput(new Date(Date.now() + dayMs * getDueOffset(shape)));
+  } else {
+    setComposerColor(["sun", "mint", "sky", "rose", "ink"].includes(shape.color) ? shape.color : state.color);
+  }
+}
+
+function buildLocalDraftShape(draft) {
+  const combined = `${draft.title} ${draft.body}`.toLowerCase();
+  const taskWords = ["call", "send", "buy", "book", "schedule", "email", "finish", "review", "follow up", "todo"];
+  const homeWords = ["market", "grocery", "home", "kitchen", "water", "clean"];
+  const workWords = ["meeting", "client", "recap", "metric", "product", "quarter", "review"];
+  const type = draft.mode === "task" || taskWords.some((word) => combined.includes(word)) ? "task" : "note";
+  const label = workWords.some((word) => combined.includes(word)) ? "work" : homeWords.some((word) => combined.includes(word)) ? "home" : draft.label;
+  const title = draft.title || sentenceTitle(draft.body) || (type === "task" ? "Follow up" : "Captured thought");
+
+  return {
+    type,
+    title,
+    body: draft.body || draft.title,
+    label,
+    color: label === "home" ? "mint" : label === "work" ? "sky" : "sun",
+    priority: combined.includes("urgent") || combined.includes("today") ? "high" : "normal",
+    dueOffsetDays: combined.includes("tomorrow") ? 1 : 0,
+    summary: "Draft shaped locally"
+  };
+}
+
+function sentenceTitle(value) {
+  return String(value || "")
+    .split(/[.!?\n]/)[0]
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 70);
+}
+
+function setComposerColor(color) {
+  state.color = color;
+  document.querySelectorAll(".dot").forEach((dot) => dot.classList.toggle("active", dot.dataset.color === color));
+}
+
+function setShapeLoading(loading) {
+  els.shapeButton.disabled = loading;
+  els.shapeButton.textContent = loading ? "Shaping..." : "Shape";
 }
 
 async function sparkIdeas() {
@@ -744,6 +1340,33 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => els.toast.classList.remove("show"), 1700);
 }
 
+function initWhatsNew() {
+  if (!latestUpdate?.id || !latestUpdate.title || !Array.isArray(latestUpdate.bullets)) return;
+  const lastSeen = localStorage.getItem(UPDATE_SEEN_KEY);
+  if (lastSeen === latestUpdate.id) return;
+  showWhatsNew(latestUpdate);
+}
+
+function showWhatsNew(update) {
+  els.whatsNewTitle.textContent = update.title;
+  els.whatsNewList.replaceChildren(
+    ...update.bullets.slice(0, 4).map((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      return item;
+    })
+  );
+  els.whatsNewBackdrop.hidden = false;
+  document.body.classList.add("modal-open");
+  requestAnimationFrame(() => els.whatsNewDismiss.focus());
+}
+
+function dismissWhatsNew() {
+  if (latestUpdate?.id) localStorage.setItem(UPDATE_SEEN_KEY, latestUpdate.id);
+  els.whatsNewBackdrop.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
 function formatDate(value) {
   return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(new Date(value));
 }
@@ -806,7 +1429,11 @@ document.querySelectorAll(".mode-button").forEach((button) => {
 });
 
 els.addButton.addEventListener("click", addItem);
+els.shapeButton.addEventListener("click", shapeDraft);
 els.sparkButton.addEventListener("click", sparkIdeas);
+els.focusButton.addEventListener("click", briefFocus);
+els.sweepButton.addEventListener("click", sweepItems);
+els.askForm.addEventListener("submit", askKeeply);
 els.quickAddButton.addEventListener("click", () => {
   els.titleInput.focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -824,10 +1451,16 @@ els.themeButton.addEventListener("click", () => {
   document.body.classList.toggle("night");
   showToast(document.body.classList.contains("night") ? "Evening paper" : "Morning paper");
 });
+els.whatsNewDismiss.addEventListener("click", dismissWhatsNew);
+els.whatsNewBackdrop.addEventListener("click", (event) => {
+  if (event.target === els.whatsNewBackdrop) dismissWhatsNew();
+});
 
 document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !els.whatsNewBackdrop.hidden) dismissWhatsNew();
   if ((event.metaKey || event.ctrlKey) && event.key === "Enter") addItem();
 });
 
 render();
 loadRemoteData();
+initWhatsNew();

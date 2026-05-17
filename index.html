@@ -103,6 +103,7 @@
               <option value="home">Home</option>
               <option value="personal">Personal</option>
             </select>
+            <button id="shapeButton" class="shape-button" type="button">Shape</button>
             <button id="sparkButton" class="spark-button" type="button">Spark</button>
             <button id="addButton" class="primary-button">
               <span class="icon icon-plus"></span>
@@ -126,6 +127,39 @@
           </div>
         </section>
 
+        <section class="focus-brief" id="focusBrief" aria-label="Focus brief">
+          <div class="focus-copy">
+            <span class="focus-kicker">Focus Brief</span>
+            <h2 id="focusTitle">Plan the next move</h2>
+            <p id="focusSummary">Ask Claude to turn open tasks and pinned notes into a short agenda.</p>
+          </div>
+          <button class="focus-button" id="focusButton" type="button">Brief me</button>
+          <div class="focus-list" id="focusList"></div>
+        </section>
+
+        <section class="smart-sweep" id="smartSweep" aria-label="Smart sweep">
+          <div class="sweep-copy">
+            <span class="sweep-kicker">Smart Sweep</span>
+            <h2 id="sweepTitle">Clean up the clutter</h2>
+            <p id="sweepSummary">Let Claude spot stale notes, loose tasks, and easy organizing wins.</p>
+          </div>
+          <button class="sweep-button" id="sweepButton" type="button">Sweep</button>
+          <div class="sweep-list" id="sweepList"></div>
+        </section>
+
+        <section class="ask-keeply" id="askKeeply" aria-label="Ask Keeply">
+          <div class="ask-copy">
+            <span class="ask-kicker">Ask Keeply</span>
+            <h2 id="askTitle">Question your notes</h2>
+            <p id="askSummary">Ask Claude to answer from saved notes and tasks, with sources.</p>
+          </div>
+          <form class="ask-form" id="askForm">
+            <input id="askInput" type="search" autocomplete="off" placeholder="What did I say about the check-in?" />
+            <button class="ask-button" id="askButton" type="submit">Ask</button>
+          </form>
+          <div class="ask-answer" id="askAnswer"></div>
+        </section>
+
         <section class="notes-region">
           <div class="section-heading" id="pinnedHeading">Pinned</div>
           <div class="notes-grid" id="pinnedNotes"></div>
@@ -143,6 +177,15 @@
       <button class="fab" id="quickAddButton" aria-label="Quick add note">
         <span class="icon icon-plus"></span>
       </button>
+    </div>
+
+    <div class="whats-new-backdrop" id="whatsNewBackdrop" hidden>
+      <section class="whats-new-dialog" id="whatsNewDialog" role="dialog" aria-modal="true" aria-labelledby="whatsNewTitle">
+        <span class="whats-new-kicker">What's New</span>
+        <h2 id="whatsNewTitle"></h2>
+        <ul id="whatsNewList"></ul>
+        <button class="whats-new-dismiss" id="whatsNewDismiss" type="button">Got it</button>
+      </section>
     </div>
 
     <template id="noteTemplate">

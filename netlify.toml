@@ -12,6 +12,26 @@
   to = "/.netlify/functions/spark"
   status = 200
 
+[[redirects]]
+  from = "/api/brief"
+  to = "/.netlify/functions/brief"
+  status = 200
+
+[[redirects]]
+  from = "/api/sweep"
+  to = "/.netlify/functions/sweep"
+  status = 200
+
+[[redirects]]
+  from = "/api/shape"
+  to = "/.netlify/functions/shape"
+  status = 200
+
+[[redirects]]
+  from = "/api/ask"
+  to = "/.netlify/functions/ask"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
