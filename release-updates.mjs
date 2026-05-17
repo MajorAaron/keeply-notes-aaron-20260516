@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-undo-cleanup-actions",
+    title: "Undo Cleanup Actions",
+    bullets: [
+      "Archive, trash, restore, and delete-forever actions now offer a quick Undo.",
+      "Undo restores the note or task back into its previous spot when possible.",
+      "The toast action is sized for mobile so cleanup mistakes are easier to catch."
+    ]
+  },
+  {
     id: "2026-05-17-task-priority-shortcuts",
     title: "Quick Task Priority Changes",
     bullets: [

@@ -4,6 +4,7 @@ import { buildLocalNoteImage, dataUrlBytes } from "./note-images.mjs";
 import { getTaskDueShortcutDate, getVisibleTaskDueShortcuts } from "./task-due-shortcuts.mjs";
 import { getTaskPriorityShortcutValue, getVisibleTaskPriorityShortcuts } from "./task-priority-shortcuts.mjs";
 import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask } from "./note-followups.mjs";
+import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -998,18 +999,25 @@ function renderNote(note) {
   pinButton.addEventListener("click", () => updateNote(note.id, { pinned: !note.pinned }, note.pinned ? "Unpinned" : "Pinned"));
   archiveButton.addEventListener("click", () => {
     const status = state.view === "archive" ? "active" : "archive";
-    updateNote(note.id, { status, pinned: false }, status === "archive" ? "Archived" : "Restored");
+    updateNoteWithUndo(note, { status, pinned: false }, status === "archive" ? "Archived" : "Restored");
   });
   trashButton.addEventListener("click", () => {
     if (state.view === "trash") {
+      const snapshot = captureItemRestore(state.notes, note.id);
       state.notes = state.notes.filter((item) => item.id !== note.id);
       rememberDeleted(note.id);
       saveData();
       render();
-      showToast("Deleted forever");
+      showUndoToast("Deleted forever", () => {
+        state.notes = restoreItem(state.notes, snapshot);
+        state.deletedIds = state.deletedIds.filter((deletedId) => deletedId !== note.id);
+        saveData();
+        render();
+        showToast("Note restored");
+      });
       return;
     }
-    updateNote(note.id, { status: "trash", pinned: false }, "Moved to trash");
+    updateNoteWithUndo(note, { status: "trash", pinned: false }, "Moved to trash");
   });
 
   attachSwipe(node, note);
@@ -1105,18 +1113,25 @@ function renderTask(task) {
   });
   archiveButton.addEventListener("click", () => {
     const status = state.view === "archive" ? "active" : "archive";
-    updateTask(task.id, { status }, status === "archive" ? "Archived" : "Restored");
+    updateTaskWithUndo(task, { status }, status === "archive" ? "Archived" : "Restored");
   });
   trashButton.addEventListener("click", () => {
     if (state.view === "trash") {
+      const snapshot = captureItemRestore(state.tasks, task.id);
       state.tasks = state.tasks.filter((item) => item.id !== task.id);
       rememberDeleted(task.id);
       saveData();
       render();
-      showToast("Deleted forever");
+      showUndoToast("Deleted forever", () => {
+        state.tasks = restoreItem(state.tasks, snapshot);
+        state.deletedIds = state.deletedIds.filter((deletedId) => deletedId !== task.id);
+        saveData();
+        render();
+        showToast("Task restored");
+      });
       return;
     }
-    updateTask(task.id, { status: "trash" }, "Moved to trash");
+    updateTaskWithUndo(task, { status: "trash" }, "Moved to trash");
   });
 
   return node;
@@ -1145,7 +1160,7 @@ function attachSwipe(node, note) {
         updateNote(note.id, { pinned: !note.pinned }, note.pinned ? "Unpinned" : "Pinned");
       } else {
         const status = state.view === "trash" ? "active" : "trash";
-        updateNote(note.id, { status, pinned: false }, status === "trash" ? "Moved to trash" : "Restored");
+        updateNoteWithUndo(note, { status, pinned: false }, status === "trash" ? "Moved to trash" : "Restored");
       }
     } else {
       node.style.setProperty("--drag-x", "0px");
@@ -1167,6 +1182,32 @@ function updateTask(id, patch, message) {
   saveData();
   render();
   showToast(message);
+}
+
+function updateNoteWithUndo(note, patch, message) {
+  const snapshot = captureItemRestore(state.notes, note.id);
+  state.notes = state.notes.map((item) => (item.id === note.id ? { ...item, ...patch, updatedAt: new Date().toISOString() } : item));
+  saveData();
+  render();
+  showUndoToast(message, () => {
+    state.notes = restoreItem(state.notes, snapshot);
+    saveData();
+    render();
+    showToast("Note restored");
+  });
+}
+
+function updateTaskWithUndo(task, patch, message) {
+  const snapshot = captureItemRestore(state.tasks, task.id);
+  state.tasks = state.tasks.map((item) => (item.id === task.id ? { ...item, ...patch, updatedAt: new Date().toISOString() } : item));
+  saveData();
+  render();
+  showUndoToast(message, () => {
+    state.tasks = restoreItem(state.tasks, snapshot);
+    saveData();
+    render();
+    showToast("Task restored");
+  });
 }
 
 function rememberDeleted(id) {
@@ -1615,11 +1656,26 @@ function getViewTitle() {
   return titleCase(state.view);
 }
 
-function showToast(message) {
-  els.toast.textContent = message;
+function showToast(message, action) {
+  els.toast.replaceChildren(document.createTextNode(message));
+  if (action?.label && typeof action.onClick === "function") {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = action.label;
+    button.addEventListener("click", () => {
+      window.clearTimeout(showToast.timer);
+      els.toast.classList.remove("show");
+      action.onClick();
+    });
+    els.toast.append(button);
+  }
   els.toast.classList.add("show");
   window.clearTimeout(showToast.timer);
   showToast.timer = window.setTimeout(() => els.toast.classList.remove("show"), 1700);
+}
+
+function showUndoToast(message, onUndo) {
+  showToast(message, { label: "Undo", onClick: onUndo });
 }
 
 function initWhatsNew() {
