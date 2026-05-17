@@ -1285,6 +1285,14 @@ select {
   background: rgba(255, 255, 255, 0.42);
 }
 
+.share-action {
+  width: auto;
+  min-width: 52px;
+  padding: 0 10px;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
 .note-card.pinned .pin-action {
   background: var(--note-color);
 }

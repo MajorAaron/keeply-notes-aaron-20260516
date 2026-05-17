@@ -16,6 +16,7 @@ import { formatLabelCount, getLabelCounts } from "./label-counts.mjs";
 import { buildViewPreferences, parseViewPreferences } from "./view-preferences.mjs";
 import { getSearchHighlightTerms, splitHighlightedText } from "./search-highlights.mjs";
 import { getActiveFilterSummary } from "./active-filters.mjs";
+import { buildNoteSharePayload, buildTaskSharePayload } from "./item-share.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1113,6 +1114,7 @@ function renderNote(note) {
   const archiveButton = node.querySelector(".archive-action");
   const trashButton = node.querySelector(".trash-action");
   const pinButton = node.querySelector(".pin-action");
+  const shareButton = node.querySelector(".share-action");
   const followUpRow = node.querySelector(".note-followups");
   const colorShortcutRow = node.querySelector(".note-color-shortcuts");
 
@@ -1149,6 +1151,7 @@ function renderNote(note) {
   trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move note to trash");
 
   pinButton.addEventListener("click", () => updateNote(note.id, { pinned: !note.pinned }, note.pinned ? "Unpinned" : "Pinned"));
+  shareButton.addEventListener("click", () => shareItem(buildNoteSharePayload(note), "Note copied"));
   archiveButton.addEventListener("click", () => {
     const status = state.view === "archive" ? "active" : "archive";
     updateNoteWithUndo(note, { status, pinned: false }, status === "archive" ? "Archived" : "Restored");
@@ -1224,6 +1227,7 @@ function renderTask(task) {
   const checkButton = node.querySelector(".task-check");
   const archiveButton = node.querySelector(".archive-action");
   const trashButton = node.querySelector(".trash-action");
+  const shareButton = node.querySelector(".share-action");
   const dueShortcutRow = node.querySelector(".task-due-shortcuts");
   const priorityShortcutRow = node.querySelector(".task-priority-shortcuts");
   const labelShortcutRow = node.querySelector(".task-label-shortcuts");
@@ -1278,6 +1282,7 @@ function renderTask(task) {
   trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move task to trash");
 
   checkButton.addEventListener("click", () => toggleTaskCompletionWithUndo(task));
+  shareButton.addEventListener("click", () => shareItem(buildTaskSharePayload(task), "Task copied"));
   archiveButton.addEventListener("click", () => {
     const status = state.view === "archive" ? "active" : "archive";
     updateTaskWithUndo(task, { status }, status === "archive" ? "Archived" : "Restored");
@@ -1974,6 +1979,52 @@ function showToast(message, action) {
 
 function showUndoToast(message, onUndo) {
   showToast(message, { label: "Undo", onClick: onUndo });
+}
+
+async function shareItem(payload, fallbackMessage) {
+  if (!payload?.text) {
+    showToast("Nothing to share");
+    return;
+  }
+
+  if (navigator.share) {
+    try {
+      await navigator.share(payload);
+      showToast("Shared");
+      return;
+    } catch (error) {
+      if (error?.name === "AbortError") return;
+    }
+  }
+
+  try {
+    await copyText(payload.text);
+    showToast(fallbackMessage);
+  } catch {
+    showToast("Share unavailable");
+  }
+}
+
+async function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const field = document.createElement("textarea");
+  field.value = text;
+  field.setAttribute("readonly", "");
+  field.style.position = "fixed";
+  field.style.opacity = "0";
+  document.body.append(field);
+  field.select();
+
+  try {
+    const copied = document.execCommand("copy");
+    if (!copied) throw new Error("copy failed");
+  } finally {
+    field.remove();
+  }
 }
 
 function initWhatsNew() {

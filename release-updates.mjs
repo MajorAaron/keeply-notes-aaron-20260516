@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-share-cards",
+    title: "Share Notes and Tasks",
+    bullets: [
+      "Saved note and task cards now include a mobile-friendly Share action.",
+      "Keeply uses the device share sheet when available and copies clean text otherwise.",
+      "Shared tasks include status, label, priority, due date, and details."
+    ]
+  },
+  {
     id: "2026-05-17-remember-workspace",
     title: "Remembered Workspace",
     bullets: [
