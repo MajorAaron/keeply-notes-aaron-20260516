@@ -20,6 +20,7 @@ import { buildNoteSharePayload, buildTaskSharePayload } from "./item-share.mjs";
 import { duplicateNote, duplicateTask } from "./duplicate-items.mjs";
 import { removeCopiedItem } from "./duplicate-undo.mjs";
 import { buildNoteEditPatch, buildTaskEditPatch } from "./edit-items.mjs";
+import { getNotePinLabel, toggleNotePin } from "./note-pin.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1203,6 +1204,8 @@ function renderNote(note) {
   const colorShortcutRow = node.querySelector(".note-color-shortcuts");
 
   pinButton.hidden = state.view !== "active";
+  pinButton.setAttribute("aria-label", getNotePinLabel(note));
+  pinButton.title = getNotePinLabel(note);
   followUpRow.hidden = state.view !== "active";
   colorShortcutRow.hidden = state.view !== "active";
   followUpRow.replaceChildren(
@@ -1234,7 +1237,7 @@ function renderNote(note) {
   archiveButton.setAttribute("aria-label", state.view === "archive" ? "Restore note" : "Archive note");
   trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move note to trash");
 
-  pinButton.addEventListener("click", () => updateNote(note.id, { pinned: !note.pinned }, note.pinned ? "Unpinned" : "Pinned"));
+  pinButton.addEventListener("click", () => toggleNotePinWithUndo(note));
   editButton.addEventListener("click", () => startNoteEdit(note));
   shareButton.addEventListener("click", () => shareItem(buildNoteSharePayload(note), "Note copied"));
   duplicateButton.addEventListener("click", () => duplicateNoteCard(note));
@@ -1530,7 +1533,7 @@ function attachSwipe(node, note) {
   node.addEventListener("pointerup", () => {
     if (Math.abs(currentX) > 70) {
       if (currentX > 0 && state.view === "active") {
-        updateNote(note.id, { pinned: !note.pinned }, note.pinned ? "Unpinned" : "Pinned");
+        toggleNotePinWithUndo(note);
       } else {
         const status = state.view === "trash" ? "active" : "trash";
         updateNoteWithUndo(note, { status, pinned: false }, status === "trash" ? "Moved to trash" : "Restored");
@@ -1540,6 +1543,26 @@ function attachSwipe(node, note) {
     }
     startX = 0;
     currentX = 0;
+  });
+}
+
+function toggleNotePinWithUndo(note) {
+  const snapshot = captureItemRestore(state.notes, note.id);
+  const result = toggleNotePin(state.notes, note.id);
+
+  if (!result.note) {
+    showToast("Note not found");
+    return;
+  }
+
+  state.notes = result.notes;
+  saveData();
+  render();
+  showUndoToast(result.pinned ? "Pinned" : "Unpinned", () => {
+    state.notes = restoreItem(state.notes, snapshot);
+    saveData();
+    render();
+    showToast(result.pinned ? "Note unpinned" : "Note pinned");
   });
 }
 

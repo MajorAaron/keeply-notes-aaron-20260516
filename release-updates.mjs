@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-undo-note-pinning",
+    title: "Undo Note Pinning",
+    bullets: [
+      "Pinning or unpinning a note now shows an Undo action in the toast.",
+      "Undo works from both the pin button and the mobile swipe gesture.",
+      "Accidental pin changes can be reversed without hunting for the moved note."
+    ]
+  },
+  {
     id: "2026-05-17-undo-follow-up-tasks",
     title: "Undo Follow-Up Tasks",
     bullets: [
