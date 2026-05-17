@@ -9,7 +9,7 @@
 - Verification: `npm test` passed with 63 tests; `git diff --check` passed.
 - Secret scan of changed app/test/metadata/helper files found no committed API key or token patterns.
 - Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local browser smoke check could not be run in this sandbox.
-- Git status: feature commit `08d10b6` (`Add undo for follow-up tasks`) plus log commits `005ae7f` and `e367643` were pushed to `origin main`; earlier push attempts intermittently failed resolving `github.com`, and unrelated untracked `backups/` was left untouched.
+- Git status: feature commit `08d10b6` (`Add undo for follow-up tasks`) and subsequent log corrections were pushed to `origin main`; earlier push attempts intermittently failed resolving `github.com`, and unrelated untracked `backups/` was left untouched.
 - Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS could not resolve `api.netlify.com`.
 - Netlify production deploy succeeded via the generated MCP deploy command. Deploy `6a0a3be455042ee40219a84f` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a3be455042ee40219a84f--keeply-notes-aaron-20260516.netlify.app`. Readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 85 scanned files.
 
