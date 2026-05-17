@@ -226,3 +226,18 @@
 - Git status: feature commit `773c92e` (`Add composer draft recovery`) was pushed to `origin main`.
 - Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
 - Netlify MCP deployment succeeded. Initial feature deploy `6a09aef56f27526a162b6b99` and final current-tree deploy `6a09af61e06e854521402567` are ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
+
+## 2026-05-17 07:04:36 MDT
+
+- Added quick note color shortcuts to active note cards.
+- Active notes now show mobile-friendly color swatches for every color except the card's current color.
+- Tapping a swatch updates the note color through the existing save/sync path without reopening the composer.
+- Added `note-color-shortcuts.mjs` and `test/note-color-shortcuts.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-note-color-shortcuts`, title `Quick Note Color Changes`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed with 36 tests; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secret assignments or tokens; local matches were false-positive task/search text. Netlify deploy validation scanned 66 files with no secret-scan matches.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
+- Git status: feature commit `7165334` (`Add note color shortcuts`) was pushed to `origin main`.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
+- Netlify MCP deployment succeeded. Deploy `6a09bcc0228bf96e4cd98ed6` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
