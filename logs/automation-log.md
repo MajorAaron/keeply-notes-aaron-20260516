@@ -1,3 +1,19 @@
+## 2026-05-17 13:05:21 MDT
+
+- Added mobile-friendly card share actions for Keeply notes and tasks.
+- Note and task cards now include a `Share` action that uses the native Web Share sheet when available, then falls back to copying clean share text to the clipboard.
+- Added `item-share.mjs` and `test/item-share.test.mjs` for formatting note/task share payloads without embedding image data URLs.
+- Updated card templates and styles in `index.html` and `styles.css`, with thin wiring in `app.js`.
+- Updated What's New metadata with latest id `2026-05-17-share-cards`, title `Share Notes and Tasks`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed with 56 tests; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secret assignments or tokens.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
+- Git status: feature commit `a091520` (`Add card share actions`) was pushed to `origin main`.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`; the connector-generated `@netlify/mcp` command failed because DNS cannot resolve `registry.npmjs.org`.
+- Netlify production deploy succeeded from the pushed commit. Deploy `6a0a113430808e0008a0f648` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, commit `a0915200f2170602f3e961cd8b10157500a1768f`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 78 scanned files.
+- Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
+
 ## 2026-05-17 12:56:44 MDT
 
 - Added an active filter reset row for Keeply.
