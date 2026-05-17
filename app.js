@@ -1,6 +1,7 @@
 import { latestUpdate } from "./release-updates.mjs";
 import { getTaskWindowCounts, matchesTaskWindow } from "./task-filters.mjs";
 import { buildLocalNoteImage, dataUrlBytes } from "./note-images.mjs";
+import { getTaskDueShortcutDate, getVisibleTaskDueShortcuts } from "./task-due-shortcuts.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1030,8 +1031,24 @@ function renderTask(task) {
   const checkButton = node.querySelector(".task-check");
   const archiveButton = node.querySelector(".archive-action");
   const trashButton = node.querySelector(".trash-action");
+  const dueShortcutRow = node.querySelector(".task-due-shortcuts");
 
   checkButton.hidden = state.view !== "tasks";
+  dueShortcutRow.hidden = state.view !== "tasks" || task.completed;
+  dueShortcutRow.replaceChildren(
+    ...getVisibleTaskDueShortcuts(task).map((shortcut) => {
+      const button = document.createElement("button");
+      button.className = "task-due-shortcut";
+      button.type = "button";
+      button.textContent = shortcut.label;
+      button.addEventListener("click", () => {
+        const dueAt = getTaskDueShortcutDate(shortcut.key);
+        if (dueAt === null) return;
+        updateTask(task.id, { dueAt }, dueAt ? `Due ${shortcut.label.toLowerCase()}` : "Due date cleared");
+      });
+      return button;
+    })
+  );
   archiveButton.setAttribute("aria-label", state.view === "archive" ? "Restore task" : "Archive task");
   trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move task to trash");
 

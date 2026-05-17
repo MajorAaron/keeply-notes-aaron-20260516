@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-task-due-shortcuts",
+    title: "Quick Task Rescheduling",
+    bullets: [
+      "Task cards now include quick due-date chips for Today, Tomorrow, and No date.",
+      "The current due state is hidden so only useful date changes are shown.",
+      "Completed tasks stay quiet, keeping the mobile task list easier to scan."
+    ]
+  },
+  {
     id: "2026-05-17-visual-note-fallbacks",
     title: "Visual Notes Keep Working",
     bullets: [
