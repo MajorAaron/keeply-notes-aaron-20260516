@@ -79,3 +79,17 @@
 - Mobile/browser verification limit: `npm start` remains blocked in this sandbox with `listen EPERM: operation not permitted 127.0.0.1:4174`.
 - Git status: committed with message `Add task date filters` and pushed to `origin main` before deployment.
 - Netlify deployment limit: `npx netlify deploy --prod --dir . --json` failed before deployment because DNS cannot resolve `registry.npmjs.org`, so no production deploy id or URL was produced from this run.
+
+## 2026-05-16 21:05:31 MDT
+
+- Added local visual fallbacks for Keeply image notes.
+- The composer now creates a lightweight local visual when `/api/image` is unavailable, so Generate still produces a savable visual note.
+- Added `note-images.mjs` with deterministic SVG fallback generation and data URL byte sizing, plus `test/note-images.test.mjs`.
+- Updated What's New metadata with latest id `2026-05-17-visual-note-fallbacks`, title `Visual Notes Keep Working`, and 3 user-facing bullets.
+- Included the existing visual-note/MCP worktree state in the shipped commit: image note UI, `/api/image`, remote `/mcp`, shared MCP core, and MCP HTTP tests.
+- AI/API behavior: the image endpoint still uses the existing `/api/image` function; the new app behavior falls back locally without an API key when that endpoint fails.
+- Verification: `npm test` passed.
+- Secret scan of changed app/test/metadata/function/server/docs files found no committed secrets.
+- Mobile/browser verification limit: `npm start` remains blocked in this sandbox with `listen EPERM: operation not permitted 127.0.0.1:4174`.
+- Git status: committed with message `Add visual note fallbacks` (`f89e936`) and pushed to `origin main`.
+- Netlify deployment limit: `npx netlify deploy --prod --dir . --json` failed because DNS cannot resolve `registry.npmjs.org`; retrying the cached Netlify CLI with local env and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced from this run.
