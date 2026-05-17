@@ -241,3 +241,19 @@
 - Git status: feature commit `7165334` (`Add note color shortcuts`) was pushed to `origin main`.
 - Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
 - Netlify MCP deployment succeeded. Deploy `6a09bcc0228bf96e4cd98ed6` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
+
+## 2026-05-17 08:06:03 MDT
+
+- Added live label counts to the existing label chip row.
+- Label chips now show compact counts for the current view, with task counts respecting the selected task date filter.
+- Archive and Trash label counts include both notes and tasks so mixed cleanup views are easier to scan.
+- Added `label-counts.mjs` and `test/label-counts.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-label-count-chips`, title `Label Counts`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed with 38 tests; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secret assignments or tokens; Netlify deploy validation scanned 68 files with no secret-scan matches.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
+- Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
+- Git status: feature commit `7992938` (`Add label count chips`) was pushed to `origin main`.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
+- Netlify MCP deployment succeeded. Deploy `6a09cb0efa13889f2b48405b` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
