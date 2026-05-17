@@ -4,6 +4,7 @@ import { buildLocalNoteImage, dataUrlBytes } from "./note-images.mjs";
 import { getTaskDueShortcutDate, getVisibleTaskDueShortcuts } from "./task-due-shortcuts.mjs";
 import { getTaskPriorityShortcutValue, getVisibleTaskPriorityShortcuts } from "./task-priority-shortcuts.mjs";
 import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask } from "./note-followups.mjs";
+import { getNoteColorShortcutValue, getVisibleNoteColorShortcuts } from "./note-color-shortcuts.mjs";
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
 import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-composer-presets.mjs";
@@ -1046,9 +1047,11 @@ function renderNote(note) {
   const trashButton = node.querySelector(".trash-action");
   const pinButton = node.querySelector(".pin-action");
   const followUpRow = node.querySelector(".note-followups");
+  const colorShortcutRow = node.querySelector(".note-color-shortcuts");
 
   pinButton.hidden = state.view !== "active";
   followUpRow.hidden = state.view !== "active";
+  colorShortcutRow.hidden = state.view !== "active";
   followUpRow.replaceChildren(
     ...NOTE_FOLLOW_UP_SHORTCUTS.map((shortcut) => {
       const button = document.createElement("button");
@@ -1056,6 +1059,22 @@ function renderNote(note) {
       button.type = "button";
       button.textContent = shortcut.label;
       button.addEventListener("click", () => createFollowUpTask(note, shortcut.key));
+      return button;
+    })
+  );
+  colorShortcutRow.replaceChildren(
+    ...getVisibleNoteColorShortcuts(note).map((shortcut) => {
+      const button = document.createElement("button");
+      button.className = "note-color-shortcut";
+      button.type = "button";
+      button.dataset.color = shortcut.key;
+      button.setAttribute("aria-label", `Change note color to ${shortcut.label}`);
+      button.title = shortcut.label;
+      button.addEventListener("click", () => {
+        const color = getNoteColorShortcutValue(shortcut.key);
+        if (!color) return;
+        updateNote(note.id, { color }, `${shortcut.label} color`);
+      });
       return button;
     })
   );

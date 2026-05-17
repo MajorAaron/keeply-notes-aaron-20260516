@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-note-color-shortcuts",
+    title: "Quick Note Color Changes",
+    bullets: [
+      "Active note cards now show one-tap color swatches.",
+      "The current note color stays hidden so only useful changes appear.",
+      "Mobile notes are easier to organize without reopening the composer."
+    ]
+  },
+  {
     id: "2026-05-17-composer-draft-recovery",
     title: "Composer Draft Recovery",
     bullets: [

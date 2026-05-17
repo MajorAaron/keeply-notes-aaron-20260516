@@ -1134,14 +1134,23 @@ select {
   -webkit-line-clamp: 5;
 }
 
-.note-followups {
+.note-followups,
+.note-color-shortcuts {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.note-followups {
+  margin: 0 0 10px;
+}
+
+.note-color-shortcuts {
   margin: 0 0 16px;
 }
 
-.note-followups[hidden] {
+.note-followups[hidden],
+.note-color-shortcuts[hidden] {
   display: none;
 }
 
@@ -1160,6 +1169,41 @@ select {
 .note-followup:hover {
   border-color: rgba(35, 36, 38, 0.34);
   background: var(--paper);
+}
+
+.note-color-shortcut {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.66);
+  border-radius: 12px;
+  background: var(--note-color);
+  box-shadow: inset 0 0 0 1px rgba(35, 36, 38, 0.08);
+}
+
+.note-color-shortcut[data-color="sun"] {
+  --note-color: var(--sun);
+}
+
+.note-color-shortcut[data-color="mint"] {
+  --note-color: var(--mint);
+}
+
+.note-color-shortcut[data-color="sky"] {
+  --note-color: var(--sky);
+}
+
+.note-color-shortcut[data-color="rose"] {
+  --note-color: var(--rose);
+}
+
+.note-color-shortcut[data-color="ink"] {
+  --note-color: #56585d;
+}
+
+.note-color-shortcut:focus-visible,
+.note-color-shortcut:hover {
+  border-color: rgba(35, 36, 38, 0.42);
+  transform: translateY(-1px);
 }
 
 .note-card-foot {
@@ -1695,7 +1739,16 @@ time {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .note-color-shortcuts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .note-followup {
+    width: 100%;
+  }
+
+  .note-color-shortcut {
     width: 100%;
   }
 
