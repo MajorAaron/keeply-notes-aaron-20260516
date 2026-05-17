@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-undo-duplicate-cards",
+    title: "Undo Copied Cards",
+    bullets: [
+      "Copying a note or task now shows an Undo action in the toast.",
+      "Undo removes the fresh copy before it clutters your active list.",
+      "The cleanup also queues the copied card for sync removal when needed."
+    ]
+  },
+  {
     id: "2026-05-17-edit-cards",
     title: "Edit Saved Cards",
     bullets: [

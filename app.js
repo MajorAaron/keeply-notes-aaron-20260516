@@ -18,6 +18,7 @@ import { getSearchHighlightTerms, splitHighlightedText } from "./search-highligh
 import { getActiveFilterSummary } from "./active-filters.mjs";
 import { buildNoteSharePayload, buildTaskSharePayload } from "./item-share.mjs";
 import { duplicateNote, duplicateTask } from "./duplicate-items.mjs";
+import { removeCopiedItem } from "./duplicate-undo.mjs";
 import { buildNoteEditPatch, buildTaskEditPatch } from "./edit-items.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1425,7 +1426,18 @@ function duplicateNoteCard(note) {
   syncNav();
   saveData();
   render();
-  showToast("Note duplicated");
+  showUndoToast("Note duplicated", () => {
+    const result = removeCopiedItem(state.notes, copy.id);
+    if (!result.removed) {
+      showToast("Copy already changed");
+      return;
+    }
+    state.notes = result.items;
+    rememberDeleted(copy.id);
+    saveData();
+    render();
+    showToast("Copy removed");
+  });
 }
 
 function duplicateTaskCard(task) {
@@ -1443,7 +1455,18 @@ function duplicateTaskCard(task) {
   saveViewPreferences();
   saveData();
   render();
-  showToast("Task duplicated");
+  showUndoToast("Task duplicated", () => {
+    const result = removeCopiedItem(state.tasks, copy.id);
+    if (!result.removed) {
+      showToast("Copy already changed");
+      return;
+    }
+    state.tasks = result.items;
+    rememberDeleted(copy.id);
+    saveData();
+    render();
+    showToast("Copy removed");
+  });
 }
 
 function startTaskEdit(task) {
