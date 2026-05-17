@@ -25,9 +25,10 @@
 - Verification: `npm test` passed with 52 tests; `git diff --check` passed.
 - Secret scan of changed app/test/metadata/style/package files found no committed secret assignments or tokens.
 - Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
-- Git status: feature commit `b0e60d8` (`Remember Keeply workspace`) was created locally, but `git push origin main` failed because DNS cannot resolve `github.com`.
-- Netlify deployment limit: direct Netlify CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`; connector-generated `@netlify/mcp` deploy command failed because DNS cannot resolve `registry.npmjs.org`.
-- No production deploy id or URL was produced from this run.
+- Git status: amended feature commit `ac5b46d` (`Remember Keeply workspace`) was pushed to `origin main`.
+- Netlify CLI deployment limit: direct Netlify CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
+- Netlify connector deployment succeeded. Deploy `6a0a101965506c35dd466635` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 76 scanned files.
+- Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
 
 ## 2026-05-17 09:06:42 MDT
 
