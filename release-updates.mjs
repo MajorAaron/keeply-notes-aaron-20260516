@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-task-composer-presets",
+    title: "Task Due Presets",
+    bullets: [
+      "The task composer now has one-tap due presets for Today, Tomorrow, and No date.",
+      "Preset buttons stay in sync with the manual due-date field.",
+      "The controls are sized for quick mobile task capture."
+    ]
+  },
+  {
     id: "2026-05-17-archive-completed-tasks",
     title: "Archive Completed Tasks",
     bullets: [

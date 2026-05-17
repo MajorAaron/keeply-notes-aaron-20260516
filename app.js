@@ -6,6 +6,7 @@ import { getTaskPriorityShortcutValue, getVisibleTaskPriorityShortcuts } from ".
 import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask } from "./note-followups.mjs";
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
+import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-composer-presets.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -111,6 +112,7 @@ const els = {
   dueInput: document.querySelector("#dueInput"),
   priorityInput: document.querySelector("#priorityInput"),
   taskFields: document.querySelector("#taskFields"),
+  taskComposerPresets: document.querySelector("#taskComposerPresets"),
   colorDots: document.querySelector(".color-dots"),
   labelInput: document.querySelector("#labelInput"),
   shapeButton: document.querySelector("#shapeButton"),
@@ -1292,6 +1294,7 @@ function applyDraftShape(shape) {
   if (mode === "task") {
     els.priorityInput.value = ["low", "normal", "high"].includes(shape.priority) ? shape.priority : "normal";
     els.dueInput.value = toDateInput(new Date(Date.now() + dayMs * getDueOffset(shape)));
+    renderTaskComposerPresets();
   } else {
     setComposerColor(["sun", "mint", "sky", "rose", "ink"].includes(shape.color) ? shape.color : state.color);
   }
@@ -1674,6 +1677,32 @@ function setComposerMode(mode) {
     button.classList.toggle("active", active);
     button.setAttribute("aria-selected", String(active));
   });
+  renderTaskComposerPresets();
+}
+
+function renderTaskComposerPresets() {
+  const activeDue = els.dueInput.value;
+  els.taskComposerPresets.replaceChildren(
+    ...TASK_COMPOSER_DUE_PRESETS.map((preset) => {
+      const button = document.createElement("button");
+      const dueAt = getTaskComposerDueDate(preset.key);
+      const active = dueAt !== null && dueAt === activeDue;
+      button.className = "task-composer-preset";
+      button.type = "button";
+      button.textContent = preset.label;
+      button.dataset.preset = preset.key;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+      return button;
+    })
+  );
+}
+
+function applyTaskComposerDuePreset(key) {
+  const dueAt = getTaskComposerDueDate(key);
+  if (dueAt === null) return;
+  els.dueInput.value = dueAt;
+  renderTaskComposerPresets();
 }
 
 function syncNav() {
@@ -1819,6 +1848,12 @@ els.focusButton.addEventListener("click", briefFocus);
 els.sweepButton.addEventListener("click", sweepItems);
 els.askForm.addEventListener("submit", askKeeply);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
+els.taskComposerPresets.addEventListener("click", (event) => {
+  const button = event.target.closest(".task-composer-preset");
+  if (!button) return;
+  applyTaskComposerDuePreset(button.dataset.preset);
+});
+els.dueInput.addEventListener("input", renderTaskComposerPresets);
 els.quickAddButton.addEventListener("click", () => {
   els.titleInput.focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
