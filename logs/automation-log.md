@@ -93,3 +93,17 @@
 - Mobile/browser verification limit: `npm start` remains blocked in this sandbox with `listen EPERM: operation not permitted 127.0.0.1:4174`.
 - Git status: committed with message `Add visual note fallbacks` (`f89e936`) and pushed to `origin main`.
 - Netlify deployment limit: `npx netlify deploy --prod --dir . --json` failed because DNS cannot resolve `registry.npmjs.org`; retrying the cached Netlify CLI with local env and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced from this run.
+
+## 2026-05-16 22:04:21 MDT
+
+- Added quick due-date shortcuts to active task cards.
+- Task cards in the Tasks view now show mobile-friendly chips for `Today`, `Tomorrow`, and `No date`, hiding the chip that matches the task's current due state.
+- Completed tasks do not show rescheduling chips so finished work stays visually quiet.
+- Added `task-due-shortcuts.mjs` with shared shortcut/date logic and `test/task-due-shortcuts.test.mjs`.
+- Updated What's New metadata with latest id `2026-05-17-task-due-shortcuts`, title `Quick Task Rescheduling`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style files found no committed secrets.
+- Mobile/browser verification limit: `npm start` remains blocked in this sandbox with `listen EPERM: operation not permitted 127.0.0.1:4174`.
+- Git status: committed with message `Add task due shortcuts` (`2d5565c`) and pushed to `origin main`.
+- Netlify deployment limit: initial `npx netlify deploy --prod --dir . --json` failed writing `/Users/aaronmajor/Library/Preferences/netlify/config.json.tmp-89906381712c1751`; retrying with temp config/cache paths and local env loaded failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced from this run.
