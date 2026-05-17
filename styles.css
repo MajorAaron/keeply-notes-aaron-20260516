@@ -1275,6 +1275,8 @@ select {
 
 .note-actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 4px;
 }
 
@@ -1285,7 +1287,8 @@ select {
   background: rgba(255, 255, 255, 0.42);
 }
 
-.share-action {
+.share-action,
+.duplicate-action {
   width: auto;
   min-width: 52px;
   padding: 0 10px;
@@ -1450,6 +1453,8 @@ select {
 
 .task-actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 4px;
 }
 

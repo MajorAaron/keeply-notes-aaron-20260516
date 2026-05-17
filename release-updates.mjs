@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-duplicate-cards",
+    title: "Duplicate Cards",
+    bullets: [
+      "Note and task cards now include a Copy action for making a fresh duplicate.",
+      "Copied notes reopen as active, unpinned cards with the same label, color, body, and image.",
+      "Copied tasks reopen as active, unchecked tasks with the same label, priority, due date, and details."
+    ]
+  },
+  {
     id: "2026-05-17-share-cards",
     title: "Share Notes and Tasks",
     bullets: [

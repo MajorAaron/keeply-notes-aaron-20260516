@@ -17,6 +17,7 @@ import { buildViewPreferences, parseViewPreferences } from "./view-preferences.m
 import { getSearchHighlightTerms, splitHighlightedText } from "./search-highlights.mjs";
 import { getActiveFilterSummary } from "./active-filters.mjs";
 import { buildNoteSharePayload, buildTaskSharePayload } from "./item-share.mjs";
+import { duplicateNote, duplicateTask } from "./duplicate-items.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1115,6 +1116,7 @@ function renderNote(note) {
   const trashButton = node.querySelector(".trash-action");
   const pinButton = node.querySelector(".pin-action");
   const shareButton = node.querySelector(".share-action");
+  const duplicateButton = node.querySelector(".duplicate-action");
   const followUpRow = node.querySelector(".note-followups");
   const colorShortcutRow = node.querySelector(".note-color-shortcuts");
 
@@ -1152,6 +1154,7 @@ function renderNote(note) {
 
   pinButton.addEventListener("click", () => updateNote(note.id, { pinned: !note.pinned }, note.pinned ? "Unpinned" : "Pinned"));
   shareButton.addEventListener("click", () => shareItem(buildNoteSharePayload(note), "Note copied"));
+  duplicateButton.addEventListener("click", () => duplicateNoteCard(note));
   archiveButton.addEventListener("click", () => {
     const status = state.view === "archive" ? "active" : "archive";
     updateNoteWithUndo(note, { status, pinned: false }, status === "archive" ? "Archived" : "Restored");
@@ -1228,6 +1231,7 @@ function renderTask(task) {
   const archiveButton = node.querySelector(".archive-action");
   const trashButton = node.querySelector(".trash-action");
   const shareButton = node.querySelector(".share-action");
+  const duplicateButton = node.querySelector(".duplicate-action");
   const dueShortcutRow = node.querySelector(".task-due-shortcuts");
   const priorityShortcutRow = node.querySelector(".task-priority-shortcuts");
   const labelShortcutRow = node.querySelector(".task-label-shortcuts");
@@ -1283,6 +1287,7 @@ function renderTask(task) {
 
   checkButton.addEventListener("click", () => toggleTaskCompletionWithUndo(task));
   shareButton.addEventListener("click", () => shareItem(buildTaskSharePayload(task), "Task copied"));
+  duplicateButton.addEventListener("click", () => duplicateTaskCard(task));
   archiveButton.addEventListener("click", () => {
     const status = state.view === "archive" ? "active" : "archive";
     updateTaskWithUndo(task, { status }, status === "archive" ? "Archived" : "Restored");
@@ -1307,6 +1312,39 @@ function renderTask(task) {
   });
 
   return node;
+}
+
+function duplicateNoteCard(note) {
+  const copy = duplicateNote(note);
+  if (!copy) {
+    showToast("Could not copy note");
+    return;
+  }
+
+  state.notes.unshift(copy);
+  state.view = "active";
+  syncNav();
+  saveData();
+  render();
+  showToast("Note duplicated");
+}
+
+function duplicateTaskCard(task) {
+  const copy = duplicateTask(task);
+  if (!copy) {
+    showToast("Could not copy task");
+    return;
+  }
+
+  state.tasks.unshift(copy);
+  state.view = "tasks";
+  state.taskWindow = "all";
+  setComposerMode("task");
+  syncNav();
+  saveViewPreferences();
+  saveData();
+  render();
+  showToast("Task duplicated");
 }
 
 function renderHighlightedText(element, text, terms) {
