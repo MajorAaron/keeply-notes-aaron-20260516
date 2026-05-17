@@ -269,6 +269,55 @@ h1 {
   color: white;
 }
 
+.task-filters {
+  display: flex;
+  gap: 8px;
+  margin: 10px -22px 0;
+  padding: 0 22px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.task-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.task-filter {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 12px 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.52);
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+.task-filter.active {
+  background: var(--ink);
+  color: white;
+}
+
+.task-filter-count {
+  display: grid;
+  min-width: 24px;
+  height: 24px;
+  place-items: center;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: rgba(35, 36, 38, 0.1);
+  color: inherit;
+  font-size: 0.76rem;
+}
+
+.task-filter.active .task-filter-count {
+  background: rgba(255, 255, 255, 0.18);
+}
+
 .composer {
   display: grid;
   gap: 11px;
@@ -1302,6 +1351,13 @@ time {
   }
 
   .chips {
+    margin-right: -14px;
+    margin-left: -14px;
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .task-filters {
     margin-right: -14px;
     margin-left: -14px;
     padding-right: 14px;

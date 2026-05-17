@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-task-date-filters",
+    title: "Task Date Filters",
+    bullets: [
+      "Tasks now get quick filters for all, overdue, today, upcoming, and no-date work.",
+      "Each filter shows a live count so the busiest date group is easy to spot.",
+      "The filter row is horizontally scrollable on mobile and stays out of Notes."
+    ]
+  },
+  {
     id: "2026-05-17-durable-delete-sync",
     title: "Cleaner Cross-Device Deletes",
     bullets: [

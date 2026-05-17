@@ -58,6 +58,29 @@
           <button class="chip" data-label="personal">Personal</button>
         </nav>
 
+        <nav class="task-filters" id="taskFilters" aria-label="Task date filters" hidden>
+          <button class="task-filter active" type="button" data-window="all" aria-pressed="true">
+            <span>All</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+          <button class="task-filter" type="button" data-window="overdue" aria-pressed="false">
+            <span>Overdue</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+          <button class="task-filter" type="button" data-window="today" aria-pressed="false">
+            <span>Today</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+          <button class="task-filter" type="button" data-window="upcoming" aria-pressed="false">
+            <span>Upcoming</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+          <button class="task-filter" type="button" data-window="unscheduled" aria-pressed="false">
+            <span>No date</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+        </nav>
+
         <section class="composer" aria-label="Create item">
           <div class="composer-mode" role="tablist" aria-label="Item type">
             <button class="mode-button active" data-mode="note" role="tab" aria-selected="true">Note</button>

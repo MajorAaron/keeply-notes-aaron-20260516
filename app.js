@@ -1,4 +1,5 @@
 import { latestUpdate } from "./release-updates.mjs";
+import { getTaskWindowCounts, matchesTaskWindow } from "./task-filters.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -81,6 +82,7 @@ const state = {
   dirtyWhileLoading: false,
   view: "active",
   label: "all",
+  taskWindow: "all",
   query: "",
   color: "sun",
   compact: false,
@@ -136,6 +138,7 @@ const els = {
   askTitle: document.querySelector("#askTitle"),
   askSummary: document.querySelector("#askSummary"),
   askAnswer: document.querySelector("#askAnswer"),
+  taskFilters: document.querySelector("#taskFilters"),
   whatsNewBackdrop: document.querySelector("#whatsNewBackdrop"),
   whatsNewDialog: document.querySelector("#whatsNewDialog"),
   whatsNewTitle: document.querySelector("#whatsNewTitle"),
@@ -373,6 +376,7 @@ function getVisibleTasks() {
   const status = state.view === "tasks" ? "active" : state.view;
   return state.tasks
     .filter((task) => task.status === status)
+    .filter((task) => state.view !== "tasks" || matchesTaskWindow(task, state.taskWindow))
     .filter((task) => state.label === "all" || task.label === state.label)
     .filter((task) => {
       if (!query) return true;
@@ -404,18 +408,22 @@ function render() {
   els.pinnedNotes.hidden = showTasks;
   els.notesGrid.hidden = showTasks;
   els.taskList.hidden = !showTasks && !showMixedArchive;
+  els.taskFilters.hidden = !showTasks;
   els.pinnedNotes.replaceChildren(...pinned.map(renderNote));
   els.notesGrid.replaceChildren(...others.map(renderNote));
   els.taskList.replaceChildren(...tasks.map(renderTask));
   els.emptyState.classList.toggle("show", notes.length + tasks.length === 0);
   els.emptyState.querySelector("h2").textContent = showTasks ? "No tasks here" : "No notes here";
   els.emptyState.querySelector("p").textContent = showTasks
-    ? "Add a task with a due date, priority, and label."
+    ? state.taskWindow === "all"
+      ? "Add a task with a due date, priority, and label."
+      : "Try another date filter or add a task for this window."
     : "Create one, change filters, or restore something from archive.";
   els.pinnedNotes.classList.toggle("compact", state.compact);
   els.notesGrid.classList.toggle("compact", state.compact);
 
   renderStats();
+  renderTaskFilters();
 }
 
 function renderStats() {
@@ -438,6 +446,19 @@ function renderStats() {
   els.totalLabel.textContent = "Total";
   els.middleLabel.textContent = "Pinned";
   els.rightLabel.textContent = "Today";
+}
+
+function renderTaskFilters() {
+  const activeTasks = state.tasks.filter((task) => task.status === "active");
+  const counts = getTaskWindowCounts(activeTasks);
+
+  els.taskFilters.querySelectorAll(".task-filter").forEach((button) => {
+    const active = button.dataset.window === state.taskWindow;
+    const count = counts[button.dataset.window] ?? 0;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+    button.querySelector(".task-filter-count").textContent = count;
+  });
 }
 
 function renderFocusBrief(brief) {
@@ -1437,6 +1458,13 @@ document.querySelectorAll(".chip").forEach((button) => {
   button.addEventListener("click", () => {
     state.label = button.dataset.label;
     document.querySelectorAll(".chip").forEach((chip) => chip.classList.toggle("active", chip === button));
+    render();
+  });
+});
+
+document.querySelectorAll(".task-filter").forEach((button) => {
+  button.addEventListener("click", () => {
+    state.taskWindow = button.dataset.window;
     render();
   });
 });
