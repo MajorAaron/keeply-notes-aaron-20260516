@@ -81,9 +81,15 @@
           </button>
         </nav>
 
-        <section class="task-bulk-actions" id="taskBulkActions" aria-label="Completed task cleanup" hidden>
-          <span id="archiveCompletedCount">0 done</span>
-          <button class="archive-completed-button" id="archiveCompletedButton" type="button">Archive completed</button>
+        <section class="task-bulk-actions" id="taskBulkActions" aria-label="Task cleanup actions" hidden>
+          <div class="task-bulk-group">
+            <span id="snoozeOverdueCount">0 overdue</span>
+            <button class="task-bulk-button" id="snoozeOverdueButton" type="button">Snooze overdue</button>
+          </div>
+          <div class="task-bulk-group">
+            <span id="archiveCompletedCount">0 done</span>
+            <button class="task-bulk-button" id="archiveCompletedButton" type="button">Archive completed</button>
+          </div>
         </section>
 
         <section class="composer" aria-label="Create item">

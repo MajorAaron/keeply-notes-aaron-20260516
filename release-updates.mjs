@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-snooze-overdue-tasks",
+    title: "Snooze Overdue Tasks",
+    bullets: [
+      "Tasks now show a one-tap action for moving overdue work to tomorrow.",
+      "The overdue count updates live beside completed-task cleanup.",
+      "The toast includes Undo so bulk snoozing is easy to reverse."
+    ]
+  },
+  {
     id: "2026-05-17-undo-task-completion",
     title: "Undo Task Completion",
     bullets: [

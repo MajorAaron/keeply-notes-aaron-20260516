@@ -8,6 +8,7 @@ import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
 import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-composer-presets.mjs";
 import { toggleTaskCompletion } from "./task-completion.mjs";
+import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -159,6 +160,8 @@ const els = {
   taskBulkActions: document.querySelector("#taskBulkActions"),
   archiveCompletedButton: document.querySelector("#archiveCompletedButton"),
   archiveCompletedCount: document.querySelector("#archiveCompletedCount"),
+  snoozeOverdueButton: document.querySelector("#snoozeOverdueButton"),
+  snoozeOverdueCount: document.querySelector("#snoozeOverdueCount"),
   whatsNewBackdrop: document.querySelector("#whatsNewBackdrop"),
   whatsNewDialog: document.querySelector("#whatsNewDialog"),
   whatsNewTitle: document.querySelector("#whatsNewTitle"),
@@ -487,8 +490,12 @@ function renderTaskFilters() {
 
 function renderTaskBulkActions() {
   const completedCount = state.tasks.filter((task) => task.status === "active" && task.completed).length;
+  const today = toDateInput(new Date());
+  const overdueCount = state.tasks.filter((task) => task.status === "active" && !task.completed && task.dueAt && task.dueAt < today).length;
   els.archiveCompletedCount.textContent = `${completedCount} done`;
+  els.snoozeOverdueCount.textContent = `${overdueCount} overdue`;
   els.archiveCompletedButton.disabled = completedCount === 0;
+  els.snoozeOverdueButton.disabled = overdueCount === 0;
 }
 
 function archiveCompletedTasksWithUndo() {
@@ -504,6 +511,27 @@ function archiveCompletedTasksWithUndo() {
   saveData();
   render();
   showUndoToast(`${result.archived.length} completed archived`, () => {
+    state.tasks = previousTasks;
+    saveData();
+    render();
+    showToast("Tasks restored");
+  });
+}
+
+function snoozeOverdueTasksWithUndo() {
+  const previousTasks = state.tasks.map((task) => ({ ...task }));
+  const result = snoozeOverdueTasks(state.tasks, { now: new Date() });
+
+  if (result.snoozed.length === 0) {
+    showToast("No overdue tasks");
+    return;
+  }
+
+  state.tasks = result.tasks;
+  state.taskWindow = "upcoming";
+  saveData();
+  render();
+  showUndoToast(`${result.snoozed.length} overdue snoozed`, () => {
     state.tasks = previousTasks;
     saveData();
     render();
@@ -1867,6 +1895,7 @@ els.focusButton.addEventListener("click", briefFocus);
 els.sweepButton.addEventListener("click", sweepItems);
 els.askForm.addEventListener("submit", askKeeply);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
+els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
 els.taskComposerPresets.addEventListener("click", (event) => {
   const button = event.target.closest(".task-composer-preset");
   if (!button) return;
