@@ -11,6 +11,7 @@ import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-compos
 import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
+import { formatLabelCount, getLabelCounts } from "./label-counts.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -452,9 +453,35 @@ function render() {
   els.pinnedNotes.classList.toggle("compact", state.compact);
   els.notesGrid.classList.toggle("compact", state.compact);
 
+  renderLabelChips();
   renderStats();
   renderTaskFilters();
   renderTaskBulkActions();
+}
+
+function renderLabelChips() {
+  const counts = getLabelCounts(getLabelCountItems());
+
+  document.querySelectorAll(".chip").forEach((button) => {
+    const label = button.dataset.label;
+    const labelText = button.querySelector(".chip-text")?.textContent || titleCase(label);
+    const count = counts[label] ?? 0;
+    button.classList.toggle("active", label === state.label);
+    button.setAttribute("aria-label", `${labelText}, ${count} items`);
+    button.querySelector(".chip-count").textContent = formatLabelCount(count);
+  });
+}
+
+function getLabelCountItems() {
+  if (state.view === "tasks") {
+    return state.tasks.filter((task) => task.status === "active" && matchesTaskWindow(task, state.taskWindow));
+  }
+
+  if (state.view === "archive" || state.view === "trash") {
+    return [...state.notes, ...state.tasks].filter((item) => item.status === state.view);
+  }
+
+  return state.notes.filter((note) => note.status === "active");
 }
 
 function renderStats() {

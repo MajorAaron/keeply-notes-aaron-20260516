@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-label-count-chips",
+    title: "Label Counts",
+    bullets: [
+      "Label chips now show live counts for the current view.",
+      "Task counts respect the selected date filter.",
+      "Archive and Trash counts include both notes and tasks."
+    ]
+  },
+  {
     id: "2026-05-17-note-color-shortcuts",
     title: "Quick Note Color Changes",
     bullets: [
