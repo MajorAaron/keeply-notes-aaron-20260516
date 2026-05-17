@@ -1,3 +1,18 @@
+## 2026-05-17 09:06:42 MDT
+
+- Added quick task label shortcuts to active task cards.
+- Active tasks now show mobile-friendly label buttons for every label except the task's current label.
+- Tapping a label shortcut updates the task through the existing save/sync path without reopening the composer.
+- Added `task-label-shortcuts.mjs` and `test/task-label-shortcuts.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-task-label-shortcuts`, title `Quick Task Label Changes`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed with 41 tests; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secret assignments or tokens; local matches were false-positive task/search text.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
+- Git status: feature commit `08b0e48` (`Add task label shortcuts`) was pushed to `origin main`.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`; the connector-generated `@netlify/mcp` deploy command failed because DNS cannot resolve `registry.npmjs.org`.
+- Netlify production deploy succeeded from the pushed commit. Deploy `6a09d90b3197b9000813f260` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 70 scanned files.
+
 ## 2026-05-16 17:06:39 MDT
 
 - Added Smart Sweep to Keeply.
