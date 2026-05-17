@@ -1,4 +1,4 @@
-## 2026-05-17 16:07:33 MDT
+## 2026-05-17 16:08:54 MDT
 
 - Added undo for note follow-up task creation.
 - Creating a task from a note now shows a toast with an `Undo` action that removes the fresh follow-up task.
@@ -7,11 +7,11 @@
 - Updated What's New metadata with latest id `2026-05-17-undo-follow-up-tasks`, title `Undo Follow-Up Tasks`, and 3 user-facing bullets.
 - AI/API behavior: no new AI endpoint or API key usage was added.
 - Verification: `npm test` passed with 63 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser console smoke test confirmed a note follow-up showed `Task added for today` with `Undo`, and pressing Undo reduced task count by one and showed `Follow-up removed`.
 - Secret scan of changed app/test/metadata/helper files found no committed API key or token patterns.
-- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local browser smoke check could not be run in this sandbox.
-- Git status: feature commit `08d10b6` (`Add undo for follow-up tasks`) and subsequent log corrections were pushed to `origin main`; earlier push attempts intermittently failed resolving `github.com`, and unrelated untracked `backups/` was left untouched.
-- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS could not resolve `api.netlify.com`.
-- Netlify production deploy succeeded via the generated MCP deploy command. Deploy `6a0a3be455042ee40219a84f` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a3be455042ee40219a84f--keeply-notes-aaron-20260516.netlify.app`. Readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 85 scanned files.
+- Git status: feature commit `08d10b6` (`Add undo for follow-up tasks`) and log commits were pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded from a clean temporary worktree to avoid untracked local files. Final deploy `6a0a3c50db360de6c90c00e6` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a3c50db360de6c90c00e6--keeply-notes-aaron-20260516.netlify.app`.
+- Netlify note: the first plain `npx netlify deploy --prod --dir . --json` attempt failed with `Error while running build`; retrying with `--no-build` succeeded, then the clean-worktree deploy above replaced it.
 
 ## 2026-05-17 15:10:29 MDT
 
