@@ -12,6 +12,7 @@
 - Git status: feature commit `08d10b6` (`Add undo for follow-up tasks`) and log commits were pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded from a clean temporary worktree to avoid untracked local files. Final deploy `6a0a3c50db360de6c90c00e6` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a3c50db360de6c90c00e6--keeply-notes-aaron-20260516.netlify.app`.
 - Netlify note: the first plain `npx netlify deploy --prod --dir . --json` attempt failed with `Error while running build`; retrying with `--no-build` succeeded, then the clean-worktree deploy above replaced it.
+- Live shell verification limit: direct `curl -I https://keeply-notes-aaron-20260516.netlify.app` was blocked by the command security scanner for `.app` lookalike-TLD approval, so the live URL was not fetched from this sandbox after deploy.
 
 ## 2026-05-17 15:10:29 MDT
 
