@@ -149,3 +149,17 @@
 - Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`.
 - Git status: committed with message `Add undo for cleanup actions` (`60e8cac`) and pushed to `origin main`.
 - Netlify deployment limit: `npx netlify deploy --prod --dir . --json` with temp config/cache paths and local env loaded failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced.
+
+## 2026-05-17 02:05:15 MDT
+
+- Added completed task cleanup to the Tasks view.
+- Tasks now show a mobile-friendly completed-work cleanup row with a live done count and an `Archive completed` action.
+- Completed active tasks move to Archive in one tap and the toast offers `Undo` to restore the previous task list.
+- Added `completed-task-cleanup.mjs` with shared archive logic and `test/completed-task-cleanup.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-archive-completed-tasks`, title `Archive Completed Tasks`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secrets; broad scan output contained only false-positive task/search text matches, not secret assignments or tokens.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`; the in-app Browser check also rejected loading `http://127.0.0.1:4175` by browser security policy after the server failure.
+- Git status: committed with message `Add completed task cleanup` (`eba94ff`) and pushed to `origin main`.
+- Netlify deployment limit: `npx netlify deploy --prod --dir . --json` with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced.
