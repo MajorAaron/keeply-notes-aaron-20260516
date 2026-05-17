@@ -163,3 +163,18 @@
 - Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`; the in-app Browser check also rejected loading `http://127.0.0.1:4175` by browser security policy after the server failure.
 - Git status: committed with message `Add completed task cleanup` (`eba94ff`) and pushed to `origin main`.
 - Netlify deployment limit: `npx netlify deploy --prod --dir . --json` with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced.
+
+## 2026-05-17 03:05:23 MDT
+
+- Added task due presets to the task composer.
+- The task composer now shows mobile-friendly `Today`, `Tomorrow`, and `No date` preset buttons that update the due-date field.
+- Preset active state stays in sync with manual due-date changes and with Keeply Shape task drafts.
+- Added `task-composer-presets.mjs` and `test/task-composer-presets.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-task-composer-presets`, title `Task Due Presets`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secrets; Netlify deploy validation also reported no secret-scan matches across 58 scanned files.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local browser check could not be run in this sandbox.
+- Git status: committed with message `Add task due presets` (`9566a46`) and pushed to `origin main`.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
+- Netlify connector deployment succeeded. Deploy `6a0984a6a84d93cf6778428a` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, and 1 header rule processed.
