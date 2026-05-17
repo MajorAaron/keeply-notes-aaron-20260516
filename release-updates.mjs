@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-composer-draft-recovery",
+    title: "Composer Draft Recovery",
+    bullets: [
+      "Keeply now saves unfinished composer text locally while you type.",
+      "Reloading the app restores the in-progress note or task draft.",
+      "Attached and generated image drafts recover with the note composer."
+    ]
+  },
+  {
     id: "2026-05-17-snooze-overdue-tasks",
     title: "Snooze Overdue Tasks",
     bullets: [

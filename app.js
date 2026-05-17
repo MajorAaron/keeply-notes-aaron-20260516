@@ -9,10 +9,12 @@ import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
 import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-composer-presets.mjs";
 import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
+import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
 const UPDATE_SEEN_KEY = "keeply-last-seen-update";
+const COMPOSER_DRAFT_KEY = "keeply-composer-draft-v1";
 const API_URL = "/api/items";
 const dayMs = 86400000;
 
@@ -383,6 +385,7 @@ function clearComposer() {
   els.dueInput.value = "";
   els.priorityInput.value = "normal";
   hideSparkPanel();
+  clearSavedComposerDraft();
 }
 
 function getVisibleNotes() {
@@ -1345,6 +1348,8 @@ function applyDraftShape(shape) {
   } else {
     setComposerColor(["sun", "mint", "sky", "rose", "ink"].includes(shape.color) ? shape.color : state.color);
   }
+
+  saveComposerDraft();
 }
 
 function buildLocalDraftShape(draft) {
@@ -1450,11 +1455,13 @@ async function generateNoteImage() {
 function setDraftImage(image) {
   state.draftImage = normalizeNoteImage(image);
   renderDraftImage();
+  saveComposerDraft();
 }
 
 function clearDraftImage() {
   state.draftImage = null;
   renderDraftImage();
+  saveComposerDraft();
 }
 
 function renderDraftImage() {
@@ -1725,6 +1732,62 @@ function setComposerMode(mode) {
     button.setAttribute("aria-selected", String(active));
   });
   renderTaskComposerPresets();
+  saveComposerDraft();
+}
+
+function getComposerDraft() {
+  return buildComposerDraft({
+    mode: state.composerMode,
+    title: els.titleInput.value,
+    body: els.bodyInput.value,
+    label: els.labelInput.value,
+    color: state.color,
+    dueAt: els.dueInput.value,
+    priority: els.priorityInput.value,
+    image: state.draftImage
+  });
+}
+
+function saveComposerDraft() {
+  if (!els.titleInput) return;
+  const draft = getComposerDraft();
+  if (!hasComposerDraftContent(draft)) {
+    clearSavedComposerDraft();
+    return;
+  }
+  localStorage.setItem(COMPOSER_DRAFT_KEY, JSON.stringify(draft));
+}
+
+function clearSavedComposerDraft() {
+  localStorage.removeItem(COMPOSER_DRAFT_KEY);
+}
+
+function restoreComposerDraft() {
+  const saved = localStorage.getItem(COMPOSER_DRAFT_KEY);
+  if (!saved) return;
+
+  try {
+    const draft = normalizeComposerDraft(JSON.parse(saved));
+    if (!hasComposerDraftContent(draft)) {
+      clearSavedComposerDraft();
+      return;
+    }
+
+    setComposerMode(draft.mode);
+    els.titleInput.value = draft.title;
+    els.bodyInput.value = draft.body;
+    els.labelInput.value = draft.label;
+    els.dueInput.value = draft.dueAt;
+    els.priorityInput.value = draft.priority;
+    setComposerColor(draft.color);
+    state.draftImage = draft.image;
+    renderDraftImage();
+    renderTaskComposerPresets();
+    saveComposerDraft();
+    showToast("Draft restored");
+  } catch {
+    clearSavedComposerDraft();
+  }
 }
 
 function renderTaskComposerPresets() {
@@ -1750,6 +1813,7 @@ function applyTaskComposerDuePreset(key) {
   if (dueAt === null) return;
   els.dueInput.value = dueAt;
   renderTaskComposerPresets();
+  saveComposerDraft();
 }
 
 function syncNav() {
@@ -1874,6 +1938,7 @@ document.querySelectorAll(".dot").forEach((button) => {
   button.addEventListener("click", () => {
     state.color = button.dataset.color;
     document.querySelectorAll(".dot").forEach((dot) => dot.classList.toggle("active", dot === button));
+    saveComposerDraft();
   });
 });
 
@@ -1902,6 +1967,11 @@ els.taskComposerPresets.addEventListener("click", (event) => {
   applyTaskComposerDuePreset(button.dataset.preset);
 });
 els.dueInput.addEventListener("input", renderTaskComposerPresets);
+els.titleInput.addEventListener("input", saveComposerDraft);
+els.bodyInput.addEventListener("input", saveComposerDraft);
+els.labelInput.addEventListener("change", saveComposerDraft);
+els.dueInput.addEventListener("input", saveComposerDraft);
+els.priorityInput.addEventListener("change", saveComposerDraft);
 els.quickAddButton.addEventListener("click", () => {
   els.titleInput.focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1930,5 +2000,6 @@ document.addEventListener("keydown", (event) => {
 });
 
 render();
+restoreComposerDraft();
 loadRemoteData();
 initWhatsNew();
