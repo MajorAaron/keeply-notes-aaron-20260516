@@ -10,7 +10,7 @@
 - Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser console smoke test confirmed Copy showed `Note duplicated` with `Undo`, and pressing Undo reduced the note count by one and showed `Copy removed`.
 - Secret scan of changed app/test/metadata/package files found no committed API key or token patterns.
 - Git status: feature commit `6b26073` (`Add undo for copied cards`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
-- Netlify production deploy succeeded via direct CLI deploy. Deploy `6a0a2eb55f02e4c2ef29b6ec` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy preview URL is `https://6a0a2eb55f02e4c2ef29b6ec--keeply-notes-aaron-20260516.netlify.app`.
+- Netlify production deploy succeeded via direct CLI deploy. Final current-tree deploy `6a0a2eea28a44ba74d0cca9d` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy preview URL is `https://6a0a2eea28a44ba74d0cca9d--keeply-notes-aaron-20260516.netlify.app`. Initial feature deploy was `6a0a2eb55f02e4c2ef29b6ec`.
 - Live shell verification limit: direct `curl -I https://keeply-notes-aaron-20260516.netlify.app` was blocked by the command security scanner for `.app` lookalike-TLD approval, so the live URL was not fetched from this sandbox after deploy.
 
 ## 2026-05-17 15:06:30 MDT
