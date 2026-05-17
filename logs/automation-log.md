@@ -107,3 +107,17 @@
 - Mobile/browser verification limit: `npm start` remains blocked in this sandbox with `listen EPERM: operation not permitted 127.0.0.1:4174`.
 - Git status: committed with message `Add task due shortcuts` (`2d5565c`) and pushed to `origin main`.
 - Netlify deployment limit: initial `npx netlify deploy --prod --dir . --json` failed writing `/Users/aaronmajor/Library/Preferences/netlify/config.json.tmp-89906381712c1751`; retrying with temp config/cache paths and local env loaded failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced from this run.
+
+## 2026-05-16 23:05:08 MDT
+
+- Added note follow-up shortcuts to active note cards.
+- Active notes now show mobile-friendly `Task today` and `Task tomorrow` buttons that create a task from the note without opening the composer.
+- Follow-up tasks keep the note title, body, label, and `sourceNoteId`, with normal priority and the selected due date.
+- Added `note-followups.mjs` and `test/note-followups.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-note-follow-up-shortcuts`, title `Note Follow-Up Shortcuts`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style files found no committed secrets.
+- Mobile/browser verification limit: `npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4174`; retrying `HOST=0.0.0.0 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 0.0.0.0:4175`.
+- Git status: committed with message `Add note follow-up shortcuts` (`6ef140d`) and pushed to `origin main`.
+- Netlify deployment limit: `npx netlify deploy --prod --dir . --json` first failed writing `/Users/aaronmajor/Library/Preferences/netlify/config.json.tmp-8994294792844ddc`; retrying with temp `HOME`, config, and cache paths plus local env loaded failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced.
