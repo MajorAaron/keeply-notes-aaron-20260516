@@ -65,3 +65,17 @@
 - Mobile/browser verification limit: `npm start` remains blocked in this sandbox with `listen EPERM: operation not permitted 127.0.0.1:4174`.
 - Git status: committed locally with message `Add durable delete sync` and pushed to `origin main`.
 - Netlify deployment limit: `npx netlify deploy --prod --dir . --json` failed because DNS cannot resolve `registry.npmjs.org`; retrying cached Netlify CLI with temp config/cache paths and local env loaded failed because DNS cannot resolve `api.netlify.com`.
+
+## 2026-05-16 20:05:25 MDT
+
+- Added task date filters to the Tasks view.
+- The new horizontally scrollable filter row supports All, Overdue, Today, Upcoming, and No date windows with live counts for active tasks.
+- Empty task-filter states now point the user toward another date filter or a task for that window.
+- Added `task-filters.mjs` with shared filter/count logic and `test/task-filters.test.mjs` for due-date and completion-state coverage.
+- Updated What's New metadata with latest id `2026-05-17-task-date-filters`, title `Task Date Filters`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed.
+- Secret scan of changed app/test/metadata files found no committed secrets.
+- Mobile/browser verification limit: `npm start` remains blocked in this sandbox with `listen EPERM: operation not permitted 127.0.0.1:4174`.
+- Git status: committed with message `Add task date filters` and pushed to `origin main` before deployment.
+- Netlify deployment limit: `npx netlify deploy --prod --dir . --json` failed before deployment because DNS cannot resolve `registry.npmjs.org`, so no production deploy id or URL was produced from this run.
