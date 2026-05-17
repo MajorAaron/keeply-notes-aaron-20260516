@@ -88,6 +88,17 @@
           </div>
           <input id="titleInput" class="composer-title" placeholder="Title" maxlength="90" />
           <textarea id="bodyInput" class="composer-body" placeholder="Take a note..." rows="3"></textarea>
+          <input id="imageInput" class="image-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />
+          <div class="image-preview" id="imagePreview" hidden>
+            <img alt="" />
+            <div>
+              <strong id="imagePreviewTitle"></strong>
+              <span id="imagePreviewMeta"></span>
+            </div>
+            <button id="removeImageButton" class="icon-button" type="button" aria-label="Remove image">
+              <span class="icon icon-trash"></span>
+            </button>
+          </div>
           <div class="spark-panel" id="sparkPanel" hidden>
             <div class="spark-head">
               <div>
@@ -126,6 +137,8 @@
               <option value="home">Home</option>
               <option value="personal">Personal</option>
             </select>
+            <button id="attachImageButton" class="image-button" type="button">Image</button>
+            <button id="generateImageButton" class="image-button" type="button">Generate</button>
             <button id="shapeButton" class="shape-button" type="button">Shape</button>
             <button id="sparkButton" class="spark-button" type="button">Spark</button>
             <button id="addButton" class="primary-button">
@@ -221,6 +234,9 @@
           </button>
         </div>
         <h3></h3>
+        <figure class="note-image" hidden>
+          <img alt="" loading="lazy" />
+        </figure>
         <p></p>
         <div class="note-card-foot">
           <time></time>

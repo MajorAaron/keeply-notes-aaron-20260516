@@ -7,6 +7,7 @@ import { homedir } from "node:os";
 import { handler as itemsHandler } from "./netlify/functions/items.mjs";
 import shapeHandler from "./netlify/functions/shape.mjs";
 import askHandler from "./netlify/functions/ask.mjs";
+import imageHandler from "./netlify/functions/image.mjs";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const port = Number(process.env.PORT || 4174);
@@ -39,6 +40,10 @@ const server = createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/ask") {
       await handleAsk(req, res);
+      return;
+    }
+    if (req.method === "POST" && url.pathname === "/api/image") {
+      await handleImage(req, res);
       return;
     }
     if (url.pathname === "/api/items") {
@@ -160,6 +165,10 @@ async function handleAsk(req, res) {
   await runWebFunction(req, res, "/api/ask", askHandler);
 }
 
+async function handleImage(req, res) {
+  await runWebFunction(req, res, "/api/image", imageHandler);
+}
+
 async function runWebFunction(req, res, pathname, handler) {
   globalThis.Netlify ||= {};
   globalThis.Netlify.env = {
@@ -190,7 +199,7 @@ async function readRawBody(req) {
   let raw = "";
   for await (const chunk of req) {
     raw += chunk;
-    if (raw.length > 20000) throw new Error("Request body too large");
+    if (raw.length > 8 * 1024 * 1024) throw new Error("Request body too large");
   }
   return raw;
 }

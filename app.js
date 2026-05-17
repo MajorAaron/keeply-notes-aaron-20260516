@@ -1,5 +1,6 @@
 import { latestUpdate } from "./release-updates.mjs";
 import { getTaskWindowCounts, matchesTaskWindow } from "./task-filters.mjs";
+import { buildLocalNoteImage, dataUrlBytes } from "./note-images.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -86,7 +87,8 @@ const state = {
   query: "",
   color: "sun",
   compact: false,
-  composerMode: "note"
+  composerMode: "note",
+  draftImage: null
 };
 
 const els = {
@@ -94,6 +96,13 @@ const els = {
   searchInput: document.querySelector("#searchInput"),
   titleInput: document.querySelector("#titleInput"),
   bodyInput: document.querySelector("#bodyInput"),
+  imageInput: document.querySelector("#imageInput"),
+  imagePreview: document.querySelector("#imagePreview"),
+  imagePreviewTitle: document.querySelector("#imagePreviewTitle"),
+  imagePreviewMeta: document.querySelector("#imagePreviewMeta"),
+  attachImageButton: document.querySelector("#attachImageButton"),
+  generateImageButton: document.querySelector("#generateImageButton"),
+  removeImageButton: document.querySelector("#removeImageButton"),
   dueInput: document.querySelector("#dueInput"),
   priorityInput: document.querySelector("#priorityInput"),
   taskFields: document.querySelector("#taskFields"),
@@ -291,7 +300,7 @@ function addItem() {
 function addNote() {
   const title = els.titleInput.value.trim();
   const body = els.bodyInput.value.trim();
-  if (!title && !body) {
+  if (!title && !body && !state.draftImage) {
     showToast("Write a note first");
     els.bodyInput.focus();
     return;
@@ -303,6 +312,7 @@ function addNote() {
     id: crypto.randomUUID(),
     title: title || "Untitled",
     body,
+    image: state.draftImage,
     label: els.labelInput.value,
     color: state.color,
     pinned: false,
@@ -355,6 +365,7 @@ function addTask() {
 function clearComposer() {
   els.titleInput.value = "";
   els.bodyInput.value = "";
+  clearDraftImage();
   els.dueInput.value = "";
   els.priorityInput.value = "normal";
   hideSparkPanel();
@@ -367,7 +378,7 @@ function getVisibleNotes() {
     .filter((note) => state.label === "all" || note.label === state.label)
     .filter((note) => {
       if (!query) return true;
-      return `${note.title} ${note.body} ${note.label}`.toLowerCase().includes(query);
+      return `${note.title} ${note.body} ${note.label} ${note.image?.prompt || ""} ${note.image?.name || ""}`.toLowerCase().includes(query);
     });
 }
 
@@ -948,8 +959,18 @@ function renderNote(note) {
   node.classList.toggle("pinned", note.pinned);
   node.querySelector(".note-label").textContent = note.label;
   node.querySelector("h3").textContent = note.title;
-  node.querySelector("p").textContent = note.body || "No extra details";
+  node.querySelector("p").textContent = note.body || (note.image ? "Image note" : "No extra details");
   node.querySelector("time").textContent = formatDate(note.createdAt);
+
+  const image = normalizeNoteImage(note.image);
+  const figure = node.querySelector(".note-image");
+  if (image) {
+    const img = figure.querySelector("img");
+    img.src = image.src;
+    img.alt = image.alt || image.prompt || note.title || "";
+    figure.hidden = false;
+    node.classList.add("has-image");
+  }
 
   const archiveButton = node.querySelector(".archive-action");
   const trashButton = node.querySelector(".trash-action");
@@ -978,6 +999,20 @@ function renderNote(note) {
 
   attachSwipe(node, note);
   return node;
+}
+
+function normalizeNoteImage(image) {
+  if (typeof image === "string") image = { src: image };
+  if (!image?.src || !String(image.src).startsWith("data:image/")) return null;
+  return {
+    src: image.src,
+    mime: image.mime || "image/png",
+    name: image.name || "Image",
+    alt: image.alt || image.prompt || "",
+    prompt: image.prompt || "",
+    generated: Boolean(image.generated),
+    createdAt: image.createdAt || ""
+  };
 }
 
 function renderTask(task) {
@@ -1161,6 +1196,140 @@ function setComposerColor(color) {
 function setShapeLoading(loading) {
   els.shapeButton.disabled = loading;
   els.shapeButton.textContent = loading ? "Shaping..." : "Shape";
+}
+
+async function handleImageInput(event) {
+  const file = event.target.files?.[0];
+  event.target.value = "";
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    showToast("Choose an image file");
+    return;
+  }
+  if (file.size > 6 * 1024 * 1024) {
+    showToast("Image must be under 6 MB");
+    return;
+  }
+
+  setImageLoading(true, "Preparing...");
+  try {
+    const image = await fileToNoteImage(file);
+    setDraftImage(image);
+    setComposerMode("note");
+    showToast("Image attached");
+  } catch (error) {
+    showToast(error.message || "Image could not be added");
+  } finally {
+    setImageLoading(false);
+  }
+}
+
+async function generateNoteImage() {
+  if (state.composerMode === "task") setComposerMode("note");
+
+  const title = els.titleInput.value.trim();
+  const body = els.bodyInput.value.trim();
+  if (!title && !body) {
+    showToast("Describe the image first");
+    els.bodyInput.focus();
+    return;
+  }
+
+  setImageLoading(true, "Generating...");
+  try {
+    const response = await fetch("/api/image", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        title,
+        body,
+        label: els.labelInput.value,
+        prompt: body || title
+      })
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Image generation failed");
+    setDraftImage(data.image);
+    showToast("Image ready");
+  } catch (error) {
+    setDraftImage(buildLocalNoteImage({ title, body, label: els.labelInput.value, prompt: body || title }));
+    showToast("Local image ready");
+  } finally {
+    setImageLoading(false);
+  }
+}
+
+function setDraftImage(image) {
+  state.draftImage = normalizeNoteImage(image);
+  renderDraftImage();
+}
+
+function clearDraftImage() {
+  state.draftImage = null;
+  renderDraftImage();
+}
+
+function renderDraftImage() {
+  const image = state.draftImage;
+  els.imagePreview.hidden = !image;
+  if (!image) {
+    els.imagePreview.querySelector("img").removeAttribute("src");
+    els.imagePreviewTitle.textContent = "";
+    els.imagePreviewMeta.textContent = "";
+    return;
+  }
+
+  els.imagePreview.querySelector("img").src = image.src;
+  els.imagePreviewTitle.textContent = image.generated ? "Generated image" : image.name || "Attached image";
+  els.imagePreviewMeta.textContent = image.generated ? "Ready to save" : formatBytes(dataUrlBytes(image.src));
+}
+
+async function fileToNoteImage(file) {
+  const src = await resizeImageFile(file, 1280, 0.78);
+  return {
+    src,
+    mime: src.slice(5, src.indexOf(";")) || file.type,
+    name: file.name || "Attached image",
+    alt: els.titleInput.value.trim() || file.name || "Attached image",
+    generated: false,
+    createdAt: new Date().toISOString()
+  };
+}
+
+function resizeImageFile(file, maxSize, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener("error", () => reject(new Error("Image could not be read")));
+    reader.addEventListener("load", () => {
+      const img = new Image();
+      img.addEventListener("error", () => reject(new Error("Image could not be loaded")));
+      img.addEventListener("load", () => {
+        const scale = Math.min(1, maxSize / Math.max(img.naturalWidth, img.naturalHeight));
+        const width = Math.max(1, Math.round(img.naturalWidth * scale));
+        const height = Math.max(1, Math.round(img.naturalHeight * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext("2d");
+        context.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL(file.type === "image/png" ? "image/png" : "image/jpeg", quality));
+      });
+      img.src = reader.result;
+    });
+    reader.readAsDataURL(file);
+  });
+}
+
+function formatBytes(bytes) {
+  if (!bytes) return "Ready to save";
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function setImageLoading(loading, label = "Image") {
+  els.attachImageButton.disabled = loading;
+  els.generateImageButton.disabled = loading;
+  els.generateImageButton.textContent = loading ? label : "Generate";
 }
 
 async function sparkIdeas() {
@@ -1357,6 +1526,9 @@ function setComposerMode(mode) {
   state.composerMode = mode;
   els.taskFields.hidden = mode !== "task";
   els.colorDots.hidden = mode === "task";
+  els.attachImageButton.hidden = mode === "task";
+  els.generateImageButton.hidden = mode === "task";
+  els.imagePreview.hidden = mode === "task" || !state.draftImage;
   els.bodyInput.placeholder = mode === "task" ? "Task details..." : "Take a note...";
   els.addButtonLabel.textContent = mode === "task" ? "Add task" : "Add";
   document.querySelectorAll(".mode-button").forEach((button) => {
@@ -1481,6 +1653,13 @@ document.querySelectorAll(".mode-button").forEach((button) => {
 });
 
 els.addButton.addEventListener("click", addItem);
+els.attachImageButton.addEventListener("click", () => els.imageInput.click());
+els.generateImageButton.addEventListener("click", generateNoteImage);
+els.imageInput.addEventListener("change", handleImageInput);
+els.removeImageButton.addEventListener("click", () => {
+  clearDraftImage();
+  showToast("Image removed");
+});
 els.shapeButton.addEventListener("click", shapeDraft);
 els.sparkButton.addEventListener("click", sparkIdeas);
 els.focusButton.addEventListener("click", briefFocus);

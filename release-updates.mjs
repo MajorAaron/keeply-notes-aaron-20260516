@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-visual-note-fallbacks",
+    title: "Visual Notes Keep Working",
+    bullets: [
+      "Image notes now get a local visual fallback when generation is unavailable.",
+      "Fallback visuals save into notes like regular generated images.",
+      "Image preview sizes now handle both generated files and lightweight local visuals."
+    ]
+  },
+  {
     id: "2026-05-17-task-date-filters",
     title: "Task Date Filters",
     bullets: [

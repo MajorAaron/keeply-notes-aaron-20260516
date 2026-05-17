@@ -1,6 +1,7 @@
 # Keeply MCP Server
 
 Keeply includes a local stdio MCP server at `scripts/keeply-mcp-server.mjs`.
+Production also exposes a Streamable HTTP MCP endpoint at `/mcp` through `netlify/functions/mcp.mjs`.
 
 ## Run
 
@@ -13,6 +14,8 @@ The server reads environment variables from `.env` and `/Users/aaronmajor/.claud
 Live note/task tools require network/DNS access to the configured Turso database. AI tools also require `ANTHROPIC_API_KEY`.
 
 ## Codex or Claude Desktop Config
+
+Local stdio:
 
 ```json
 {
@@ -27,6 +30,30 @@ Live note/task tools require network/DNS access to the configured Turso database
   }
 }
 ```
+
+Remote production through Netlify:
+
+```json
+{
+  "mcpServers": {
+    "keeply": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://keeply-notes-aaron-20260516.netlify.app/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer <KEEPLY_MCP_TOKEN>"
+      }
+    }
+  }
+}
+```
+
+Set `KEEPLY_MCP_TOKEN` in Netlify production function environment variables. If it is set, the remote endpoint requires `Authorization: Bearer <token>`.
 
 ## Tools
 
