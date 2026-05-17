@@ -193,3 +193,19 @@
 - Git status: feature commit `d9e5240` (`Add undo for task completion`) was pushed to `origin main`.
 - Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
 - Netlify connector deployment succeeded. Deploy `6a0992d3ba53fc08f92e0f22` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, and 1 header rule processed.
+
+## 2026-05-17 05:04:33 MDT
+
+- Added overdue task snoozing to the Tasks view.
+- Tasks now show a mobile-friendly cleanup row with live `overdue` and `done` counts plus separate `Snooze overdue` and `Archive completed` actions.
+- `Snooze overdue` moves active overdue tasks to tomorrow, switches the task filter to Upcoming, and shows an Undo toast that restores the previous task list.
+- Added `snooze-overdue-tasks.mjs` and `test/snooze-overdue-tasks.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-snooze-overdue-tasks`, title `Snooze Overdue Tasks`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style/package files found no committed secrets; local scan matches were task/search text false positives, and Netlify deploy validation reported no secret-scan matches across 62 scanned files.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
+- Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
+- Git status: feature commit `7370b79` (`Add overdue task snooze`) was pushed to `origin main`.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
+- Netlify MCP deployment succeeded. Deploy `6a09a091143b767c431e313e` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
