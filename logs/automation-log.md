@@ -121,3 +121,17 @@
 - Mobile/browser verification limit: `npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4174`; retrying `HOST=0.0.0.0 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 0.0.0.0:4175`.
 - Git status: committed with message `Add note follow-up shortcuts` (`6ef140d`) and pushed to `origin main`.
 - Netlify deployment limit: `npx netlify deploy --prod --dir . --json` first failed writing `/Users/aaronmajor/Library/Preferences/netlify/config.json.tmp-8994294792844ddc`; retrying with temp `HOME`, config, and cache paths plus local env loaded failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced.
+
+## 2026-05-17 00:03:57 MDT
+
+- Added quick priority shortcuts to active task cards.
+- Task cards in the Tasks view now show mobile-friendly priority buttons for High, Normal, and Low while hiding the task's current priority.
+- Completed tasks do not show priority shortcuts, keeping finished work visually quiet.
+- Added `task-priority-shortcuts.mjs` and `test/task-priority-shortcuts.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-task-priority-shortcuts`, title `Quick Task Priority Changes`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/style files found no committed secrets.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`.
+- Git status: committed with message `Add task priority shortcuts` (`4abcd77`) and pushed to `origin main`.
+- Netlify deployment limit: `npx netlify deploy --prod --dir . --json` with temp config/cache paths and local env loaded failed because DNS cannot resolve `api.netlify.com`, so no production deploy id or URL was produced.
