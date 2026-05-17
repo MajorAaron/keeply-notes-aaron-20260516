@@ -225,4 +225,4 @@
 - Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
 - Git status: feature commit `773c92e` (`Add composer draft recovery`) was pushed to `origin main`.
 - Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
-- Netlify MCP deployment succeeded. Deploy `6a09aef56f27526a162b6b99` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
+- Netlify MCP deployment succeeded. Initial feature deploy `6a09aef56f27526a162b6b99` and final current-tree deploy `6a09af61e06e854521402567` are ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
