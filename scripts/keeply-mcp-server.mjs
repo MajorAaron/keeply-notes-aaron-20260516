@@ -142,6 +142,7 @@ const tools = [
 ];
 
 let buffer = "";
+let pending = Promise.resolve();
 
 process.stdin.setEncoding("utf8");
 process.stdin.on("data", (chunk) => {
@@ -151,14 +152,20 @@ process.stdin.on("data", (chunk) => {
     if (newline === -1) break;
     const line = buffer.slice(0, newline).trim();
     buffer = buffer.slice(newline + 1);
-    if (line) handleLine(line);
+    if (line) enqueueLine(line);
   }
 });
 
 process.stdin.on("end", () => {
   const line = buffer.trim();
-  if (line) handleLine(line);
+  if (line) enqueueLine(line);
 });
+
+function enqueueLine(line) {
+  pending = pending.then(() => handleLine(line)).catch((error) => {
+    sendError(null, -32000, error.message || "Server error", error.details);
+  });
+}
 
 async function handleLine(line) {
   let message;

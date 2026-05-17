@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-durable-delete-sync",
+    title: "Cleaner Cross-Device Deletes",
+    bullets: [
+      "Items deleted forever stay deleted after Keeply syncs with the cloud.",
+      "Offline deletes are remembered locally until the next successful save.",
+      "Sync keeps the newest edit when another device changes the same item."
+    ]
+  },
+  {
     id: "2026-05-17-whats-new",
     title: "What's New in Keeply",
     bullets: [

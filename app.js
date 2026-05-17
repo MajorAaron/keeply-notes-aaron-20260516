@@ -73,6 +73,7 @@ const loaded = loadData();
 const state = {
   notes: loaded.notes,
   tasks: loaded.tasks,
+  deletedIds: loaded.deletedIds,
   hasLocalData: loaded.hasLocalData,
   syncReady: false,
   syncTimer: 0,
@@ -153,30 +154,32 @@ function loadData() {
       return {
         notes: Array.isArray(parsed.notes) ? parsed.notes : seedNotes,
         tasks: Array.isArray(parsed.tasks) ? parsed.tasks : seedTasks,
+        deletedIds: Array.isArray(parsed.deletedIds) ? parsed.deletedIds : [],
         hasLocalData: true
       };
     } catch {
-      return { notes: seedNotes, tasks: seedTasks, hasLocalData: false };
+      return { notes: seedNotes, tasks: seedTasks, deletedIds: [], hasLocalData: false };
     }
   }
 
   const legacyNotes = localStorage.getItem(LEGACY_NOTES_KEY);
-  if (!legacyNotes) return { notes: seedNotes, tasks: seedTasks, hasLocalData: false };
+  if (!legacyNotes) return { notes: seedNotes, tasks: seedTasks, deletedIds: [], hasLocalData: false };
 
   try {
     const parsed = JSON.parse(legacyNotes);
     return {
       notes: Array.isArray(parsed) ? parsed : seedNotes,
       tasks: seedTasks,
+      deletedIds: [],
       hasLocalData: Array.isArray(parsed)
     };
   } catch {
-    return { notes: seedNotes, tasks: seedTasks, hasLocalData: false };
+    return { notes: seedNotes, tasks: seedTasks, deletedIds: [], hasLocalData: false };
   }
 }
 
 function saveData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks, deletedIds: state.deletedIds }));
   state.hasLocalData = true;
   if (!state.syncReady) state.dirtyWhileLoading = true;
   queueRemoteSave();
@@ -195,11 +198,11 @@ async function loadRemoteData() {
     state.syncReady = true;
 
     if (hasRemoteData) {
-      state.notes = state.dirtyWhileLoading ? mergeByUpdatedAt(remoteNotes, state.notes) : remoteNotes;
-      state.tasks = state.dirtyWhileLoading ? mergeByUpdatedAt(remoteTasks, state.tasks) : remoteTasks;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks }));
+      state.notes = state.dirtyWhileLoading ? mergeByUpdatedAt(remoteNotes, state.notes, state.deletedIds) : filterDeletedItems(remoteNotes, state.deletedIds);
+      state.tasks = state.dirtyWhileLoading ? mergeByUpdatedAt(remoteTasks, state.tasks, state.deletedIds) : filterDeletedItems(remoteTasks, state.deletedIds);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks, deletedIds: state.deletedIds }));
       render();
-      if (state.dirtyWhileLoading) queueRemoteSave(true);
+      if (state.dirtyWhileLoading || state.deletedIds.length > 0) queueRemoteSave(true);
       state.dirtyWhileLoading = false;
       showToast("Synced");
       return;
@@ -215,10 +218,12 @@ async function loadRemoteData() {
   }
 }
 
-function mergeByUpdatedAt(remoteItems, localItems) {
-  const items = new Map(remoteItems.map((item) => [item.id, item]));
+function mergeByUpdatedAt(remoteItems, localItems, deletedIds = []) {
+  const deleted = new Set(deletedIds);
+  const items = new Map(remoteItems.filter((item) => !deleted.has(item.id)).map((item) => [item.id, item]));
 
   for (const localItem of localItems) {
+    if (deleted.has(localItem.id)) continue;
     const remoteItem = items.get(localItem.id);
     if (!remoteItem || new Date(localItem.updatedAt || localItem.createdAt) > new Date(remoteItem.updatedAt || remoteItem.createdAt)) {
       items.set(localItem.id, localItem);
@@ -226,6 +231,12 @@ function mergeByUpdatedAt(remoteItems, localItems) {
   }
 
   return [...items.values()];
+}
+
+function filterDeletedItems(items, deletedIds = []) {
+  if (!deletedIds.length) return items;
+  const deleted = new Set(deletedIds);
+  return items.filter((item) => !deleted.has(item.id));
 }
 
 function queueRemoteSave(immediate = false) {
@@ -247,10 +258,17 @@ async function syncRemoteData() {
     const response = await fetch(API_URL, {
       method: "PUT",
       headers: { "content-type": "application/json", accept: "application/json" },
-      body: JSON.stringify({ notes: state.notes, tasks: state.tasks })
+      body: JSON.stringify({ notes: state.notes, tasks: state.tasks, deletedIds: state.deletedIds })
     });
 
     if (!response.ok) throw new Error(`Sync returned ${response.status}`);
+
+    const data = await response.json();
+    state.notes = Array.isArray(data.notes) ? data.notes : state.notes;
+    state.tasks = Array.isArray(data.tasks) ? data.tasks : state.tasks;
+    state.deletedIds = [];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks, deletedIds: state.deletedIds }));
+    render();
   } catch (error) {
     console.warn("Keeply sync failed", error);
     showToast("Saved locally");
@@ -928,6 +946,7 @@ function renderNote(note) {
   trashButton.addEventListener("click", () => {
     if (state.view === "trash") {
       state.notes = state.notes.filter((item) => item.id !== note.id);
+      rememberDeleted(note.id);
       saveData();
       render();
       showToast("Deleted forever");
@@ -970,6 +989,7 @@ function renderTask(task) {
   trashButton.addEventListener("click", () => {
     if (state.view === "trash") {
       state.tasks = state.tasks.filter((item) => item.id !== task.id);
+      rememberDeleted(task.id);
       saveData();
       render();
       showToast("Deleted forever");
@@ -1026,6 +1046,10 @@ function updateTask(id, patch, message) {
   saveData();
   render();
   showToast(message);
+}
+
+function rememberDeleted(id) {
+  state.deletedIds = [...new Set([...state.deletedIds, id])];
 }
 
 async function shapeDraft() {

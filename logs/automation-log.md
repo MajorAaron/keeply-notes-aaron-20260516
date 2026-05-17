@@ -50,3 +50,18 @@
 - Mobile/browser verification limit: `npm start` remains blocked in this sandbox with `listen EPERM: operation not permitted 127.0.0.1:4174`.
 - Netlify deployment limit: `npx netlify deploy --prod --dir . --json` failed because DNS could not resolve `registry.npmjs.org`; retrying the cached Netlify CLI with temp config/cache paths and `NETLIFY_AUTH_TOKEN` failed because DNS could not resolve `api.netlify.com`.
 - Git status: committed locally with message `Add Keeply what's new updates`. Push is blocked: first attempt was rejected because `origin/main` contains work not present locally, and follow-up `git fetch origin main` failed because DNS could not resolve `github.com`.
+
+## 2026-05-16 19:49:35 MDT
+
+- Added durable delete sync for Keeply notes and tasks.
+- The client now stores `deletedIds`, filters those ids during remote load/merge, and sends them on the next successful `/api/items` save so items deleted forever do not reappear from cloud sync.
+- Updated `netlify/functions/items.mjs` to merge incoming notes/tasks with current Turso data, remove ids listed in `deletedIds`, and keep the newest copy when two clients edited the same item.
+- Added `test/sync-delete.test.mjs` and wired it into `npm test` to cover deleted-id removal and newest-item conflict handling.
+- Updated What's New metadata with latest id `2026-05-17-durable-delete-sync`, title `Cleaner Cross-Device Deletes`, and 3 user-facing bullets.
+- Included existing local reliability hardening in the commit: `.mjs` static MIME serving for local module imports and sequential MCP stdin request handling.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed.
+- Netlify function smoke test: direct `/api/items` GET loaded local env without printing secrets but returned status 500 because sandbox DNS cannot resolve Turso host `keeply-majoraaron.aws-us-east-2.turso.io`.
+- Mobile/browser verification limit: `npm start` remains blocked in this sandbox with `listen EPERM: operation not permitted 127.0.0.1:4174`.
+- Git status: committed locally with message `Add durable delete sync` and pushed to `origin main`.
+- Netlify deployment limit: `npx netlify deploy --prod --dir . --json` failed because DNS cannot resolve `registry.npmjs.org`; retrying cached Netlify CLI with temp config/cache paths and local env loaded failed because DNS cannot resolve `api.netlify.com`.

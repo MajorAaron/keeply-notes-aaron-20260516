@@ -7,7 +7,7 @@
     "start": "node server.js",
     "dev": "npx netlify dev",
     "mcp": "node scripts/keeply-mcp-server.mjs",
-    "test": "node --check app.js && node --check release-updates.mjs && node --check netlify/functions/items.mjs && node --check netlify/functions/spark.mjs && node --check netlify/functions/brief.mjs && node --check netlify/functions/sweep.mjs && node --check netlify/functions/shape.mjs && node --check netlify/functions/ask.mjs && node --check scripts/keeply-mcp-server.mjs && node --check scripts/check-release-updates.mjs && node scripts/check-release-updates.mjs"
+    "test": "node --check app.js && node --check release-updates.mjs && node --check netlify/functions/items.mjs && node --check netlify/functions/spark.mjs && node --check netlify/functions/brief.mjs && node --check netlify/functions/sweep.mjs && node --check netlify/functions/shape.mjs && node --check netlify/functions/ask.mjs && node --check scripts/keeply-mcp-server.mjs && node --check scripts/check-release-updates.mjs && node --check test/sync-delete.test.mjs && node scripts/check-release-updates.mjs && node --test test/sync-delete.test.mjs"
   },
   "dependencies": {
     "@libsql/client": "^0.17.3"

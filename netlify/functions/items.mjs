@@ -74,11 +74,38 @@ async function listItems() {
   return { notes, tasks };
 }
 
-async function replaceItems({ notes = [], tasks = [] }) {
+export function newerItem(first, second) {
+  if (!first) return second;
+  if (!second) return first;
+  const firstDate = new Date(first.updatedAt || first.createdAt || 0);
+  const secondDate = new Date(second.updatedAt || second.createdAt || 0);
+  return firstDate >= secondDate ? first : second;
+}
+
+export function mergeItemsForSync(current = {}, incoming = {}) {
+  const deleted = new Set((incoming.deletedIds || []).map((id) => String(id)));
+  const noteMap = new Map((current.notes || []).filter((item) => !deleted.has(item.id)).map((item) => [item.id, item]));
+  const taskMap = new Map((current.tasks || []).filter((item) => !deleted.has(item.id)).map((item) => [item.id, item]));
+
+  for (const item of (incoming.notes || []).map((note) => normalizeItem("note", note))) {
+    if (!deleted.has(item.id)) noteMap.set(item.id, newerItem(item, noteMap.get(item.id)));
+  }
+
+  for (const item of (incoming.tasks || []).map((task) => normalizeItem("task", task))) {
+    if (!deleted.has(item.id)) taskMap.set(item.id, newerItem(item, taskMap.get(item.id)));
+  }
+
+  return {
+    notes: [...noteMap.values()],
+    tasks: [...taskMap.values()]
+  };
+}
+
+async function replaceItems({ notes = [], tasks = [], deletedIds = [] }) {
   const client = getClient();
   const now = new Date().toISOString();
-  const normalizedNotes = notes.map((item) => normalizeItem("note", item));
-  const normalizedTasks = tasks.map((item) => normalizeItem("task", item));
+  const current = await listItems();
+  const { notes: normalizedNotes, tasks: normalizedTasks } = mergeItemsForSync(current, { notes, tasks, deletedIds });
   const items = [...normalizedNotes, ...normalizedTasks];
 
   const statements = [
