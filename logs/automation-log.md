@@ -209,3 +209,20 @@
 - Git status: feature commit `7370b79` (`Add overdue task snooze`) was pushed to `origin main`.
 - Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
 - Netlify MCP deployment succeeded. Deploy `6a09a091143b767c431e313e` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
+
+## 2026-05-17 06:04:37 MDT
+
+- Added composer draft recovery for unfinished notes and tasks.
+- The composer now saves local draft text, mode, label, color, due date, priority, and note images while the user edits.
+- Reloading Keeply restores a meaningful in-progress draft and shows a short `Draft restored` toast.
+- Saving a note or task clears the local draft so completed captures do not reappear.
+- Added `composer-draft.mjs` and `test/composer-draft.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-composer-draft-recovery`, title `Composer Draft Recovery`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed with 33 tests; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/package files found no committed secret patterns; Netlify deploy validation scanned 64 files with no secret-scan matches.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local mobile browser check could not be run in this sandbox.
+- Live shell verification limit: `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
+- Git status: feature commit `773c92e` (`Add composer draft recovery`) was pushed to `origin main`.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
+- Netlify MCP deployment succeeded. Deploy `6a09aef56f27526a162b6b99` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
