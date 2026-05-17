@@ -13,11 +13,15 @@ import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
 import { formatLabelCount, getLabelCounts } from "./label-counts.mjs";
+import { buildViewPreferences, parseViewPreferences } from "./view-preferences.mjs";
+import { getSearchHighlightTerms, splitHighlightedText } from "./search-highlights.mjs";
+import { getActiveFilterSummary } from "./active-filters.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
 const UPDATE_SEEN_KEY = "keeply-last-seen-update";
 const COMPOSER_DRAFT_KEY = "keeply-composer-draft-v1";
+const VIEW_PREFERENCES_KEY = "keeply-view-preferences-v1";
 const API_URL = "/api/items";
 const dayMs = 86400000;
 
@@ -85,6 +89,7 @@ const seedTasks = [
 ];
 
 const loaded = loadData();
+const savedPreferences = parseViewPreferences(localStorage.getItem(VIEW_PREFERENCES_KEY));
 const state = {
   notes: loaded.notes,
   tasks: loaded.tasks,
@@ -94,13 +99,14 @@ const state = {
   syncTimer: 0,
   syncInFlight: false,
   dirtyWhileLoading: false,
-  view: "active",
-  label: "all",
-  taskWindow: "all",
+  view: savedPreferences.view,
+  label: savedPreferences.label,
+  taskWindow: savedPreferences.taskWindow,
   query: "",
   color: "sun",
-  compact: false,
-  composerMode: "note",
+  compact: savedPreferences.compact,
+  theme: savedPreferences.theme,
+  composerMode: savedPreferences.view === "tasks" ? "task" : "note",
   draftImage: null
 };
 
@@ -162,6 +168,9 @@ const els = {
   askSummary: document.querySelector("#askSummary"),
   askAnswer: document.querySelector("#askAnswer"),
   taskFilters: document.querySelector("#taskFilters"),
+  filterSummary: document.querySelector("#filterSummary"),
+  filterSummaryChips: document.querySelector("#filterSummaryChips"),
+  filterClearButton: document.querySelector("#filterClearButton"),
   taskBulkActions: document.querySelector("#taskBulkActions"),
   archiveCompletedButton: document.querySelector("#archiveCompletedButton"),
   archiveCompletedCount: document.querySelector("#archiveCompletedCount"),
@@ -455,6 +464,7 @@ function render() {
   els.notesGrid.classList.toggle("compact", state.compact);
 
   renderLabelChips();
+  renderFilterSummary();
   renderStats();
   renderTaskFilters();
   renderTaskBulkActions();
@@ -483,6 +493,34 @@ function getLabelCountItems() {
   }
 
   return state.notes.filter((note) => note.status === "active");
+}
+
+function renderFilterSummary() {
+  const summary = getActiveFilterSummary({
+    view: state.view,
+    label: state.label,
+    taskWindow: state.taskWindow,
+    query: state.query
+  });
+
+  els.filterSummary.hidden = !summary.active;
+  els.filterSummaryChips.replaceChildren(
+    ...summary.chips.map((chip) => {
+      const item = document.createElement("span");
+      item.className = "filter-summary-chip";
+      item.textContent = chip.label;
+      return item;
+    })
+  );
+}
+
+function clearActiveFilters() {
+  state.label = "all";
+  state.query = "";
+  state.taskWindow = "all";
+  els.searchInput.value = "";
+  render();
+  showToast("Filters cleared");
 }
 
 function renderStats() {
@@ -1053,12 +1091,13 @@ function setAskLoading(loading) {
 
 function renderNote(note) {
   const node = els.noteTemplate.content.firstElementChild.cloneNode(true);
+  const highlightTerms = getSearchHighlightTerms(state.query);
   node.dataset.id = note.id;
   node.dataset.color = note.color;
   node.classList.toggle("pinned", note.pinned);
   node.querySelector(".note-label").textContent = note.label;
-  node.querySelector("h3").textContent = note.title;
-  node.querySelector("p").textContent = note.body || (note.image ? "Image note" : "No extra details");
+  renderHighlightedText(node.querySelector("h3"), note.title, highlightTerms);
+  renderHighlightedText(node.querySelector("p"), note.body || (note.image ? "Image note" : "No extra details"), highlightTerms);
   node.querySelector("time").textContent = formatDate(note.createdAt);
 
   const image = normalizeNoteImage(note.image);
@@ -1171,14 +1210,15 @@ function normalizeNoteImage(image) {
 
 function renderTask(task) {
   const node = els.taskTemplate.content.firstElementChild.cloneNode(true);
+  const highlightTerms = getSearchHighlightTerms(state.query);
   node.dataset.id = task.id;
   node.dataset.priority = task.priority;
   node.classList.toggle("completed", task.completed);
   node.classList.toggle("overdue", isOverdue(task));
   node.querySelector(".task-label").textContent = task.label;
   node.querySelector(".task-priority").textContent = task.priority;
-  node.querySelector("h3").textContent = task.title;
-  node.querySelector("p").textContent = task.details || "No extra details";
+  renderHighlightedText(node.querySelector("h3"), task.title, highlightTerms);
+  renderHighlightedText(node.querySelector("p"), task.details || "No extra details", highlightTerms);
   node.querySelector("time").textContent = task.dueAt ? formatDueDate(task.dueAt) : "No due date";
 
   const checkButton = node.querySelector(".task-check");
@@ -1262,6 +1302,19 @@ function renderTask(task) {
   });
 
   return node;
+}
+
+function renderHighlightedText(element, text, terms) {
+  const fragments = splitHighlightedText(text, terms);
+  element.replaceChildren(
+    ...fragments.map((fragment) => {
+      if (!fragment.highlighted) return document.createTextNode(fragment.text);
+      const mark = document.createElement("mark");
+      mark.className = "search-highlight";
+      mark.textContent = fragment.text;
+      return mark;
+    })
+  );
 }
 
 function attachSwipe(node, note) {
@@ -2022,6 +2075,7 @@ els.sparkButton.addEventListener("click", sparkIdeas);
 els.focusButton.addEventListener("click", briefFocus);
 els.sweepButton.addEventListener("click", sweepItems);
 els.askForm.addEventListener("submit", askKeeply);
+els.filterClearButton.addEventListener("click", clearActiveFilters);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
 els.taskComposerPresets.addEventListener("click", (event) => {

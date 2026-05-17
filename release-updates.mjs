@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-clear-active-filters",
+    title: "Clear Active Filters",
+    bullets: [
+      "Keeply now shows a compact summary when labels, search, or task dates are filtering the view.",
+      "One tap clears every active filter and resets task dates back to All.",
+      "Empty lists are easier to recover from on mobile."
+    ]
+  },
+  {
     id: "2026-05-17-task-label-shortcuts",
     title: "Quick Task Label Changes",
     bullets: [
