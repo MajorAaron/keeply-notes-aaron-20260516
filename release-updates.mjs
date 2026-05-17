@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-task-label-shortcuts",
+    title: "Quick Task Label Changes",
+    bullets: [
+      "Active task cards now show one-tap label shortcuts.",
+      "The current label stays hidden so only useful moves appear.",
+      "Mobile task triage is faster without reopening the composer."
+    ]
+  },
+  {
     id: "2026-05-17-label-count-chips",
     title: "Label Counts",
     bullets: [

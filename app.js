@@ -3,6 +3,7 @@ import { getTaskWindowCounts, matchesTaskWindow } from "./task-filters.mjs";
 import { buildLocalNoteImage, dataUrlBytes } from "./note-images.mjs";
 import { getTaskDueShortcutDate, getVisibleTaskDueShortcuts } from "./task-due-shortcuts.mjs";
 import { getTaskPriorityShortcutValue, getVisibleTaskPriorityShortcuts } from "./task-priority-shortcuts.mjs";
+import { getTaskLabelShortcutValue, getVisibleTaskLabelShortcuts } from "./task-label-shortcuts.mjs";
 import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask } from "./note-followups.mjs";
 import { getNoteColorShortcutValue, getVisibleNoteColorShortcuts } from "./note-color-shortcuts.mjs";
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
@@ -1185,10 +1186,12 @@ function renderTask(task) {
   const trashButton = node.querySelector(".trash-action");
   const dueShortcutRow = node.querySelector(".task-due-shortcuts");
   const priorityShortcutRow = node.querySelector(".task-priority-shortcuts");
+  const labelShortcutRow = node.querySelector(".task-label-shortcuts");
 
   checkButton.hidden = state.view !== "tasks";
   dueShortcutRow.hidden = state.view !== "tasks" || task.completed;
   priorityShortcutRow.hidden = state.view !== "tasks" || task.completed;
+  labelShortcutRow.hidden = state.view !== "tasks" || task.completed;
   dueShortcutRow.replaceChildren(
     ...getVisibleTaskDueShortcuts(task).map((shortcut) => {
       const button = document.createElement("button");
@@ -1213,6 +1216,20 @@ function renderTask(task) {
         const priority = getTaskPriorityShortcutValue(shortcut.key);
         if (!priority) return;
         updateTask(task.id, { priority }, `${shortcut.label} priority`);
+      });
+      return button;
+    })
+  );
+  labelShortcutRow.replaceChildren(
+    ...getVisibleTaskLabelShortcuts(task).map((shortcut) => {
+      const button = document.createElement("button");
+      button.className = "task-label-shortcut";
+      button.type = "button";
+      button.textContent = shortcut.label;
+      button.addEventListener("click", () => {
+        const label = getTaskLabelShortcutValue(shortcut.key);
+        if (!label) return;
+        updateTask(task.id, { label }, `${shortcut.label} label`);
       });
       return button;
     })
