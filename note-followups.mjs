@@ -32,6 +32,19 @@ export function buildFollowUpTask(note, options = {}) {
   };
 }
 
+export function removeFollowUpTask(tasks, snapshot) {
+  const list = Array.isArray(tasks) ? tasks : [];
+  if (!snapshot?.id || !snapshot?.sourceNoteId) return { tasks: list, removed: null };
+
+  const index = list.findIndex((task) => task?.id === snapshot.id && task?.sourceNoteId === snapshot.sourceNoteId);
+  if (index === -1) return { tasks: list, removed: null };
+
+  return {
+    tasks: [...list.slice(0, index), ...list.slice(index + 1)],
+    removed: list[index]
+  };
+}
+
 function addDays(date, days) {
   const next = new Date(date);
   next.setDate(next.getDate() + days);

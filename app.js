@@ -4,7 +4,7 @@ import { buildLocalNoteImage, dataUrlBytes } from "./note-images.mjs";
 import { getTaskDueShortcutDate, getVisibleTaskDueShortcuts } from "./task-due-shortcuts.mjs";
 import { getTaskPriorityShortcutValue, getVisibleTaskPriorityShortcuts } from "./task-priority-shortcuts.mjs";
 import { getTaskLabelShortcutValue, getVisibleTaskLabelShortcuts } from "./task-label-shortcuts.mjs";
-import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask } from "./note-followups.mjs";
+import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask, removeFollowUpTask } from "./note-followups.mjs";
 import { getNoteColorShortcutValue, getVisibleNoteColorShortcuts } from "./note-color-shortcuts.mjs";
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
@@ -1280,7 +1280,18 @@ function createFollowUpTask(note, shortcut) {
   state.tasks.unshift(task);
   saveData();
   render();
-  showToast(shortcut === "today" ? "Task added for today" : "Task added for tomorrow");
+  showUndoToast(shortcut === "today" ? "Task added for today" : "Task added for tomorrow", () => {
+    const result = removeFollowUpTask(state.tasks, task);
+    if (!result.removed) {
+      showToast("Task already changed");
+      return;
+    }
+    state.tasks = result.tasks;
+    rememberDeleted(task.id);
+    saveData();
+    render();
+    showToast("Follow-up removed");
+  });
 }
 
 function startNoteEdit(note) {

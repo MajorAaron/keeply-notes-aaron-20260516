@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildFollowUpTask, getNoteFollowUpDueDate } from "../note-followups.mjs";
+import { buildFollowUpTask, getNoteFollowUpDueDate, removeFollowUpTask } from "../note-followups.mjs";
 
 const baseDate = new Date("2026-05-17T12:00:00");
 
@@ -44,4 +44,26 @@ test("buildFollowUpTask carries note context into a task", () => {
 test("buildFollowUpTask rejects unknown shortcuts and missing notes", () => {
   assert.equal(buildFollowUpTask({ id: "note-1" }, { shortcut: "later", baseDate }), null);
   assert.equal(buildFollowUpTask(null, { shortcut: "today", baseDate }), null);
+});
+
+test("removeFollowUpTask removes only the matching task from its source note", () => {
+  const tasks = [
+    { id: "task-1", title: "Keep", sourceNoteId: "note-1" },
+    { id: "task-2", title: "Follow up", sourceNoteId: "note-2" },
+    { id: "task-3", title: "Other", sourceNoteId: "note-2" }
+  ];
+
+  const result = removeFollowUpTask(tasks, { id: "task-2", sourceNoteId: "note-2" });
+
+  assert.deepEqual(result.tasks, [tasks[0], tasks[2]]);
+  assert.deepEqual(result.removed, tasks[1]);
+  assert.deepEqual(tasks.map((task) => task.id), ["task-1", "task-2", "task-3"]);
+});
+
+test("removeFollowUpTask refuses mismatched or invalid follow-up snapshots", () => {
+  const tasks = [{ id: "task-2", title: "Changed", sourceNoteId: "note-2" }];
+
+  assert.equal(removeFollowUpTask(tasks, { id: "task-2", sourceNoteId: "other-note" }).removed, null);
+  assert.equal(removeFollowUpTask(tasks, { id: "task-2" }).removed, null);
+  assert.deepEqual(removeFollowUpTask(null, { id: "task-2", sourceNoteId: "note-2" }), { tasks: [], removed: null });
 });

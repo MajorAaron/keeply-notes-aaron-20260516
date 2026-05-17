@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-undo-follow-up-tasks",
+    title: "Undo Follow-Up Tasks",
+    bullets: [
+      "Creating a task from a note now shows an Undo action in the toast.",
+      "Undo removes the fresh follow-up before it clutters your task list.",
+      "If the task already synced, Keeply queues the cleanup for the next save."
+    ]
+  },
+  {
     id: "2026-05-17-undo-duplicate-cards",
     title: "Undo Copied Cards",
     bullets: [
