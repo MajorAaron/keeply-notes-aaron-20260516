@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-edit-cards",
+    title: "Edit Saved Cards",
+    bullets: [
+      "Saved notes and tasks now include an Edit action.",
+      "Edit opens the card in the composer so title, details, label, color, priority, and due date can be revised.",
+      "The composer switches into a clear save-or-cancel state for mobile updates."
+    ]
+  },
+  {
     id: "2026-05-17-duplicate-cards",
     title: "Duplicate Cards",
     bullets: [

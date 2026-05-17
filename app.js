@@ -18,6 +18,7 @@ import { getSearchHighlightTerms, splitHighlightedText } from "./search-highligh
 import { getActiveFilterSummary } from "./active-filters.mjs";
 import { buildNoteSharePayload, buildTaskSharePayload } from "./item-share.mjs";
 import { duplicateNote, duplicateTask } from "./duplicate-items.mjs";
+import { buildNoteEditPatch, buildTaskEditPatch } from "./edit-items.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -109,10 +110,12 @@ const state = {
   compact: savedPreferences.compact,
   theme: savedPreferences.theme,
   composerMode: savedPreferences.view === "tasks" ? "task" : "note",
-  draftImage: null
+  draftImage: null,
+  editingItem: null
 };
 
 const els = {
+  composer: document.querySelector("#composer"),
   viewTitle: document.querySelector("#viewTitle"),
   searchInput: document.querySelector("#searchInput"),
   titleInput: document.querySelector("#titleInput"),
@@ -137,6 +140,7 @@ const els = {
   sparkSuggestions: document.querySelector("#sparkSuggestions"),
   addButton: document.querySelector("#addButton"),
   addButtonLabel: document.querySelector("#addButtonLabel"),
+  editCancelButton: document.querySelector("#editCancelButton"),
   quickAddButton: document.querySelector("#quickAddButton"),
   layoutButton: document.querySelector("#layoutButton"),
   themeButton: document.querySelector("#themeButton"),
@@ -320,11 +324,85 @@ async function syncRemoteData() {
 }
 
 function addItem() {
+  if (state.editingItem) {
+    saveEditedItem();
+    return;
+  }
+
   if (state.composerMode === "task") {
     addTask();
   } else {
     addNote();
   }
+}
+
+function saveEditedItem() {
+  if (state.editingItem.type === "task") {
+    saveEditedTask();
+  } else {
+    saveEditedNote();
+  }
+}
+
+function saveEditedNote() {
+  const note = state.notes.find((item) => item.id === state.editingItem.id);
+  if (!note) {
+    cancelEditDraft("Note no longer exists");
+    return;
+  }
+
+  const title = els.titleInput.value.trim();
+  const body = els.bodyInput.value.trim();
+  if (!title && !body && !state.draftImage) {
+    showToast("Keep some note content");
+    els.bodyInput.focus();
+    return;
+  }
+
+  const patch = buildNoteEditPatch(note, {
+    title,
+    body,
+    image: state.draftImage,
+    label: els.labelInput.value,
+    color: state.color
+  });
+  state.notes = state.notes.map((item) => (item.id === note.id ? { ...item, ...patch } : item));
+  finishEditing("Note updated");
+}
+
+function saveEditedTask() {
+  const task = state.tasks.find((item) => item.id === state.editingItem.id);
+  if (!task) {
+    cancelEditDraft("Task no longer exists");
+    return;
+  }
+
+  const title = els.titleInput.value.trim();
+  if (!title) {
+    showToast("Name the task first");
+    els.titleInput.focus();
+    return;
+  }
+
+  const patch = buildTaskEditPatch(task, {
+    title,
+    details: els.bodyInput.value,
+    label: els.labelInput.value,
+    priority: els.priorityInput.value,
+    dueAt: els.dueInput.value
+  });
+  state.tasks = state.tasks.map((item) => (item.id === task.id ? { ...item, ...patch } : item));
+  finishEditing("Task updated");
+}
+
+function finishEditing(message) {
+  const type = state.editingItem.type;
+  state.editingItem = null;
+  clearComposer();
+  setComposerMode(type === "task" ? "task" : "note", { saveDraft: false });
+  saveData();
+  render();
+  showToast(message);
 }
 
 function addNote() {
@@ -398,6 +476,8 @@ function clearComposer() {
   clearDraftImage();
   els.dueInput.value = "";
   els.priorityInput.value = "normal";
+  state.editingItem = null;
+  updateComposerEditingState();
   hideSparkPanel();
   clearSavedComposerDraft();
 }
@@ -1115,6 +1195,7 @@ function renderNote(note) {
   const archiveButton = node.querySelector(".archive-action");
   const trashButton = node.querySelector(".trash-action");
   const pinButton = node.querySelector(".pin-action");
+  const editButton = node.querySelector(".edit-action");
   const shareButton = node.querySelector(".share-action");
   const duplicateButton = node.querySelector(".duplicate-action");
   const followUpRow = node.querySelector(".note-followups");
@@ -1153,6 +1234,7 @@ function renderNote(note) {
   trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move note to trash");
 
   pinButton.addEventListener("click", () => updateNote(note.id, { pinned: !note.pinned }, note.pinned ? "Unpinned" : "Pinned"));
+  editButton.addEventListener("click", () => startNoteEdit(note));
   shareButton.addEventListener("click", () => shareItem(buildNoteSharePayload(note), "Note copied"));
   duplicateButton.addEventListener("click", () => duplicateNoteCard(note));
   archiveButton.addEventListener("click", () => {
@@ -1200,6 +1282,21 @@ function createFollowUpTask(note, shortcut) {
   showToast(shortcut === "today" ? "Task added for today" : "Task added for tomorrow");
 }
 
+function startNoteEdit(note) {
+  state.editingItem = { type: "note", id: note.id };
+  setComposerMode("note", { saveDraft: false });
+  els.titleInput.value = note.title || "";
+  els.bodyInput.value = note.body || "";
+  els.labelInput.value = ["ideas", "work", "home", "personal"].includes(note.label) ? note.label : "ideas";
+  setComposerColor(["sun", "mint", "sky", "rose", "ink"].includes(note.color) ? note.color : "sun");
+  state.draftImage = normalizeNoteImage(note.image);
+  renderDraftImage();
+  updateComposerEditingState();
+  clearSavedComposerDraft();
+  scrollComposerIntoView();
+  showToast("Editing note");
+}
+
 function normalizeNoteImage(image) {
   if (typeof image === "string") image = { src: image };
   if (!image?.src || !String(image.src).startsWith("data:image/")) return null;
@@ -1230,6 +1327,7 @@ function renderTask(task) {
   const checkButton = node.querySelector(".task-check");
   const archiveButton = node.querySelector(".archive-action");
   const trashButton = node.querySelector(".trash-action");
+  const editButton = node.querySelector(".edit-action");
   const shareButton = node.querySelector(".share-action");
   const duplicateButton = node.querySelector(".duplicate-action");
   const dueShortcutRow = node.querySelector(".task-due-shortcuts");
@@ -1286,6 +1384,7 @@ function renderTask(task) {
   trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move task to trash");
 
   checkButton.addEventListener("click", () => toggleTaskCompletionWithUndo(task));
+  editButton.addEventListener("click", () => startTaskEdit(task));
   shareButton.addEventListener("click", () => shareItem(buildTaskSharePayload(task), "Task copied"));
   duplicateButton.addEventListener("click", () => duplicateTaskCard(task));
   archiveButton.addEventListener("click", () => {
@@ -1345,6 +1444,23 @@ function duplicateTaskCard(task) {
   saveData();
   render();
   showToast("Task duplicated");
+}
+
+function startTaskEdit(task) {
+  state.editingItem = { type: "task", id: task.id };
+  setComposerMode("task", { saveDraft: false });
+  els.titleInput.value = task.title || "";
+  els.bodyInput.value = task.details || "";
+  els.labelInput.value = ["ideas", "work", "home", "personal"].includes(task.label) ? task.label : "ideas";
+  els.priorityInput.value = ["low", "normal", "high"].includes(task.priority) ? task.priority : "normal";
+  els.dueInput.value = task.dueAt || "";
+  state.draftImage = null;
+  renderDraftImage();
+  renderTaskComposerPresets();
+  updateComposerEditingState();
+  clearSavedComposerDraft();
+  scrollComposerIntoView();
+  showToast("Editing task");
 }
 
 function renderHighlightedText(element, text, terms) {
@@ -1884,7 +2000,7 @@ function setComposerMode(mode, options = {}) {
   els.generateImageButton.hidden = mode === "task";
   els.imagePreview.hidden = mode === "task" || !state.draftImage;
   els.bodyInput.placeholder = mode === "task" ? "Task details..." : "Take a note...";
-  els.addButtonLabel.textContent = mode === "task" ? "Add task" : "Add";
+  updateComposerEditingState();
   document.querySelectorAll(".mode-button").forEach((button) => {
     const active = button.dataset.mode === mode;
     button.classList.toggle("active", active);
@@ -1892,6 +2008,29 @@ function setComposerMode(mode, options = {}) {
   });
   renderTaskComposerPresets();
   if (options.saveDraft !== false) saveComposerDraft();
+}
+
+function updateComposerEditingState() {
+  const editing = Boolean(state.editingItem);
+  els.composer.classList.toggle("editing", editing);
+  els.editCancelButton.hidden = !editing;
+  if (editing) {
+    els.addButtonLabel.textContent = state.editingItem.type === "task" ? "Save task" : "Save note";
+    return;
+  }
+  els.addButtonLabel.textContent = state.composerMode === "task" ? "Add task" : "Add";
+}
+
+function cancelEditDraft(message = "Edit canceled") {
+  state.editingItem = null;
+  clearComposer();
+  render();
+  showToast(message);
+}
+
+function scrollComposerIntoView() {
+  els.composer.scrollIntoView({ behavior: "smooth", block: "start" });
+  requestAnimationFrame(() => els.titleInput.focus());
 }
 
 function saveViewPreferences() {
@@ -1919,6 +2058,7 @@ function getComposerDraft() {
 
 function saveComposerDraft() {
   if (!els.titleInput) return;
+  if (state.editingItem) return;
   const draft = getComposerDraft();
   if (!hasComposerDraftContent(draft)) {
     clearSavedComposerDraft();
@@ -2161,10 +2301,16 @@ document.querySelectorAll(".dot").forEach((button) => {
 });
 
 document.querySelectorAll(".mode-button").forEach((button) => {
-  button.addEventListener("click", () => setComposerMode(button.dataset.mode));
+  button.addEventListener("click", () => {
+    if (state.editingItem && button.dataset.mode !== state.editingItem.type) {
+      cancelEditDraft();
+    }
+    setComposerMode(button.dataset.mode);
+  });
 });
 
 els.addButton.addEventListener("click", addItem);
+els.editCancelButton.addEventListener("click", () => cancelEditDraft());
 els.attachImageButton.addEventListener("click", () => els.imageInput.click());
 els.generateImageButton.addEventListener("click", generateNoteImage);
 els.imageInput.addEventListener("change", handleImageInput);
@@ -2192,6 +2338,7 @@ els.labelInput.addEventListener("change", saveComposerDraft);
 els.dueInput.addEventListener("input", saveComposerDraft);
 els.priorityInput.addEventListener("change", saveComposerDraft);
 els.quickAddButton.addEventListener("click", () => {
+  if (state.editingItem) cancelEditDraft();
   els.titleInput.focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
 });

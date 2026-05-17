@@ -429,6 +429,11 @@ h1 {
   border-radius: 28px;
 }
 
+.composer.editing {
+  border-color: rgba(129, 199, 238, 0.42);
+  box-shadow: 0 24px 70px rgba(38, 31, 15, 0.19), inset 0 0 0 2px rgba(129, 199, 238, 0.2);
+}
+
 .composer-mode {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -684,7 +689,8 @@ h1 {
 .spark-add,
 .spark-button,
 .shape-button,
-.image-button {
+.image-button,
+.edit-cancel-button {
   min-height: 38px;
   border: 0;
   border-radius: 14px;
@@ -715,6 +721,13 @@ h1 {
   background: rgba(130, 215, 162, 0.32);
   color: var(--ink);
   box-shadow: inset 0 0 0 1px rgba(35, 36, 38, 0.1);
+}
+
+.edit-cancel-button {
+  padding: 0 14px;
+  background: rgba(35, 36, 38, 0.08);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(35, 36, 38, 0.12);
 }
 
 .spark-button:disabled,
@@ -1287,10 +1300,11 @@ select {
   background: rgba(255, 255, 255, 0.42);
 }
 
+.edit-action,
 .share-action,
 .duplicate-action {
   width: auto;
-  min-width: 52px;
+  min-width: 48px;
   padding: 0 10px;
   font-size: 0.7rem;
   font-weight: 900;

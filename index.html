@@ -97,7 +97,7 @@
           </div>
         </section>
 
-        <section class="composer" aria-label="Create item">
+        <section class="composer" id="composer" aria-label="Create item">
           <div class="composer-mode" role="tablist" aria-label="Item type">
             <button class="mode-button active" data-mode="note" role="tab" aria-selected="true">Note</button>
             <button class="mode-button" data-mode="task" role="tab" aria-selected="false">Task</button>
@@ -158,6 +158,7 @@
             <button id="generateImageButton" class="image-button" type="button">Generate</button>
             <button id="shapeButton" class="shape-button" type="button">Shape</button>
             <button id="sparkButton" class="spark-button" type="button">Spark</button>
+            <button id="editCancelButton" class="edit-cancel-button" type="button" hidden>Cancel</button>
             <button id="addButton" class="primary-button">
               <span class="icon icon-plus"></span>
               <span id="addButtonLabel">Add</span>
@@ -260,6 +261,7 @@
         <div class="note-card-foot">
           <time></time>
           <div class="note-actions">
+            <button class="icon-button edit-action" aria-label="Edit note">Edit</button>
             <button class="icon-button share-action" aria-label="Share note">Share</button>
             <button class="icon-button duplicate-action" aria-label="Duplicate note">Copy</button>
             <button class="icon-button archive-action" aria-label="Archive note">
@@ -291,6 +293,7 @@
           <div class="task-label-shortcuts" aria-label="Quick task label changes"></div>
         </div>
         <div class="task-actions">
+          <button class="icon-button edit-action" aria-label="Edit task">Edit</button>
           <button class="icon-button share-action" aria-label="Share task">Share</button>
           <button class="icon-button duplicate-action" aria-label="Duplicate task">Copy</button>
           <button class="icon-button archive-action" aria-label="Archive task">
