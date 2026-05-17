@@ -2,33 +2,16 @@
 
 - Added undo for note pinning.
 - Pinning or unpinning a note from the pin button now shows a toast with an `Undo` action that restores the previous pinned state.
-- The same undo path is used by the existing mobile swipe-to-pin gesture, so accidental swipe pin changes are reversible.
+- The existing mobile swipe-to-pin gesture now uses the same undoable flow, so accidental swipe pin changes are reversible.
 - Added `note-pin.mjs` and `test/note-pin.test.mjs`; wired both into `npm test`.
 - Updated What's New metadata with latest id `2026-05-17-undo-note-pinning`, title `Undo Note Pinning`, and 3 user-facing bullets.
 - AI/API behavior: no new AI endpoint or API key usage was added.
 - Verification: `npm test` passed with 67 tests; `git diff --check` passed.
 - Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the What's New popup appeared for `Undo Note Pinning`; after dismissing it, invoking a note pin action showed `Pinned` with `Undo`, and pressing Undo restored the pinned count and showed `Note unpinned`.
 - Secret scan of changed app/test/metadata/package/helper files found no committed API key or token patterns.
-- Git status: feature commit `dc814ac` (`Add undo for note pinning`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
-- Netlify production deploy succeeded from a clean temporary worktree to avoid untracked local files. Deploy `6a0a499d5f02e4fe9829b900` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a499d5f02e4fe9829b900--keeply-notes-aaron-20260516.netlify.app`.
+- Git status: feature commit `dc814ac` (`Add undo for note pinning`) and log commits were pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded from a clean temporary worktree to avoid untracked local files. Final deploy `6a0a499d5f02e4fe9829b900` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a499d5f02e4fe9829b900--keeply-notes-aaron-20260516.netlify.app`. Earlier connector deploy `6a0a498edb360d05ba0c0126` also reached ready state.
 - Live shell verification limit: direct live-site `curl` was not run because previous runs in this sandbox were blocked by the command security scanner for the `.app` production hostname; local browser verification covered the shipped UI behavior before deploy.
-
-## 2026-05-17 17:05:38 MDT
-
-- Added undo for note pinning.
-- Pinning or unpinning a note from the pin button now shows a toast with an `Undo` action that restores the previous note snapshot.
-- The mobile swipe-to-pin gesture now uses the same undoable flow, and the pin button updates its accessible label between `Pin note` and `Unpin note`.
-- Added `note-pin.mjs` and `test/note-pin.test.mjs`; wired both into `npm test`.
-- Updated What's New metadata with latest id `2026-05-17-undo-note-pinning`, title `Undo Note Pinning`, and 3 user-facing bullets.
-- AI/API behavior: no new AI endpoint or API key usage was added.
-- Verification: `npm test` passed with 67 tests; `git diff --check` passed.
-- Secret scan of changed app/test/metadata/helper/package/log files found no committed API key or token patterns.
-- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local browser check could not run in this sandbox.
-- Git status: feature commit `dc814ac` (`Add undo for note pinning`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
-- Netlify deployment: direct CLI deploy from a clean worktree failed because DNS could not resolve `api.netlify.com`; the first connector upload deploy `6a0a49685d701dbe6c88c1cb` failed because `.git` was included in the worktree upload; retrying from a clean `git archive` succeeded.
-- Production deploy `6a0a498edb360d05ba0c0126` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a498edb360d05ba0c0126--keeply-notes-aaron-20260516.netlify.app`.
-- Netlify readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 86 scanned files.
-- Live shell verification limit: direct `curl -I https://keeply-notes-aaron-20260516.netlify.app` failed because DNS could not resolve the Netlify hostname from this sandbox.
 
 ## 2026-05-17 16:08:54 MDT
 
