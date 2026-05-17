@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-note-follow-up-shortcuts",
+    title: "Note Follow-Up Shortcuts",
+    bullets: [
+      "Active note cards now include quick buttons for creating a follow-up task.",
+      "Follow-up tasks keep the note label and details so context carries over.",
+      "Mobile cards offer Today and Tomorrow choices without opening the composer."
+    ]
+  },
+  {
     id: "2026-05-17-task-due-shortcuts",
     title: "Quick Task Rescheduling",
     bullets: [

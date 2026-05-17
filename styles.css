@@ -1057,13 +1057,41 @@ select {
 
 .note-card p {
   display: -webkit-box;
-  margin: 0 0 18px;
+  margin: 0 0 12px;
   overflow: hidden;
   color: #554f42;
   line-height: 1.45;
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5;
+}
+
+.note-followups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 16px;
+}
+
+.note-followups[hidden] {
+  display: none;
+}
+
+.note-followup {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.54);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.note-followup:focus-visible,
+.note-followup:hover {
+  border-color: rgba(35, 36, 38, 0.34);
+  background: var(--paper);
 }
 
 .note-card-foot {
@@ -1554,6 +1582,15 @@ time {
   .note-card {
     min-height: 172px;
     border-radius: 24px;
+  }
+
+  .note-followups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .note-followup {
+    width: 100%;
   }
 
   .task-card {

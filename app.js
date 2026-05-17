@@ -2,6 +2,7 @@ import { latestUpdate } from "./release-updates.mjs";
 import { getTaskWindowCounts, matchesTaskWindow } from "./task-filters.mjs";
 import { buildLocalNoteImage, dataUrlBytes } from "./note-images.mjs";
 import { getTaskDueShortcutDate, getVisibleTaskDueShortcuts } from "./task-due-shortcuts.mjs";
+import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask } from "./note-followups.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -976,8 +977,20 @@ function renderNote(note) {
   const archiveButton = node.querySelector(".archive-action");
   const trashButton = node.querySelector(".trash-action");
   const pinButton = node.querySelector(".pin-action");
+  const followUpRow = node.querySelector(".note-followups");
 
   pinButton.hidden = state.view !== "active";
+  followUpRow.hidden = state.view !== "active";
+  followUpRow.replaceChildren(
+    ...NOTE_FOLLOW_UP_SHORTCUTS.map((shortcut) => {
+      const button = document.createElement("button");
+      button.className = "note-followup";
+      button.type = "button";
+      button.textContent = shortcut.label;
+      button.addEventListener("click", () => createFollowUpTask(note, shortcut.key));
+      return button;
+    })
+  );
   archiveButton.setAttribute("aria-label", state.view === "archive" ? "Restore note" : "Archive note");
   trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move note to trash");
 
@@ -1000,6 +1013,24 @@ function renderNote(note) {
 
   attachSwipe(node, note);
   return node;
+}
+
+function createFollowUpTask(note, shortcut) {
+  const task = buildFollowUpTask(note, {
+    shortcut,
+    id: crypto.randomUUID(),
+    now: new Date()
+  });
+
+  if (!task) {
+    showToast("Could not create task");
+    return;
+  }
+
+  state.tasks.unshift(task);
+  saveData();
+  render();
+  showToast(shortcut === "today" ? "Task added for today" : "Task added for tomorrow");
 }
 
 function normalizeNoteImage(image) {
