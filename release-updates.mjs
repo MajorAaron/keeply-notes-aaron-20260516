@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-task-priority-shortcuts",
+    title: "Quick Task Priority Changes",
+    bullets: [
+      "Active task cards now include quick priority buttons for High, Normal, and Low.",
+      "The current priority stays hidden so each card only shows useful changes.",
+      "Completed tasks remain visually quiet while open tasks stay easy to triage."
+    ]
+  },
+  {
     id: "2026-05-17-note-follow-up-shortcuts",
     title: "Note Follow-Up Shortcuts",
     bullets: [

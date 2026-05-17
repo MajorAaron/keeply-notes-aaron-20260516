@@ -2,6 +2,7 @@ import { latestUpdate } from "./release-updates.mjs";
 import { getTaskWindowCounts, matchesTaskWindow } from "./task-filters.mjs";
 import { buildLocalNoteImage, dataUrlBytes } from "./note-images.mjs";
 import { getTaskDueShortcutDate, getVisibleTaskDueShortcuts } from "./task-due-shortcuts.mjs";
+import { getTaskPriorityShortcutValue, getVisibleTaskPriorityShortcuts } from "./task-priority-shortcuts.mjs";
 import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask } from "./note-followups.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1063,9 +1064,11 @@ function renderTask(task) {
   const archiveButton = node.querySelector(".archive-action");
   const trashButton = node.querySelector(".trash-action");
   const dueShortcutRow = node.querySelector(".task-due-shortcuts");
+  const priorityShortcutRow = node.querySelector(".task-priority-shortcuts");
 
   checkButton.hidden = state.view !== "tasks";
   dueShortcutRow.hidden = state.view !== "tasks" || task.completed;
+  priorityShortcutRow.hidden = state.view !== "tasks" || task.completed;
   dueShortcutRow.replaceChildren(
     ...getVisibleTaskDueShortcuts(task).map((shortcut) => {
       const button = document.createElement("button");
@@ -1076,6 +1079,20 @@ function renderTask(task) {
         const dueAt = getTaskDueShortcutDate(shortcut.key);
         if (dueAt === null) return;
         updateTask(task.id, { dueAt }, dueAt ? `Due ${shortcut.label.toLowerCase()}` : "Due date cleared");
+      });
+      return button;
+    })
+  );
+  priorityShortcutRow.replaceChildren(
+    ...getVisibleTaskPriorityShortcuts(task).map((shortcut) => {
+      const button = document.createElement("button");
+      button.className = "task-priority-shortcut";
+      button.type = "button";
+      button.textContent = shortcut.label;
+      button.addEventListener("click", () => {
+        const priority = getTaskPriorityShortcutValue(shortcut.key);
+        if (!priority) return;
+        updateTask(task.id, { priority }, `${shortcut.label} priority`);
       });
       return button;
     })

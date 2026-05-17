@@ -1190,18 +1190,25 @@ select {
   overflow-wrap: anywhere;
 }
 
-.task-due-shortcuts {
+.task-due-shortcuts,
+.task-priority-shortcuts {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 10px;
 }
 
-.task-due-shortcuts[hidden] {
+.task-priority-shortcuts {
+  margin-top: 6px;
+}
+
+.task-due-shortcuts[hidden],
+.task-priority-shortcuts[hidden] {
   display: none;
 }
 
-.task-due-shortcut {
+.task-due-shortcut,
+.task-priority-shortcut {
   min-height: 34px;
   padding: 7px 10px;
   border: 1px solid var(--line);
@@ -1212,8 +1219,14 @@ select {
   font-weight: 900;
 }
 
+.task-priority-shortcut {
+  background: rgba(255, 248, 222, 0.58);
+}
+
 .task-due-shortcut:focus-visible,
-.task-due-shortcut:hover {
+.task-due-shortcut:hover,
+.task-priority-shortcut:focus-visible,
+.task-priority-shortcut:hover {
   border-color: rgba(35, 36, 38, 0.34);
   background: var(--paper);
 }
@@ -1597,12 +1610,14 @@ time {
     grid-template-columns: 40px minmax(0, 1fr);
   }
 
-  .task-due-shortcuts {
+  .task-due-shortcuts,
+  .task-priority-shortcuts {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .task-due-shortcut {
+  .task-due-shortcut,
+  .task-priority-shortcut {
     width: 100%;
   }
 
