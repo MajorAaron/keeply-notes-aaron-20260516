@@ -1,3 +1,18 @@
+## 2026-05-17 16:07:33 MDT
+
+- Added undo for note follow-up task creation.
+- Creating a task from a note now shows a toast with an `Undo` action that removes the fresh follow-up task.
+- Undo uses `removeFollowUpTask()` to remove only the matching source-note task and queues the task id in `deletedIds` so an already-synced follow-up is removed on the next save.
+- Added `removeFollowUpTask()` coverage in `test/note-followups.test.mjs`.
+- Updated What's New metadata with latest id `2026-05-17-undo-follow-up-tasks`, title `Undo Follow-Up Tasks`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: `npm test` passed with 63 tests; `git diff --check` passed.
+- Secret scan of changed app/test/metadata/helper files found no committed API key or token patterns.
+- Mobile/browser verification limit: `HOST=127.0.0.1 PORT=4175 npm start` failed with `listen EPERM: operation not permitted 127.0.0.1:4175`, so a local browser smoke check could not be run in this sandbox.
+- Git status: feature commit `08d10b6` (`Add undo for follow-up tasks`) was created locally, but `git push origin main` failed because DNS could not resolve `github.com`; unrelated untracked `backups/` was left untouched.
+- Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS could not resolve `api.netlify.com`.
+- Netlify production deploy succeeded via the generated MCP deploy command. Deploy `6a0a3be455042ee40219a84f` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a3be455042ee40219a84f--keeply-notes-aaron-20260516.netlify.app`. Readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches across 85 scanned files.
+
 ## 2026-05-17 15:10:29 MDT
 
 - Added undo for copied Keeply notes and tasks.
