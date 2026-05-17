@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-undo-task-completion",
+    title: "Undo Task Completion",
+    bullets: [
+      "Tapping a task checkbox now shows an Undo action in the toast.",
+      "Undo restores the task to its previous open or completed state.",
+      "The flow works for quick mobile checkoffs and accidental reopens."
+    ]
+  },
+  {
     id: "2026-05-17-task-composer-presets",
     title: "Task Due Presets",
     bullets: [

@@ -7,6 +7,7 @@ import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask } from "./note-followups.mj
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
 import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-composer-presets.mjs";
+import { toggleTaskCompletion } from "./task-completion.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1142,9 +1143,7 @@ function renderTask(task) {
   archiveButton.setAttribute("aria-label", state.view === "archive" ? "Restore task" : "Archive task");
   trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move task to trash");
 
-  checkButton.addEventListener("click", () => {
-    updateTask(task.id, { completed: !task.completed }, task.completed ? "Reopened" : "Completed");
-  });
+  checkButton.addEventListener("click", () => toggleTaskCompletionWithUndo(task));
   archiveButton.addEventListener("click", () => {
     const status = state.view === "archive" ? "active" : "archive";
     updateTaskWithUndo(task, { status }, status === "archive" ? "Archived" : "Restored");
@@ -1241,6 +1240,26 @@ function updateTaskWithUndo(task, patch, message) {
     saveData();
     render();
     showToast("Task restored");
+  });
+}
+
+function toggleTaskCompletionWithUndo(task) {
+  const snapshot = captureItemRestore(state.tasks, task.id);
+  const result = toggleTaskCompletion(state.tasks, task.id);
+
+  if (!result.task) {
+    showToast("Task not found");
+    return;
+  }
+
+  state.tasks = result.tasks;
+  saveData();
+  render();
+  showUndoToast(result.completed ? "Completed" : "Reopened", () => {
+    state.tasks = restoreItem(state.tasks, snapshot);
+    saveData();
+    render();
+    showToast(result.completed ? "Task reopened" : "Task completed");
   });
 }
 
