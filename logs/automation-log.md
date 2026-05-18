@@ -1,4 +1,21 @@
 
+## 2026-05-18 07:07:39 MDT
+
+- Added a mobile-first Next Task Highlight for faster task triage.
+- Tasks view now shows a compact `Next task` card above the Today progress card, selecting the most urgent open task by due window (overdue, today, upcoming, no date), priority, due date, and recent update.
+- The card includes a `Show overdue` / `Show today` / `Show task` button that clears filters and jumps to the matching task window, so the highlighted task is easier to act on from mobile.
+- Added `next-task.mjs` and `test/next-task.test.mjs`; wired both into `npm test` syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-next-task-highlight`, title `Next Task Highlight`, and 3 user-facing bullets.
+- UI areas touched: task dashboard markup in `index.html`, task highlight rendering/filter jump wiring in `app.js`, mobile-friendly card styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 118 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Next Task Highlight` What's New popup, the Tasks view `Next task` card, and no browser console errors.
+- Mobile/layout verification: browser snapshot and screenshot review found no obvious overlap, clipping, or unreadable controls around the new `Next task` card at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded in browser, showed the `Next Task Highlight` What's New popup, and the Tasks view showed the `Next task` card with no browser console errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `80b0081` (`Add next task highlight`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b0ef9bd35e8aa8c9cd561` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b0ef9bd35e8aa8c9cd561--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-18 06:05:16 MDT
 
 - Added recent note ordering for faster mobile note resurfacing.
