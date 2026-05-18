@@ -1,4 +1,20 @@
 
+
+## 2026-05-18 12:06:24 MDT
+
+- Added body-first note titles for faster mobile note capture.
+- Notes saved without a typed title now derive a compact title from the first meaningful body line, cleaning bullet/checklist markers and falling back to `Image note` for image-only captures.
+- Added `note-title.mjs` and `test/note-title.test.mjs`; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-body-first-note-titles`, title `Body-First Note Titles`, and 3 user-facing bullets.
+- UI/code areas touched: note creation in `app.js`, release metadata, package test wiring, and the new title helper/test files. No CSS changes were needed.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local note-title cleanup only.
+- Verification: full `npm test` passed with 136 tests after fixing one helper assertion; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Body-First Note Titles` What's New popup, dismiss behavior, a body-only bullet note saving with title `Call Sam about the venue`, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found no obvious overlap, clipping, or horizontal overflow around the composer, note cards, or visible popup trigger at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Body-First Note Titles` What's New popup, and a body-only checklist note saved with title `Draft launch note from phone`; browser console reported no errors.
+- Secret scan of changed app/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `933de33` (`Add body-first note titles`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b54f9b3c49ec5de93c0d9` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b54f9b3c49ec5de93c0d9--keeply-notes-aaron-20260516.netlify.app`.
 ## 2026-05-18 11:08:08 MDT
 
 - Added mobile-first Ask Keeply suggestions for faster question starts.
