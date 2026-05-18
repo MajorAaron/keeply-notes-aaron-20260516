@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-collapsible-note-previews",
+    title: "Collapsible Note Previews",
+    bullets: [
+      "Long note cards now stay compact in the mobile feed.",
+      "Tap Read more to expand the full note body in place.",
+      "Search highlights keep working inside collapsed and expanded previews."
+    ]
+  },
+  {
     id: "2026-05-17-task-swipe-triage",
     title: "Swipe Task Triage",
     bullets: [

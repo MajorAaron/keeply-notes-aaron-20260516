@@ -23,6 +23,7 @@ import { buildNoteEditPatch, buildTaskEditPatch } from "./edit-items.mjs";
 import { getNotePinLabel, toggleNotePin } from "./note-pin.mjs";
 import { buildBulkTasksFromText } from "./task-bulk-entry.mjs";
 import { getTaskSwipeAction } from "./task-swipe-actions.mjs";
+import { buildNotePreview } from "./note-preview.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1202,7 +1203,21 @@ function renderNote(note) {
   node.classList.toggle("pinned", note.pinned);
   node.querySelector(".note-label").textContent = note.label;
   renderHighlightedText(node.querySelector("h3"), note.title, highlightTerms);
-  renderHighlightedText(node.querySelector("p"), note.body || (note.image ? "Image note" : "No extra details"), highlightTerms);
+  const noteBody = note.body || "";
+  const bodyPreview = buildNotePreview(noteBody, { emptyText: note.image ? "Image note" : "No extra details" });
+  const bodyElement = node.querySelector("p");
+  const expandButton = node.querySelector(".note-preview-toggle");
+  renderHighlightedText(bodyElement, bodyPreview.text, highlightTerms);
+  expandButton.hidden = !bodyPreview.isTruncated;
+  if (bodyPreview.isTruncated) {
+    expandButton.addEventListener("click", () => {
+      const isExpanded = expandButton.getAttribute("aria-expanded") === "true";
+      expandButton.setAttribute("aria-expanded", String(!isExpanded));
+      expandButton.textContent = isExpanded ? "Read more" : "Show less";
+      bodyElement.classList.toggle("expanded", !isExpanded);
+      renderHighlightedText(bodyElement, isExpanded ? bodyPreview.text : noteBody.replace(/\s+/g, " ").trim(), highlightTerms);
+    });
+  }
   node.querySelector("time").textContent = formatDate(note.createdAt);
 
   const image = normalizeNoteImage(note.image);

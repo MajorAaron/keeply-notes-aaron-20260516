@@ -1156,7 +1156,8 @@ select {
 
 .note-card[data-color="ink"] .note-label,
 .note-card[data-color="ink"] time,
-.note-card[data-color="ink"] p {
+.note-card[data-color="ink"] p,
+.note-card[data-color="ink"] .note-preview-toggle {
   color: rgba(255, 255, 255, 0.72);
 }
 
@@ -1208,6 +1209,32 @@ select {
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 5;
+}
+
+.note-card p.expanded {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+}
+
+.note-preview-toggle {
+  justify-self: start;
+  min-height: 32px;
+  margin: -4px 0 12px;
+  padding: 6px 10px;
+  border: 1px solid rgba(35, 36, 38, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.note-preview-toggle:focus-visible,
+.note-preview-toggle:hover {
+  border-color: rgba(35, 36, 38, 0.34);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
 }
 
 .note-followups,
