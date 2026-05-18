@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-note-color-filters",
+    title: "Note Color Filters",
+    bullets: [
+      "Notes now have quick color filters for Sun, Mint, Sky, Rose, and Ink cards.",
+      "Color counts update with the selected label so matching notes are easier to spot.",
+      "Keeply remembers the chosen note color filter on this device."
+    ]
+  },
+  {
     id: "2026-05-17-task-priority-filters",
     title: "Task Priority Filters",
     bullets: [

@@ -289,6 +289,7 @@ h1 {
   background: rgba(255, 255, 255, 0.18);
 }
 
+.note-color-filters,
 .task-filters,
 .task-priority-filters {
   display: flex;
@@ -299,11 +300,13 @@ h1 {
   scrollbar-width: none;
 }
 
+.note-color-filters::-webkit-scrollbar,
 .task-filters::-webkit-scrollbar,
 .task-priority-filters::-webkit-scrollbar {
   display: none;
 }
 
+.note-color-filter,
 .task-filter,
 .task-priority-filter {
   display: inline-flex;
@@ -320,6 +323,7 @@ h1 {
   font-weight: 900;
 }
 
+.note-color-filter.active,
 .task-filter.active,
 .task-priority-filter.active {
   background: var(--ink);
@@ -338,9 +342,42 @@ h1 {
   font-size: 0.76rem;
 }
 
+.note-color-filter.active .task-filter-count,
 .task-filter.active .task-filter-count,
 .task-priority-filter.active .task-filter-count {
   background: rgba(255, 255, 255, 0.18);
+}
+
+.note-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(35, 36, 38, 0.18);
+  background: var(--note-color, var(--accent));
+}
+
+.note-color-dot[data-color="sun"] {
+  --note-color: #f8d75f;
+}
+
+.note-color-dot[data-color="mint"] {
+  --note-color: #9ee6c7;
+}
+
+.note-color-dot[data-color="sky"] {
+  --note-color: #9cc9ff;
+}
+
+.note-color-dot[data-color="rose"] {
+  --note-color: #ffafc2;
+}
+
+.note-color-dot[data-color="ink"] {
+  --note-color: #2f3136;
+}
+
+.note-color-filter.active .note-color-dot {
+  border-color: rgba(255, 255, 255, 0.62);
 }
 
 .filter-summary {

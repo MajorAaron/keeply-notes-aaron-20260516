@@ -27,6 +27,7 @@ import { buildNotePreview } from "./note-preview.mjs";
 import { getTaskDueBadge } from "./task-due-badge.mjs";
 import { getNoteReadingMeta } from "./note-reading-meta.mjs";
 import { getTaskPriorityFilterCounts, matchesTaskPriorityFilter, normalizeTaskPriorityFilter } from "./task-priority-filters.mjs";
+import { getNoteColorFilterCounts, matchesNoteColorFilter, normalizeNoteColorFilter } from "./note-color-filters.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -114,6 +115,7 @@ const state = {
   label: savedPreferences.label,
   taskWindow: savedPreferences.taskWindow,
   taskPriority: savedPreferences.taskPriority,
+  noteColor: savedPreferences.noteColor,
   query: "",
   color: "sun",
   compact: savedPreferences.compact,
@@ -182,6 +184,7 @@ const els = {
   askTitle: document.querySelector("#askTitle"),
   askSummary: document.querySelector("#askSummary"),
   askAnswer: document.querySelector("#askAnswer"),
+  noteColorFilters: document.querySelector("#noteColorFilters"),
   taskFilters: document.querySelector("#taskFilters"),
   taskPriorityFilters: document.querySelector("#taskPriorityFilters"),
   filterSummary: document.querySelector("#filterSummary"),
@@ -515,6 +518,7 @@ function getVisibleNotes() {
   const query = state.query.toLowerCase();
   return state.notes
     .filter((note) => note.status === state.view)
+    .filter((note) => state.view !== "active" || matchesNoteColorFilter(note, state.noteColor))
     .filter((note) => state.label === "all" || note.label === state.label)
     .filter((note) => {
       if (!query) return true;
@@ -560,6 +564,7 @@ function render() {
   els.pinnedNotes.hidden = showTasks;
   els.notesGrid.hidden = showTasks;
   els.taskList.hidden = !showTasks && !showMixedArchive;
+  els.noteColorFilters.hidden = state.view !== "active";
   els.taskFilters.hidden = !showTasks;
   els.taskPriorityFilters.hidden = !showTasks;
   els.taskBulkActions.hidden = !showTasks;
@@ -572,13 +577,16 @@ function render() {
     ? state.taskWindow === "all" && state.taskPriority === "all"
       ? "Add a task with a due date, priority, and label."
       : "Try another task filter or add a task for this view."
-    : "Create one, change filters, or restore something from archive.";
+    : state.view === "active" && state.noteColor !== "all"
+      ? "Try another note color or clear filters to see more notes."
+      : "Create one, change filters, or restore something from archive.";
   els.pinnedNotes.classList.toggle("compact", state.compact);
   els.notesGrid.classList.toggle("compact", state.compact);
 
   renderLabelChips();
   renderFilterSummary();
   renderStats();
+  renderNoteColorFilters();
   renderTaskFilters();
   renderTaskPriorityFilters();
   renderTaskBulkActions();
@@ -608,7 +616,7 @@ function getLabelCountItems() {
     return [...state.notes, ...state.tasks].filter((item) => item.status === state.view);
   }
 
-  return state.notes.filter((note) => note.status === "active");
+  return state.notes.filter((note) => note.status === "active" && matchesNoteColorFilter(note, state.noteColor));
 }
 
 function renderFilterSummary() {
@@ -617,6 +625,7 @@ function renderFilterSummary() {
     label: state.label,
     taskWindow: state.taskWindow,
     taskPriority: state.taskPriority,
+    noteColor: state.noteColor,
     query: state.query
   });
 
@@ -636,6 +645,7 @@ function clearActiveFilters() {
   state.query = "";
   state.taskWindow = "all";
   state.taskPriority = "all";
+  state.noteColor = "all";
   els.searchInput.value = "";
   saveViewPreferences();
   render();
@@ -662,6 +672,19 @@ function renderStats() {
   els.totalLabel.textContent = "Total";
   els.middleLabel.textContent = "Pinned";
   els.rightLabel.textContent = "Today";
+}
+
+function renderNoteColorFilters() {
+  const countableNotes = state.notes.filter((note) => note.status === "active" && (state.label === "all" || note.label === state.label));
+  const counts = getNoteColorFilterCounts(countableNotes);
+
+  els.noteColorFilters.querySelectorAll(".note-color-filter").forEach((button) => {
+    const filter = normalizeNoteColorFilter(button.dataset.colorFilter);
+    const active = filter === state.noteColor;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+    button.querySelector(".task-filter-count").textContent = counts[filter] ?? 0;
+  });
 }
 
 function renderTaskFilters() {
@@ -1208,6 +1231,7 @@ function jumpToSource(source) {
   if (!source?.id) return;
   state.view = source.type === "task" ? "tasks" : "active";
   state.label = "all";
+  state.noteColor = "all";
   state.query = source.title || "";
   els.searchInput.value = state.query;
   document.querySelectorAll(".chip").forEach((chip) => chip.classList.toggle("active", chip.dataset.label === "all"));
@@ -2449,6 +2473,14 @@ document.querySelectorAll(".chip").forEach((button) => {
     state.label = button.dataset.label;
     saveViewPreferences();
     document.querySelectorAll(".chip").forEach((chip) => chip.classList.toggle("active", chip === button));
+    render();
+  });
+});
+
+document.querySelectorAll(".note-color-filter").forEach((button) => {
+  button.addEventListener("click", () => {
+    state.noteColor = normalizeNoteColorFilter(button.dataset.colorFilter);
+    saveViewPreferences();
     render();
   });
 });

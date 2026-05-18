@@ -21,11 +21,21 @@ const TASK_PRIORITIES = {
   low: "Low priority"
 };
 
+const NOTE_COLORS = {
+  all: "All colors",
+  sun: "Sun notes",
+  mint: "Mint notes",
+  sky: "Sky notes",
+  rose: "Rose notes",
+  ink: "Ink notes"
+};
+
 export function getActiveFilterSummary(filters = {}) {
   const chips = [];
   const label = filters.label || "all";
   const taskWindow = filters.taskWindow || "all";
   const taskPriority = filters.taskPriority || "all";
+  const noteColor = filters.noteColor || "all";
   const query = String(filters.query || "").trim();
 
   if (label !== "all") {
@@ -38,6 +48,10 @@ export function getActiveFilterSummary(filters = {}) {
 
   if (filters.view === "tasks" && taskPriority !== "all") {
     chips.push({ key: "taskPriority", label: TASK_PRIORITIES[taskPriority] || titleCase(taskPriority) });
+  }
+
+  if (filters.view === "active" && noteColor !== "all") {
+    chips.push({ key: "noteColor", label: NOTE_COLORS[noteColor] || titleCase(noteColor) });
   }
 
   if (query) {

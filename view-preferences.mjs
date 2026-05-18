@@ -3,6 +3,7 @@ const DEFAULT_PREFERENCES = {
   label: "all",
   taskWindow: "all",
   taskPriority: "all",
+  noteColor: "all",
   compact: false,
   theme: "morning"
 };
@@ -11,6 +12,7 @@ const VALID_VIEWS = new Set(["active", "tasks", "archive", "trash"]);
 const VALID_LABELS = new Set(["all", "work", "home", "ideas", "personal"]);
 const VALID_TASK_WINDOWS = new Set(["all", "overdue", "today", "upcoming", "unscheduled"]);
 const VALID_TASK_PRIORITIES = new Set(["all", "high", "normal", "low"]);
+const VALID_NOTE_COLORS = new Set(["all", "sun", "mint", "sky", "rose", "ink"]);
 const VALID_THEMES = new Set(["morning", "night"]);
 
 export function normalizeViewPreferences(value) {
@@ -20,6 +22,7 @@ export function normalizeViewPreferences(value) {
     label: VALID_LABELS.has(source.label) ? source.label : DEFAULT_PREFERENCES.label,
     taskWindow: VALID_TASK_WINDOWS.has(source.taskWindow) ? source.taskWindow : DEFAULT_PREFERENCES.taskWindow,
     taskPriority: VALID_TASK_PRIORITIES.has(source.taskPriority) ? source.taskPriority : DEFAULT_PREFERENCES.taskPriority,
+    noteColor: VALID_NOTE_COLORS.has(source.noteColor) ? source.noteColor : DEFAULT_PREFERENCES.noteColor,
     compact: source.compact === true,
     theme: VALID_THEMES.has(source.theme) ? source.theme : DEFAULT_PREFERENCES.theme
   };
@@ -40,6 +43,7 @@ export function buildViewPreferences(state) {
     label: state?.label,
     taskWindow: state?.taskWindow,
     taskPriority: state?.taskPriority,
+    noteColor: state?.noteColor,
     compact: state?.compact,
     theme: state?.theme
   });
