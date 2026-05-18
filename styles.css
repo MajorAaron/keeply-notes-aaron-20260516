@@ -1218,6 +1218,44 @@ select {
   outline: 0;
 }
 
+.ask-suggestions {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.ask-suggestions:empty {
+  display: none;
+}
+
+.ask-suggestions::-webkit-scrollbar {
+  display: none;
+}
+
+.ask-suggestion {
+  flex: 0 0 auto;
+  max-width: min(82vw, 320px);
+  min-height: 34px;
+  padding: 0 12px;
+  overflow: hidden;
+  border: 1px solid rgba(35, 36, 38, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.64);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(31, 32, 35, 0.06);
+}
+
+.ask-suggestion:focus-visible {
+  outline: 3px solid rgba(248, 215, 95, 0.85);
+  outline-offset: 2px;
+}
+
 .ask-answer:empty {
   display: none;
 }

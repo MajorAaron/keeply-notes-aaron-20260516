@@ -36,6 +36,7 @@ import { getTodayTaskProgress } from "./task-today-progress.mjs";
 import { getNextTaskHighlight } from "./next-task.mjs";
 import { getNoteSpotlight } from "./note-spotlight.mjs";
 import { getCleanupSpotlight } from "./cleanup-spotlight.mjs";
+import { getAskSuggestions } from "./ask-suggestions.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 
@@ -193,6 +194,7 @@ const els = {
   askForm: document.querySelector("#askForm"),
   askInput: document.querySelector("#askInput"),
   askButton: document.querySelector("#askButton"),
+  askSuggestions: document.querySelector("#askSuggestions"),
   askTitle: document.querySelector("#askTitle"),
   askSummary: document.querySelector("#askSummary"),
   askAnswer: document.querySelector("#askAnswer"),
@@ -625,6 +627,7 @@ function render() {
   renderNoteColorFilters();
   renderTaskFilters();
   renderTaskPriorityFilters();
+  renderAskSuggestions();
   renderNoteSpotlight();
   renderCleanupSpotlight();
   renderNextTaskHighlight();
@@ -890,6 +893,27 @@ function renderTaskBulkActions() {
   els.snoozeOverdueCount.textContent = `${overdueCount} overdue`;
   els.archiveCompletedButton.disabled = completedCount === 0;
   els.snoozeOverdueButton.disabled = overdueCount === 0;
+}
+
+function renderAskSuggestions() {
+  const suggestions = getAskSuggestions(getAskContext().items, { now: new Date() });
+  els.askSuggestions.replaceChildren(
+    ...suggestions.map((suggestion) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "ask-suggestion";
+      button.textContent = suggestion;
+      button.setAttribute("aria-label", `Ask Keeply: ${suggestion}`);
+      button.addEventListener("click", () => useAskSuggestion(suggestion));
+      return button;
+    })
+  );
+}
+
+function useAskSuggestion(question) {
+  els.askInput.value = question;
+  els.askInput.focus();
+  showToast("Question ready");
 }
 
 function archiveCompletedTasksWithUndo() {

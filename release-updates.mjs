@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-ask-suggestions",
+    title: "Ask Suggestions",
+    bullets: [
+      "Ask Keeply now shows ready-made question chips based on your active notes and tasks.",
+      "Suggestions prioritize overdue or today tasks, pinned notes, and busy labels for faster mobile asking.",
+      "Tap a chip to fill the Ask field, then send it to Claude or use the local fallback if the API is unavailable."
+    ]
+  },
+  {
     id: "2026-05-18-cleanup-spotlight",
     title: "Cleanup Spotlight",
     bullets: [
