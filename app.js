@@ -32,6 +32,7 @@ import { getNoteColorFilterCounts, matchesNoteColorFilter, normalizeNoteColorFil
 import { compareTasksForDisplay } from "./task-sort.mjs";
 import { compareNotesForDisplay } from "./note-sort.mjs";
 import { getTodayTaskProgress } from "./task-today-progress.mjs";
+import { getNextTaskHighlight } from "./next-task.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 
@@ -199,6 +200,11 @@ const els = {
   filterSummaryChips: document.querySelector("#filterSummaryChips"),
   filterClearButton: document.querySelector("#filterClearButton"),
   taskBulkActions: document.querySelector("#taskBulkActions"),
+  nextTaskCard: document.querySelector("#nextTaskCard"),
+  nextTaskKicker: document.querySelector("#nextTaskKicker"),
+  nextTaskTitle: document.querySelector("#nextTaskTitle"),
+  nextTaskSummary: document.querySelector("#nextTaskSummary"),
+  nextTaskButton: document.querySelector("#nextTaskButton"),
   taskTodayProgress: document.querySelector("#taskTodayProgress"),
   taskTodayTitle: document.querySelector("#taskTodayTitle"),
   taskTodaySummary: document.querySelector("#taskTodaySummary"),
@@ -606,6 +612,7 @@ function render() {
   renderNoteColorFilters();
   renderTaskFilters();
   renderTaskPriorityFilters();
+  renderNextTaskHighlight();
   renderTaskTodayProgress();
   renderTaskBulkActions();
 }
@@ -752,6 +759,33 @@ function renderTaskPriorityFilters() {
     button.setAttribute("aria-pressed", String(active));
     button.querySelector(".task-filter-count").textContent = counts[filter] ?? 0;
   });
+}
+
+function renderNextTaskHighlight() {
+  const highlight = getNextTaskHighlight(state.tasks);
+  els.nextTaskCard.hidden = state.view !== "tasks";
+  els.nextTaskCard.dataset.tone = highlight.tone;
+  els.nextTaskKicker.textContent = highlight.kicker;
+  els.nextTaskTitle.textContent = highlight.title;
+  els.nextTaskSummary.textContent = highlight.summary;
+  els.nextTaskButton.textContent = highlight.buttonLabel;
+  els.nextTaskButton.dataset.window = highlight.window;
+  els.nextTaskButton.setAttribute("aria-label", highlight.available ? `${highlight.buttonLabel}: ${highlight.ariaLabel}` : "Review all tasks");
+}
+
+function focusNextTaskWindow() {
+  const highlight = getNextTaskHighlight(state.tasks);
+  state.view = "tasks";
+  state.label = "all";
+  state.query = "";
+  state.taskPriority = "all";
+  state.taskWindow = highlight.window === "unscheduled" ? "unscheduled" : highlight.window === "all" ? "all" : highlight.window;
+  els.searchInput.value = "";
+  syncNav();
+  saveViewPreferences();
+  render();
+  els.taskList.scrollIntoView({ behavior: "smooth", block: "start" });
+  showToast(highlight.available ? "Showing next task" : "Showing tasks");
 }
 
 function renderTaskTodayProgress() {
@@ -2600,6 +2634,7 @@ els.askForm.addEventListener("submit", askKeeply);
 els.filterClearButton.addEventListener("click", clearActiveFilters);
 els.emptyStateAction.addEventListener("click", clearActiveFilters);
 els.emptyStateCapture.addEventListener("click", captureSearchDraft);
+els.nextTaskButton.addEventListener("click", focusNextTaskWindow);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
 els.taskComposerPresets.addEventListener("click", (event) => {

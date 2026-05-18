@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-next-task-highlight",
+    title: "Next Task Highlight",
+    bullets: [
+      "Tasks now show a compact Next up card that points at the most urgent open task.",
+      "Overdue and today tasks are prioritized before upcoming or unscheduled work.",
+      "The Show task button jumps straight to the matching task window for faster mobile triage."
+    ]
+  },
+  {
     id: "2026-05-18-recent-note-ordering",
     title: "Recent Note Ordering",
     bullets: [
