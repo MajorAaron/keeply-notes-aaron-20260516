@@ -7,6 +7,7 @@ test("active filter summary stays hidden for default filters", () => {
     view: "active",
     label: "all",
     taskWindow: "all",
+    taskPriority: "all",
     query: ""
   });
 
@@ -39,6 +40,7 @@ test("active filter summary includes task date windows only in tasks view", () =
       view: "tasks",
       label: "home",
       taskWindow: "unscheduled",
+      taskPriority: "high",
       query: "a very long search phrase that needs trimming"
     }),
     {
@@ -46,6 +48,7 @@ test("active filter summary includes task date windows only in tasks view", () =
       chips: [
         { key: "label", label: "Home" },
         { key: "taskWindow", label: "No date" },
+        { key: "taskPriority", label: "High priority" },
         { key: "query", label: "Search: a very long search ph..." }
       ]
     }

@@ -14,10 +14,18 @@ const TASK_WINDOWS = {
   unscheduled: "No date"
 };
 
+const TASK_PRIORITIES = {
+  all: "All priorities",
+  high: "High priority",
+  normal: "Normal priority",
+  low: "Low priority"
+};
+
 export function getActiveFilterSummary(filters = {}) {
   const chips = [];
   const label = filters.label || "all";
   const taskWindow = filters.taskWindow || "all";
+  const taskPriority = filters.taskPriority || "all";
   const query = String(filters.query || "").trim();
 
   if (label !== "all") {
@@ -26,6 +34,10 @@ export function getActiveFilterSummary(filters = {}) {
 
   if (filters.view === "tasks" && taskWindow !== "all") {
     chips.push({ key: "taskWindow", label: TASK_WINDOWS[taskWindow] || titleCase(taskWindow) });
+  }
+
+  if (filters.view === "tasks" && taskPriority !== "all") {
+    chips.push({ key: "taskPriority", label: TASK_PRIORITIES[taskPriority] || titleCase(taskPriority) });
   }
 
   if (query) {

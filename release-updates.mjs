@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-task-priority-filters",
+    title: "Task Priority Filters",
+    bullets: [
+      "Tasks now have quick priority filters for High, Normal, and Low work.",
+      "Priority counts update with the selected date window and label.",
+      "Keeply remembers the chosen priority filter on this device."
+    ]
+  },
+  {
     id: "2026-05-17-note-reading-metadata",
     title: "Note Reading Details",
     bullets: [

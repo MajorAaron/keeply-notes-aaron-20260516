@@ -8,6 +8,7 @@ test("view preferences preserve valid workspace choices", () => {
       view: "tasks",
       label: "work",
       taskWindow: "overdue",
+      taskPriority: "high",
       compact: true,
       theme: "night"
     }),
@@ -15,6 +16,7 @@ test("view preferences preserve valid workspace choices", () => {
       view: "tasks",
       label: "work",
       taskWindow: "overdue",
+      taskPriority: "high",
       compact: true,
       theme: "night"
     }
@@ -27,6 +29,7 @@ test("view preferences fall back from unknown values", () => {
       view: "settings",
       label: "errands",
       taskWindow: "later",
+      taskPriority: "urgent",
       compact: "yes",
       theme: "blue"
     }),
@@ -34,6 +37,7 @@ test("view preferences fall back from unknown values", () => {
       view: "active",
       label: "all",
       taskWindow: "all",
+      taskPriority: "all",
       compact: false,
       theme: "morning"
     }
@@ -45,6 +49,7 @@ test("view preferences parse malformed storage safely", () => {
     view: "active",
     label: "all",
     taskWindow: "all",
+    taskPriority: "all",
     compact: false,
     theme: "morning"
   });
@@ -56,6 +61,7 @@ test("view preferences build from app state", () => {
       view: "archive",
       label: "personal",
       taskWindow: "today",
+      taskPriority: "low",
       compact: true,
       theme: "night"
     }),
@@ -63,6 +69,7 @@ test("view preferences build from app state", () => {
       view: "archive",
       label: "personal",
       taskWindow: "today",
+      taskPriority: "low",
       compact: true,
       theme: "night"
     }

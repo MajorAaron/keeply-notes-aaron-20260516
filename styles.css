@@ -289,7 +289,8 @@ h1 {
   background: rgba(255, 255, 255, 0.18);
 }
 
-.task-filters {
+.task-filters,
+.task-priority-filters {
   display: flex;
   gap: 8px;
   margin: 10px -22px 0;
@@ -298,11 +299,13 @@ h1 {
   scrollbar-width: none;
 }
 
-.task-filters::-webkit-scrollbar {
+.task-filters::-webkit-scrollbar,
+.task-priority-filters::-webkit-scrollbar {
   display: none;
 }
 
-.task-filter {
+.task-filter,
+.task-priority-filter {
   display: inline-flex;
   flex: 0 0 auto;
   gap: 8px;
@@ -317,7 +320,8 @@ h1 {
   font-weight: 900;
 }
 
-.task-filter.active {
+.task-filter.active,
+.task-priority-filter.active {
   background: var(--ink);
   color: white;
 }
@@ -334,7 +338,8 @@ h1 {
   font-size: 0.76rem;
 }
 
-.task-filter.active .task-filter-count {
+.task-filter.active .task-filter-count,
+.task-priority-filter.active .task-filter-count {
   background: rgba(255, 255, 255, 0.18);
 }
 
@@ -1830,7 +1835,8 @@ time {
     padding-left: 14px;
   }
 
-  .task-filters {
+  .task-filters,
+  .task-priority-filters {
     margin-right: -14px;
     margin-left: -14px;
     padding-right: 14px;

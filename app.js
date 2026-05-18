@@ -26,6 +26,7 @@ import { getTaskSwipeAction } from "./task-swipe-actions.mjs";
 import { buildNotePreview } from "./note-preview.mjs";
 import { getTaskDueBadge } from "./task-due-badge.mjs";
 import { getNoteReadingMeta } from "./note-reading-meta.mjs";
+import { getTaskPriorityFilterCounts, matchesTaskPriorityFilter, normalizeTaskPriorityFilter } from "./task-priority-filters.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -112,6 +113,7 @@ const state = {
   view: savedPreferences.view,
   label: savedPreferences.label,
   taskWindow: savedPreferences.taskWindow,
+  taskPriority: savedPreferences.taskPriority,
   query: "",
   color: "sun",
   compact: savedPreferences.compact,
@@ -181,6 +183,7 @@ const els = {
   askSummary: document.querySelector("#askSummary"),
   askAnswer: document.querySelector("#askAnswer"),
   taskFilters: document.querySelector("#taskFilters"),
+  taskPriorityFilters: document.querySelector("#taskPriorityFilters"),
   filterSummary: document.querySelector("#filterSummary"),
   filterSummaryChips: document.querySelector("#filterSummaryChips"),
   filterClearButton: document.querySelector("#filterClearButton"),
@@ -525,6 +528,7 @@ function getVisibleTasks() {
   return state.tasks
     .filter((task) => task.status === status)
     .filter((task) => state.view !== "tasks" || matchesTaskWindow(task, state.taskWindow))
+    .filter((task) => state.view !== "tasks" || matchesTaskPriorityFilter(task, state.taskPriority))
     .filter((task) => state.label === "all" || task.label === state.label)
     .filter((task) => {
       if (!query) return true;
@@ -557,6 +561,7 @@ function render() {
   els.notesGrid.hidden = showTasks;
   els.taskList.hidden = !showTasks && !showMixedArchive;
   els.taskFilters.hidden = !showTasks;
+  els.taskPriorityFilters.hidden = !showTasks;
   els.taskBulkActions.hidden = !showTasks;
   els.pinnedNotes.replaceChildren(...pinned.map(renderNote));
   els.notesGrid.replaceChildren(...others.map(renderNote));
@@ -564,9 +569,9 @@ function render() {
   els.emptyState.classList.toggle("show", notes.length + tasks.length === 0);
   els.emptyState.querySelector("h2").textContent = showTasks ? "No tasks here" : "No notes here";
   els.emptyState.querySelector("p").textContent = showTasks
-    ? state.taskWindow === "all"
+    ? state.taskWindow === "all" && state.taskPriority === "all"
       ? "Add a task with a due date, priority, and label."
-      : "Try another date filter or add a task for this window."
+      : "Try another task filter or add a task for this view."
     : "Create one, change filters, or restore something from archive.";
   els.pinnedNotes.classList.toggle("compact", state.compact);
   els.notesGrid.classList.toggle("compact", state.compact);
@@ -575,6 +580,7 @@ function render() {
   renderFilterSummary();
   renderStats();
   renderTaskFilters();
+  renderTaskPriorityFilters();
   renderTaskBulkActions();
 }
 
@@ -593,7 +599,9 @@ function renderLabelChips() {
 
 function getLabelCountItems() {
   if (state.view === "tasks") {
-    return state.tasks.filter((task) => task.status === "active" && matchesTaskWindow(task, state.taskWindow));
+    return state.tasks.filter(
+      (task) => task.status === "active" && matchesTaskWindow(task, state.taskWindow) && matchesTaskPriorityFilter(task, state.taskPriority)
+    );
   }
 
   if (state.view === "archive" || state.view === "trash") {
@@ -608,6 +616,7 @@ function renderFilterSummary() {
     view: state.view,
     label: state.label,
     taskWindow: state.taskWindow,
+    taskPriority: state.taskPriority,
     query: state.query
   });
 
@@ -626,7 +635,9 @@ function clearActiveFilters() {
   state.label = "all";
   state.query = "";
   state.taskWindow = "all";
+  state.taskPriority = "all";
   els.searchInput.value = "";
+  saveViewPreferences();
   render();
   showToast("Filters cleared");
 }
@@ -663,6 +674,21 @@ function renderTaskFilters() {
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", String(active));
     button.querySelector(".task-filter-count").textContent = count;
+  });
+}
+
+function renderTaskPriorityFilters() {
+  const countableTasks = state.tasks.filter(
+    (task) => task.status === "active" && matchesTaskWindow(task, state.taskWindow) && (state.label === "all" || task.label === state.label)
+  );
+  const counts = getTaskPriorityFilterCounts(countableTasks);
+
+  els.taskPriorityFilters.querySelectorAll(".task-priority-filter").forEach((button) => {
+    const filter = normalizeTaskPriorityFilter(button.dataset.priorityFilter);
+    const active = filter === state.taskPriority;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+    button.querySelector(".task-filter-count").textContent = counts[filter] ?? 0;
   });
 }
 
@@ -707,6 +733,7 @@ function snoozeOverdueTasksWithUndo() {
 
   state.tasks = result.tasks;
   state.taskWindow = "upcoming";
+  state.taskPriority = "all";
   saveData();
   render();
   showUndoToast(`${result.snoozed.length} overdue snoozed`, () => {
@@ -1515,6 +1542,7 @@ function duplicateTaskCard(task) {
   state.tasks.unshift(copy);
   state.view = "tasks";
   state.taskWindow = "all";
+  state.taskPriority = "all";
   setComposerMode("task");
   syncNav();
   saveViewPreferences();
@@ -2428,6 +2456,14 @@ document.querySelectorAll(".chip").forEach((button) => {
 document.querySelectorAll(".task-filter").forEach((button) => {
   button.addEventListener("click", () => {
     state.taskWindow = button.dataset.window;
+    saveViewPreferences();
+    render();
+  });
+});
+
+document.querySelectorAll(".task-priority-filter").forEach((button) => {
+  button.addEventListener("click", () => {
+    state.taskPriority = normalizeTaskPriorityFilter(button.dataset.priorityFilter);
     saveViewPreferences();
     render();
   });

@@ -81,6 +81,25 @@
           </button>
         </nav>
 
+        <nav class="task-priority-filters" id="taskPriorityFilters" aria-label="Task priority filters" hidden>
+          <button class="task-priority-filter active" type="button" data-priority-filter="all" aria-pressed="true">
+            <span>All priorities</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+          <button class="task-priority-filter" type="button" data-priority-filter="high" aria-pressed="false">
+            <span>High</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+          <button class="task-priority-filter" type="button" data-priority-filter="normal" aria-pressed="false">
+            <span>Normal</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+          <button class="task-priority-filter" type="button" data-priority-filter="low" aria-pressed="false">
+            <span>Low</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+        </nav>
+
         <section class="filter-summary" id="filterSummary" aria-label="Active filters" hidden>
           <div class="filter-summary-chips" id="filterSummaryChips"></div>
           <button class="filter-clear-button" id="filterClearButton" type="button">Clear filters</button>
