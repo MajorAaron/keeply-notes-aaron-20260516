@@ -1,4 +1,20 @@
 
+## 2026-05-18 16:05:45 MDT
+
+- Added smart bulk task hints for faster mobile task-list capture.
+- Pasted multi-line task lists now understand per-line hints like `today`, `tomorrow`, `!high`, `#normal`, `@home`, and `#ideas`; hint words are stripped from the saved task title while shared composer defaults still fill missing metadata.
+- Updated `task-bulk-entry.mjs` and `test/task-bulk-entry.test.mjs`; no new UI dependencies or Netlify functions were added.
+- Updated What's New metadata with latest id `2026-05-18-smart-bulk-task-hints`, title `Smart Bulk Task Hints`, and 3 user-facing bullets.
+- UI/code areas touched: bulk task parsing helper, bulk task tests, and release metadata only. The existing task composer and task cards surface the parsed labels/priorities/due dates.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local parsing only.
+- Verification: full `npm test` passed with 147 tests after fixing a local-date parsing test issue; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Smart Bulk Task Hints` What's New popup, dismiss behavior, and a pasted list creating `Call dentist` as Home/High/due tomorrow plus `Draft launch note` as Ideas/Normal/no date; browser console reported no errors.
+- Mobile/layout verification: browser screenshot review found no obvious overlap, clipping, or horizontal overflow around the task filters, top task cards, composer, or newly created task cards at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Smart Bulk Task Hints` What's New popup before dismissal, and a production console smoke test created the same parsed bulk tasks in localStorage with no browser console errors.
+- Secret scan of changed helper/test/metadata files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `b537582` (`Add smart bulk task hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b8d1221b8780e697ae394` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b8d1221b8780e697ae394--keeply-notes-aaron-20260516.netlify.app`.
+
 
 ## 2026-05-18 12:06:24 MDT
 
