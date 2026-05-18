@@ -1,3 +1,20 @@
+## 2026-05-18 02:07:47 MDT
+
+- Added collapsible task details for a cleaner mobile task list.
+- Long task detail text now renders as a compact preview with a `Show details` / `Hide details` toggle that expands in place.
+- Search highlighting continues to work in collapsed previews and expanded task details.
+- Added `task-detail-preview.mjs` and `test/task-detail-preview.test.mjs`; wired both into `npm test` syntax checks and the full `node --test` suite.
+- Updated What's New metadata with latest id `2026-05-18-collapsible-task-details`, title `Collapsible Task Details`, and 3 user-facing bullets.
+- UI areas touched: task card template in `index.html`, task rendering in `app.js`, toggle styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 103 tests after fixing one expected-preview assertion; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Collapsible Task Details` What's New popup, a long local task showed `Show details`, console-click expansion changed it to `Hide details` and revealed the full detail text, and browser console reported no errors.
+- Mobile/layout verification: browser screenshot review found no obvious overlap or clipping around the task detail toggle; exact narrow-phone viewport resizing was not available in the browser tool, so verification was limited to the visible responsive browser width.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, or token assignments.
+- Git status: feature commit `a5ed326` (`Add collapsible task details`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0ac8bf50df13ed7aa8de92` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0ac8bf50df13ed7aa8de92--keeply-notes-aaron-20260516.netlify.app`.
+- Production verification: deployed permalink loaded in browser, showed the `Collapsible Task Details` What's New popup, and browser console reported no errors.
+
 ## 2026-05-18 01:05:19 MDT
 
 - Added priority-aware task ordering for faster mobile task triage.
