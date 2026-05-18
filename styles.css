@@ -1520,6 +1520,34 @@ select {
   overflow-wrap: anywhere;
 }
 
+.task-card p.expanded {
+  overflow: visible;
+}
+
+.task-detail-toggle {
+  justify-self: start;
+  min-height: 32px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(35, 36, 38, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.48);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.task-detail-toggle:focus-visible,
+.task-detail-toggle:hover {
+  border-color: rgba(35, 36, 38, 0.34);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.task-detail-toggle[hidden] {
+  display: none;
+}
+
 .task-due-shortcuts,
 .task-priority-shortcuts,
 .task-label-shortcuts {

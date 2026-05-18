@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-collapsible-task-details",
+    title: "Collapsible Task Details",
+    bullets: [
+      "Long task details now stay compact in the mobile task list.",
+      "Tap Show details to expand the full context in place, then hide it again.",
+      "Search highlights continue to work in both collapsed and expanded task details."
+    ]
+  },
+  {
     id: "2026-05-18-priority-task-order",
     title: "Priority Task Ordering",
     bullets: [

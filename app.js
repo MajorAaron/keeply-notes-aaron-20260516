@@ -25,6 +25,7 @@ import { buildBulkTasksFromText } from "./task-bulk-entry.mjs";
 import { getTaskSwipeAction } from "./task-swipe-actions.mjs";
 import { buildNotePreview } from "./note-preview.mjs";
 import { getTaskDueBadge } from "./task-due-badge.mjs";
+import { buildTaskDetailPreview } from "./task-detail-preview.mjs";
 import { getNoteReadingMeta } from "./note-reading-meta.mjs";
 import { getTaskPriorityFilterCounts, matchesTaskPriorityFilter, normalizeTaskPriorityFilter } from "./task-priority-filters.mjs";
 import { getNoteColorFilterCounts, matchesNoteColorFilter, normalizeNoteColorFilter } from "./note-color-filters.mjs";
@@ -1423,7 +1424,20 @@ function renderTask(task) {
   node.querySelector(".task-label").textContent = task.label;
   node.querySelector(".task-priority").textContent = task.priority;
   renderHighlightedText(node.querySelector("h3"), task.title, highlightTerms);
-  renderHighlightedText(node.querySelector("p"), task.details || "No extra details", highlightTerms);
+  const detailsPreview = buildTaskDetailPreview(task.details);
+  const detailsElement = node.querySelector("p");
+  const detailsToggle = node.querySelector(".task-detail-toggle");
+  renderHighlightedText(detailsElement, detailsPreview.text, highlightTerms);
+  detailsToggle.hidden = !detailsPreview.isTruncated;
+  if (detailsPreview.isTruncated) {
+    detailsToggle.addEventListener("click", () => {
+      const isExpanded = detailsToggle.getAttribute("aria-expanded") === "true";
+      detailsToggle.setAttribute("aria-expanded", String(!isExpanded));
+      detailsToggle.textContent = isExpanded ? "Show details" : "Hide details";
+      detailsElement.classList.toggle("expanded", !isExpanded);
+      renderHighlightedText(detailsElement, isExpanded ? detailsPreview.text : detailsPreview.expandedText, highlightTerms);
+    });
+  }
   const dueBadge = getTaskDueBadge(task);
   const dueTime = node.querySelector("time");
   dueTime.textContent = dueBadge.label;
