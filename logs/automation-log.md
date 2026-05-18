@@ -13,7 +13,7 @@
 - Production verification: deploy permalink loaded in browser, showed the `Recent Note Ordering` What's New popup, and browser console reported no errors.
 - Secret scan of changed app/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, or token assignments.
 - Git status: feature commit `fbb66a5` (`Sort notes by recent updates`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
-- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Deploy `6a0b0068306cb29247d23316` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b0068306cb29247d23316--keeply-notes-aaron-20260516.netlify.app`.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b0068306cb29247d23316` and final post-log deploy `6a0b00ab2a16848677a634ee` are live at `https://keeply-notes-aaron-20260516.netlify.app`; final deploy permalink is `https://6a0b00ab2a16848677a634ee--keeply-notes-aaron-20260516.netlify.app`.
 ## 2026-05-18 05:06:59 MDT
 
 - Added search capture drafts for faster mobile recovery when a search turns up empty.
