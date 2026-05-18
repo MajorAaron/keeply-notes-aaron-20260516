@@ -400,3 +400,19 @@
 - Git status: feature commit `7992938` (`Add label count chips`) was pushed to `origin main`.
 - Netlify CLI deployment limit: direct CLI deploy with local env loaded and temp config/cache paths failed because DNS cannot resolve `api.netlify.com`.
 - Netlify MCP deployment succeeded. Initial feature deploy `6a09cb0efa13889f2b48405b` and final current-tree deploy `6a09cb8b9cd8f9b356a565af` are ready at `https://keeply-notes-aaron-20260516.netlify.app`; readback confirmed state `ready`, 8 deployed functions, 7 redirect rules processed, 1 header rule processed, and no secret-scan matches.
+
+## 2026-05-17 18:05:26 MDT
+
+- Added bulk task list paste for Keeply task capture.
+- In Task mode, leaving Title blank and pasting two or more lines into the details field now creates one active task per line.
+- Common pasted prefixes such as bullets, numbered list markers, and checkbox markers are stripped before task creation.
+- The selected label, priority, and due date apply to every task created from the pasted list; the composer placeholder now hints at list paste support.
+- Added `task-bulk-entry.mjs` and `test/task-bulk-entry.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-bulk-task-paste`, title `Paste a Task List`, and 3 user-facing bullets.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: wrote the failing bulk-task test first, then implemented the helper and app wiring; `npm test` passed with 70 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the What's New popup appeared for `Paste a Task List`, the Task details placeholder mentions list paste, and pasting two bullet lines with an empty title created two separate active tasks.
+- Secret scan of changed app/test/metadata/package/helper files found no committed API keys or tokens; the only scan match was the helper import name `buildBulkTasksFromText`.
+- Git status: feature commit `fe7d867` (`Add bulk task list paste`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded from a clean temporary worktree with `--no-build`. Deploy `6a0a57ad8cd67cfb95a22ad3` is ready at `https://boisterous-melba-458e03.netlify.app`; deploy permalink is `https://6a0a57ad8cd67cfb95a22ad3--boisterous-melba-458e03.netlify.app`.
+- Live shell verification limit: direct live-site `curl` was blocked by the command security scanner for the `.app` production hostname, so live HTTP verification was not run after deploy.
