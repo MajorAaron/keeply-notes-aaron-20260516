@@ -31,6 +31,7 @@ import { getTaskPriorityFilterCounts, matchesTaskPriorityFilter, normalizeTaskPr
 import { getNoteColorFilterCounts, matchesNoteColorFilter, normalizeNoteColorFilter } from "./note-color-filters.mjs";
 import { compareTasksForDisplay } from "./task-sort.mjs";
 import { getTodayTaskProgress } from "./task-today-progress.mjs";
+import { getEmptyStateCopy } from "./empty-state.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -164,6 +165,7 @@ const els = {
   pinnedHeading: document.querySelector("#pinnedHeading"),
   othersHeading: document.querySelector("#othersHeading"),
   emptyState: document.querySelector("#emptyState"),
+  emptyStateAction: document.querySelector("#emptyStateAction"),
   totalCount: document.querySelector("#totalCount"),
   pinnedCount: document.querySelector("#pinnedCount"),
   todayCount: document.querySelector("#todayCount"),
@@ -575,15 +577,19 @@ function render() {
   els.pinnedNotes.replaceChildren(...pinned.map(renderNote));
   els.notesGrid.replaceChildren(...others.map(renderNote));
   els.taskList.replaceChildren(...tasks.map(renderTask));
+  const emptyState = getEmptyStateCopy({
+    view: state.view,
+    label: state.label,
+    taskWindow: state.taskWindow,
+    taskPriority: state.taskPriority,
+    noteColor: state.noteColor,
+    query: state.query
+  });
   els.emptyState.classList.toggle("show", notes.length + tasks.length === 0);
-  els.emptyState.querySelector("h2").textContent = showTasks ? "No tasks here" : "No notes here";
-  els.emptyState.querySelector("p").textContent = showTasks
-    ? state.taskWindow === "all" && state.taskPriority === "all"
-      ? "Add a task with a due date, priority, and label."
-      : "Try another task filter or add a task for this view."
-    : state.view === "active" && state.noteColor !== "all"
-      ? "Try another note color or clear filters to see more notes."
-      : "Create one, change filters, or restore something from archive.";
+  els.emptyState.querySelector("h2").textContent = emptyState.title;
+  els.emptyState.querySelector("p").textContent = emptyState.message;
+  els.emptyStateAction.hidden = !emptyState.action;
+  els.emptyStateAction.textContent = emptyState.action || "Clear filters";
   els.pinnedNotes.classList.toggle("compact", state.compact);
   els.notesGrid.classList.toggle("compact", state.compact);
 
@@ -2564,6 +2570,7 @@ els.focusButton.addEventListener("click", briefFocus);
 els.sweepButton.addEventListener("click", sweepItems);
 els.askForm.addEventListener("submit", askKeeply);
 els.filterClearButton.addEventListener("click", clearActiveFilters);
+els.emptyStateAction.addEventListener("click", clearActiveFilters);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
 els.taskComposerPresets.addEventListener("click", (event) => {

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-empty-filter-recovery",
+    title: "Empty Filter Recovery",
+    bullets: [
+      "Empty filtered views now explain when filters are hiding cards.",
+      "A Clear filters button appears right in the empty state for one-tap recovery.",
+      "Archive and Trash now use clearer empty-view copy on mobile."
+    ]
+  },
+  {
     id: "2026-05-18-today-task-progress",
     title: "Today Task Progress",
     bullets: [
