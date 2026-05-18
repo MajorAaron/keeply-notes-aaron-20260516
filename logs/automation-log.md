@@ -1,3 +1,19 @@
+## 2026-05-18 03:07:23 MDT
+
+- Added a Today task progress card for faster mobile task triage.
+- Tasks view now shows a compact Today card with done/open/high-priority counts, tomorrow context, an accessible progressbar, and a percent badge above the composer.
+- Added `task-today-progress.mjs` and `test/task-today-progress.test.mjs`; wired both into `npm test` syntax checks and the full `node --test` suite.
+- Updated What's New metadata with latest id `2026-05-18-today-task-progress`, title `Today Task Progress`, and 3 user-facing bullets.
+- UI areas touched: task dashboard markup in `index.html`, task progress rendering in `app.js`, mobile card/progress styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 106 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Today Task Progress` What's New popup, the Tasks view Today progress card, accessible progressbar/counts, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found no obvious overlap, clipping, or unreadable text around the Today progress card; exact narrow-phone viewport resizing was not available in the browser tool, so verification was limited to the visible responsive browser width.
+- Production verification: deploy permalink loaded in browser, showed the `Today Task Progress` What's New popup, and the Tasks view showed the Today progress card with no browser console errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, or token assignments.
+- Git status: feature commit `0c6eca8` (`Add today task progress card`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0ad6ade100a608aa29222b` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0ad6ade100a608aa29222b--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-18 02:07:47 MDT
 
 - Added collapsible task details for a cleaner mobile task list.
