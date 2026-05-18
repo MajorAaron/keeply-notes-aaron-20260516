@@ -1,3 +1,18 @@
+## 2026-05-17 21:06:21 MDT
+
+- Added color-coded task due badges for faster mobile task scanning.
+- Task cards now show due timing as compact badges: Overdue with date, Today, Tomorrow, future date, No date, or a quiet Done badge for completed tasks.
+- Added `task-due-badge.mjs` and `test/task-due-badge.test.mjs`; wired both into `npm test` syntax checks and the full `node --test` suite.
+- Updated What's New metadata with latest id `2026-05-17-task-due-badges`, title `Task Due Badges`, and 3 user-facing bullets.
+- UI areas touched: task rendering in `app.js`, badge styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: watched the new task-due-badge test fail before implementation, then pass; full `npm test` passed with 85 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Task Due Badges` What's New popup, visible task due badges, and no obvious mobile layout overlap in screenshot review.
+- Production verification: deployed permalink loaded in browser, showed the `Task Due Badges` What's New popup, and the Tasks view showed a `Due today` badge without mutating production data.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, secret, token, or long `sk-` key patterns.
+- Git status: feature commit `54c8412` (`Add task due badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded after the first `npx netlify deploy --prod --dir .. --json` attempt failed with `Error while running build`; retrying `npx netlify deploy --prod --dir . --no-build --json` succeeded. Deploy `6a0a8210a79a2d762ff259e4` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a8210a79a2d762ff259e4--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-17 20:07:15 MDT
 
 - Added collapsible note previews for mobile-friendly reading.
