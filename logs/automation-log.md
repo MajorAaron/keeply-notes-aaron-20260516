@@ -1,3 +1,19 @@
+## 2026-05-18 04:07:26 MDT
+
+- Added empty filter recovery for faster mobile recovery from zero-result views.
+- Empty filtered Notes/Tasks/Archive/Trash views now explain that filters are hiding cards and show an in-card `Clear filters` action; true-empty Archive and Trash states have clearer copy.
+- Added `empty-state.mjs` and `test/empty-state.test.mjs`; wired both into `npm test` syntax checks and the full `node --test` suite.
+- Updated What's New metadata with latest id `2026-05-18-empty-filter-recovery`, title `Empty Filter Recovery`, and 3 user-facing bullets.
+- UI areas touched: empty-state markup in `index.html`, empty-state rendering/listener wiring in `app.js`, mobile-friendly empty-state action styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 110 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Empty Filter Recovery` What's New popup, a zero-result note filter showed `No matching notes` plus the empty-state `Clear filters` button, console-clicking the empty-state action cleared filters, and browser console reported no errors.
+- Mobile/layout verification: browser screenshot review found the empty-state message and Clear filters button readable with no obvious overlap or clipping at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded in browser, showed the `Empty Filter Recovery` What's New popup, and selecting a zero-count Rose note color filter showed `No matching notes` with an in-card `Clear filters` button and no browser console errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, or token assignments.
+- Git status: feature commit `fb98252` (`Add empty filter recovery`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Deploy `6a0ae4c12a16843081a63572` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0ae4c12a16843081a63572--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-18 03:07:23 MDT
 
 - Added a Today task progress card for faster mobile task triage.
