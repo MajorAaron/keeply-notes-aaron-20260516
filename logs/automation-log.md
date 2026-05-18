@@ -1,3 +1,19 @@
+
+## 2026-05-18 05:06:59 MDT
+
+- Added search capture drafts for faster mobile recovery when a search turns up empty.
+- Empty note/task search results now show a secondary `Capture as note` or `Capture as task` action; using it clears the search, preloads the composer with the query, and applies lightweight task due/priority hints for words like today, tomorrow, urgent, or asap.
+- Added `search-capture.mjs` and `test/search-capture.test.mjs`; wired both into `npm test` syntax checks and the full `node --test` suite.
+- Updated What's New metadata with latest id `2026-05-18-search-capture-drafts`, title `Capture Search Drafts`, and 3 user-facing bullets.
+- UI areas touched: empty-state markup in `index.html`, empty-state capture wiring in `app.js`, secondary empty-state button styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added; the task draft hints are local deterministic heuristics only.
+- Verification: full `npm test` passed with 114 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Capture Search Drafts` What's New popup, an empty note search showed `Capture as note`, invoking the action populated the composer and cleared the search, and browser console reported no errors.
+- Mobile/layout verification: browser screenshot review found no obvious overlap, clipping, or unreadable controls around the search-capture composer flow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded in browser, showed the `Capture Search Drafts` What's New popup, an empty search exposed `Capture as note`, console-clicking it populated the note draft and cleared search with no browser console errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, or token assignments.
+- Git status: feature commit `64bce19` (`Add search capture drafts`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Deploy `6a0af2a518bb02523fdeec27` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0af2a518bb02523fdeec27--keeply-notes-aaron-20260516.netlify.app`.
 ## 2026-05-18 04:07:26 MDT
 
 - Added empty filter recovery for faster mobile recovery from zero-result views.
