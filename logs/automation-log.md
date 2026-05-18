@@ -1,4 +1,20 @@
 
+## 2026-05-18 11:08:08 MDT
+
+- Added mobile-first Ask Keeply suggestions for faster question starts.
+- Ask Keeply now renders local suggested-question chips from active notes/tasks, prioritizing overdue/today tasks, pinned notes, and busy labels; tapping a chip fills the Ask field without mutating saved data.
+- Added `ask-suggestions.mjs` and `test/ask-suggestions.test.mjs`; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-ask-suggestions`, title `Ask Suggestions`, and 3 user-facing bullets.
+- UI areas touched: Ask Keeply markup in `index.html`, suggestion rendering/click wiring in `app.js`, mobile horizontal chip styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added; suggestions are deterministic local heuristics, and submitted questions continue to use the existing `/api/ask` Anthropic flow with the existing local fallback if that endpoint is unavailable.
+- Verification: full `npm test` passed with 132 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Ask Suggestions` What's New popup, visible Ask suggestion chips, chip-to-input fill behavior, no document-level horizontal overflow, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the Ask suggestion chips readable with no obvious overlap, clipping, or horizontal page overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Ask Suggestions` What's New popup and suggestion chips; console smoke clicked a suggestion and confirmed it filled the Ask input with no browser console errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `1906454` (`Add Ask Keeply suggestions`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b473f3a1e9c5fa1ad2f77` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b473f3a1e9c5fa1ad2f77--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-18 10:09:43 MDT
 
 - Added a mobile-first Cleanup Spotlight for Archive and Trash review.
