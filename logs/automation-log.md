@@ -1,4 +1,20 @@
 
+## 2026-05-18 08:06:42 MDT
+
+- Added a mobile-first Note Spotlight card for faster note resurfacing.
+- Notes view now shows a compact spotlight above the composer, preferring the most recently updated pinned note and falling back to the most recent active note.
+- The card previews the note body and includes a `Show pinned` / `Show note` button that clears note filters, searches for the spotlighted title, and scrolls to the matching pinned or regular note list.
+- Added `note-spotlight.mjs` and `test/note-spotlight.test.mjs`; wired both into `npm test` syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-note-spotlight`, title `Note Spotlight`, and 3 user-facing bullets.
+- UI areas touched: Notes dashboard markup in `index.html`, note spotlight rendering/jump wiring in `app.js`, mobile-friendly card styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 122 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Note Spotlight` What's New popup, the Notes view spotlight card, the spotlight button filtering to a matching note, and no browser console errors.
+- Mobile/layout verification: browser snapshot and screenshot review found no severe overlap, clipping, or unreadable text around the new spotlight card at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded in browser, showed the `Note Spotlight` What's New popup and Notes view spotlight card, and browser console reported no errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `cb84ee1` (`Add note spotlight card`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b1cd9b3c49e14b393c032` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b1cd9b3c49e14b393c032--keeply-notes-aaron-20260516.netlify.app`.
 ## 2026-05-18 07:07:39 MDT
 
 - Added a mobile-first Next Task Highlight for faster task triage.
