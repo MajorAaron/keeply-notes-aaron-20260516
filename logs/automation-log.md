@@ -1,4 +1,20 @@
 
+## 2026-05-18 17:06:22 MDT
+
+- Added context-aware Quick Add for faster mobile capture from the floating plus button.
+- The FAB now updates its accessible label/title for notes versus tasks, opens the task composer from the Tasks view, keeps note capture for Notes/Archive/Trash, focuses the title field, and shows a concise ready toast.
+- Added `quick-add-target.mjs` and `test/quick-add-target.test.mjs`; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-context-quick-add`, title `Context Quick Add`, and 3 user-facing bullets.
+- UI/code areas touched: Quick Add target helper, FAB render/click wiring in `app.js`, release metadata, package test wiring, and the new helper test. No CSS changes or new dependencies were needed.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local UI behavior only.
+- Verification: full `npm test` passed with 150 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Context Quick Add` What's New popup, note-view `Quick add note`, task-view `Quick add task`, task-mode composer focus after tapping FAB, note-mode composer focus after returning to Notes, ready toasts, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found no obvious overlap, clipping, or horizontal overflow around the floating Quick Add button, composer, and filter rows at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Context Quick Add` What's New popup, and a production console smoke test confirmed the Tasks-view FAB label, task composer focus, `Add task` state, and no browser console errors.
+- Secret scan of added lines in changed app/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `4cfdb20` (`Add context-aware quick add`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b9b4d66fa152e3b931402` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b9b4d66fa152e3b931402--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-18 16:05:45 MDT
 
 - Added smart bulk task hints for faster mobile task-list capture.
