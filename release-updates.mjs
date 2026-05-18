@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-priority-task-order",
+    title: "Priority Task Ordering",
+    bullets: [
+      "Tasks due on the same day now sort High before Normal and Low.",
+      "Open dated tasks still stay ahead of undated and completed work.",
+      "Mobile task lists surface the most important next action sooner."
+    ]
+  },
+  {
     id: "2026-05-18-note-color-filters",
     title: "Note Color Filters",
     bullets: [

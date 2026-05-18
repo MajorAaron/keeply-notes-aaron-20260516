@@ -28,6 +28,7 @@ import { getTaskDueBadge } from "./task-due-badge.mjs";
 import { getNoteReadingMeta } from "./note-reading-meta.mjs";
 import { getTaskPriorityFilterCounts, matchesTaskPriorityFilter, normalizeTaskPriorityFilter } from "./task-priority-filters.mjs";
 import { getNoteColorFilterCounts, matchesNoteColorFilter, normalizeNoteColorFilter } from "./note-color-filters.mjs";
+import { compareTasksForDisplay } from "./task-sort.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -538,14 +539,7 @@ function getVisibleTasks() {
       if (!query) return true;
       return `${task.title} ${task.details} ${task.label} ${task.priority}`.toLowerCase().includes(query);
     })
-    .sort(compareTasks);
-}
-
-function compareTasks(a, b) {
-  if (a.completed !== b.completed) return Number(a.completed) - Number(b.completed);
-  if (a.dueAt && b.dueAt && a.dueAt !== b.dueAt) return a.dueAt.localeCompare(b.dueAt);
-  if (a.dueAt !== b.dueAt) return a.dueAt ? -1 : 1;
-  return new Date(b.createdAt) - new Date(a.createdAt);
+    .sort(compareTasksForDisplay);
 }
 
 function render() {
