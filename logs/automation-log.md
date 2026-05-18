@@ -11,8 +11,8 @@
 - Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the What's New popup for `Collapsible Note Previews`; a long local note showed `Read more`, expanded to full text with `Show less`, and had no obvious desktop layout overlap in screenshot review.
 - Secret scan of changed app/test/metadata/style/package/helper files found no committed `ANTHROPIC_API_KEY`, secret, token, or long `sk-` key patterns; only false-positive `tokenize` function names appeared.
 - Git status: feature commit `82365d8` (`Add collapsible note previews`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
-- Netlify production deploy succeeded. Deploy `6a0a743eca12654c2bdfcef2` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a743eca12654c2bdfcef2--keeply-notes-aaron-20260516.netlify.app`.
-- Production browser verification loaded the deploy permalink and confirmed the `Collapsible Note Previews` What's New popup. Live production note-toggle verification was not performed to avoid mutating production note data.
+- Netlify production deploy succeeded. Final deploy `6a0a747865506c1ac84665b9` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a747865506c1ac84665b9--keeply-notes-aaron-20260516.netlify.app`. Earlier feature deploy `6a0a743eca12654c2bdfcef2` also reached ready state.
+- Production browser verification loaded the feature deploy permalink and confirmed the `Collapsible Note Previews` What's New popup. Live production note-toggle verification was not performed to avoid mutating production note data.
 
 ## 2026-05-17 19:06:02 MDT
 
