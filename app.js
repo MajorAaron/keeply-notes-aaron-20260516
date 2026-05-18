@@ -21,6 +21,7 @@ import { duplicateNote, duplicateTask } from "./duplicate-items.mjs";
 import { removeCopiedItem } from "./duplicate-undo.mjs";
 import { buildNoteEditPatch, buildTaskEditPatch } from "./edit-items.mjs";
 import { getNotePinLabel, toggleNotePin } from "./note-pin.mjs";
+import { buildBulkTasksFromText } from "./task-bulk-entry.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -442,8 +443,27 @@ function addNote() {
 function addTask() {
   const title = els.titleInput.value.trim();
   const details = els.bodyInput.value.trim();
+  const bulkTasks = title
+    ? []
+    : buildBulkTasksFromText(details, {
+        label: els.labelInput.value,
+        priority: els.priorityInput.value,
+        dueAt: els.dueInput.value
+      });
+  if (bulkTasks.length > 0) {
+    state.tasks = [...bulkTasks, ...state.tasks];
+    clearComposer();
+    setComposerMode("task");
+    state.view = "tasks";
+    syncNav();
+    saveData();
+    render();
+    showToast(`${bulkTasks.length} tasks added`);
+    return;
+  }
+
   if (!title) {
-    showToast("Name the task first");
+    showToast("Name the task or paste a list");
     els.titleInput.focus();
     return;
   }
@@ -2056,7 +2076,7 @@ function setComposerMode(mode, options = {}) {
   els.attachImageButton.hidden = mode === "task";
   els.generateImageButton.hidden = mode === "task";
   els.imagePreview.hidden = mode === "task" || !state.draftImage;
-  els.bodyInput.placeholder = mode === "task" ? "Task details..." : "Take a note...";
+  els.bodyInput.placeholder = mode === "task" ? "Task details or paste a list..." : "Take a note...";
   updateComposerEditingState();
   document.querySelectorAll(".mode-button").forEach((button) => {
     const active = button.dataset.mode === mode;

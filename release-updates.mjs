@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-bulk-task-paste",
+    title: "Paste a Task List",
+    bullets: [
+      "Task mode now turns pasted multi-line lists into separate tasks.",
+      "Common bullets, numbered lines, and checkbox prefixes are cleaned automatically.",
+      "Label, priority, and due date choices apply to every created task."
+    ]
+  },
+  {
     id: "2026-05-17-undo-note-pinning",
     title: "Undo Note Pinning",
     bullets: [
