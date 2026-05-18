@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-search-capture-drafts",
+    title: "Capture Search Drafts",
+    bullets: [
+      "Empty search results now offer a quick Capture action instead of leaving the query behind.",
+      "Notes searches become note drafts, while task searches become task drafts with lightweight due and priority hints.",
+      "Keeply clears the search and scrolls you back to the composer so the draft is ready to save or refine."
+    ]
+  },
+  {
     id: "2026-05-18-empty-filter-recovery",
     title: "Empty Filter Recovery",
     bullets: [

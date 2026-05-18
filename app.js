@@ -32,6 +32,7 @@ import { getNoteColorFilterCounts, matchesNoteColorFilter, normalizeNoteColorFil
 import { compareTasksForDisplay } from "./task-sort.mjs";
 import { getTodayTaskProgress } from "./task-today-progress.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
+import { getSearchCaptureDraft } from "./search-capture.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -166,6 +167,7 @@ const els = {
   othersHeading: document.querySelector("#othersHeading"),
   emptyState: document.querySelector("#emptyState"),
   emptyStateAction: document.querySelector("#emptyStateAction"),
+  emptyStateCapture: document.querySelector("#emptyStateCapture"),
   totalCount: document.querySelector("#totalCount"),
   pinnedCount: document.querySelector("#pinnedCount"),
   todayCount: document.querySelector("#todayCount"),
@@ -590,6 +592,9 @@ function render() {
   els.emptyState.querySelector("p").textContent = emptyState.message;
   els.emptyStateAction.hidden = !emptyState.action;
   els.emptyStateAction.textContent = emptyState.action || "Clear filters";
+  const searchCapture = getSearchCaptureDraft({ view: state.view, label: state.label, query: state.query });
+  els.emptyStateCapture.hidden = notes.length + tasks.length !== 0 || !searchCapture.available;
+  els.emptyStateCapture.textContent = searchCapture.action || "Capture search";
   els.pinnedNotes.classList.toggle("compact", state.compact);
   els.notesGrid.classList.toggle("compact", state.compact);
 
@@ -661,6 +666,27 @@ function clearActiveFilters() {
   saveViewPreferences();
   render();
   showToast("Filters cleared");
+}
+
+function captureSearchDraft() {
+  const draft = getSearchCaptureDraft({ view: state.view, label: state.label, query: state.query });
+  if (!draft.available) return;
+
+  if (state.editingItem) state.editingItem = null;
+  setComposerMode(draft.mode, { saveDraft: false });
+  els.titleInput.value = draft.title;
+  els.bodyInput.value = draft.body;
+  els.labelInput.value = draft.label;
+  els.priorityInput.value = draft.priority;
+  els.dueInput.value = draft.dueAt === "" ? "" : toDateInput(new Date(Date.now() + dayMs * draft.dueAt));
+  state.query = "";
+  els.searchInput.value = "";
+  renderTaskComposerPresets();
+  updateComposerEditingState();
+  saveComposerDraft();
+  render();
+  scrollComposerIntoView();
+  showToast(draft.mode === "task" ? "Search captured as task draft" : "Search captured as note draft");
 }
 
 function renderStats() {
@@ -2571,6 +2597,7 @@ els.sweepButton.addEventListener("click", sweepItems);
 els.askForm.addEventListener("submit", askKeeply);
 els.filterClearButton.addEventListener("click", clearActiveFilters);
 els.emptyStateAction.addEventListener("click", clearActiveFilters);
+els.emptyStateCapture.addEventListener("click", captureSearchDraft);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
 els.taskComposerPresets.addEventListener("click", (event) => {

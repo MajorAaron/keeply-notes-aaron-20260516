@@ -1765,6 +1765,14 @@ time {
   transform: scale(0.97);
 }
 
+.empty-state-capture {
+  margin-top: 0;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  box-shadow: none;
+}
+
 .fab {
   position: fixed;
   right: max(20px, env(safe-area-inset-right));
