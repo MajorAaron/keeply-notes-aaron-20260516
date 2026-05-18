@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-next-task-done-button",
+    title: "Next Task Done Button",
+    bullets: [
+      "The Next task card now includes a Mark done button for the highlighted task.",
+      "Completing from the card refreshes the next recommendation immediately so mobile triage keeps moving.",
+      "The existing Undo toast is still available if the task was checked off by mistake."
+    ]
+  },
+  {
     id: "2026-05-18-body-first-note-titles",
     title: "Body-First Note Titles",
     bullets: [

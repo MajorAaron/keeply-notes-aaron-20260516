@@ -221,6 +221,7 @@ const els = {
   nextTaskTitle: document.querySelector("#nextTaskTitle"),
   nextTaskSummary: document.querySelector("#nextTaskSummary"),
   nextTaskButton: document.querySelector("#nextTaskButton"),
+  nextTaskCompleteButton: document.querySelector("#nextTaskCompleteButton"),
   taskTodayProgress: document.querySelector("#taskTodayProgress"),
   taskTodayTitle: document.querySelector("#taskTodayTitle"),
   taskTodaySummary: document.querySelector("#taskTodaySummary"),
@@ -858,6 +859,10 @@ function renderNextTaskHighlight() {
   els.nextTaskButton.textContent = highlight.buttonLabel;
   els.nextTaskButton.dataset.window = highlight.window;
   els.nextTaskButton.setAttribute("aria-label", highlight.available ? `${highlight.buttonLabel}: ${highlight.ariaLabel}` : "Review all tasks");
+  els.nextTaskCompleteButton.textContent = highlight.completeLabel;
+  els.nextTaskCompleteButton.hidden = !highlight.canComplete;
+  els.nextTaskCompleteButton.disabled = !highlight.canComplete;
+  els.nextTaskCompleteButton.setAttribute("aria-label", highlight.completeAriaLabel);
 }
 
 function focusNextTaskWindow() {
@@ -873,6 +878,22 @@ function focusNextTaskWindow() {
   render();
   els.taskList.scrollIntoView({ behavior: "smooth", block: "start" });
   showToast(highlight.available ? "Showing next task" : "Showing tasks");
+}
+
+function completeNextTask() {
+  const highlight = getNextTaskHighlight(state.tasks);
+  if (!highlight.canComplete || !highlight.id) {
+    showToast("No next task");
+    return;
+  }
+
+  const task = state.tasks.find((item) => item.id === highlight.id);
+  if (!task) {
+    showToast("Task not found");
+    return;
+  }
+
+  toggleTaskCompletionWithUndo(task);
 }
 
 function renderTaskTodayProgress() {
@@ -2762,6 +2783,7 @@ els.emptyStateCapture.addEventListener("click", captureSearchDraft);
 els.noteSpotlightButton.addEventListener("click", focusNoteSpotlight);
 els.cleanupSpotlightButton.addEventListener("click", focusCleanupSpotlight);
 els.nextTaskButton.addEventListener("click", focusNextTaskWindow);
+els.nextTaskCompleteButton.addEventListener("click", completeNextTask);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
 els.taskComposerPresets.addEventListener("click", (event) => {

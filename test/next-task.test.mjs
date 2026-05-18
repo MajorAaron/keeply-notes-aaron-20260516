@@ -32,6 +32,9 @@ test("highlights overdue work before today and upcoming tasks", () => {
   assert.equal(summary.kicker, "Overdue · Normal");
   assert.equal(summary.window, "overdue");
   assert.equal(summary.buttonLabel, "Show overdue");
+  assert.equal(summary.canComplete, true);
+  assert.equal(summary.completeLabel, "Mark done");
+  assert.equal(summary.completeAriaLabel, "Mark next task done: Old normal");
   assert.match(summary.summary, /Due May 16/);
 });
 
@@ -76,4 +79,6 @@ test("ignores completed and inactive tasks", () => {
   assert.equal(summary.available, false);
   assert.equal(summary.title, "No open tasks");
   assert.equal(summary.window, "all");
+  assert.equal(summary.canComplete, false);
+  assert.equal(summary.completeAriaLabel, "No next task to complete");
 });

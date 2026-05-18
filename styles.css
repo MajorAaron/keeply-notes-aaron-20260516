@@ -588,16 +588,38 @@ h1 {
   font-weight: 700;
 }
 
-.next-task-button {
+.next-task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.next-task-button,
+.next-task-complete-button {
   min-height: 38px;
   padding: 0 13px;
   border: 0;
   border-radius: 14px;
-  background: var(--ink);
-  color: white;
   font-size: 0.84rem;
   font-weight: 900;
   white-space: nowrap;
+}
+
+.next-task-button {
+  background: var(--ink);
+  color: white;
+}
+
+.next-task-complete-button {
+  border: 1px solid rgba(35, 36, 38, 0.14);
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--text);
+}
+
+body.night .next-task-complete-button {
+  border-color: rgba(255, 248, 222, 0.16);
+  background: rgba(255, 248, 222, 0.1);
 }
 
 .task-today-progress {
@@ -2213,8 +2235,17 @@ time {
 
   .cleanup-spotlight-button,
   .note-spotlight-button,
+  .next-task-actions,
   .next-task-button {
     width: 100%;
+  }
+
+  .next-task-actions {
+    justify-content: stretch;
+  }
+
+  .next-task-actions > button {
+    flex: 1 1 130px;
   }
 
   .filter-summary {

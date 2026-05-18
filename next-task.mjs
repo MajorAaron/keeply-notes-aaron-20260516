@@ -25,9 +25,12 @@ export function getNextTaskHighlight(tasks = [], options = {}) {
       kicker: "Next up",
       summary: "All active tasks are complete.",
       buttonLabel: "Review tasks",
+      completeLabel: "Mark done",
+      canComplete: false,
       window: "all",
       tone: "quiet",
-      ariaLabel: "No open tasks"
+      ariaLabel: "No open tasks",
+      completeAriaLabel: "No next task to complete"
     };
   }
 
@@ -46,9 +49,12 @@ export function getNextTaskHighlight(tasks = [], options = {}) {
     kicker: `${windowLabel} · ${priorityLabel}`,
     summary: duePhrase,
     buttonLabel: candidate.window === "overdue" ? "Show overdue" : candidate.window === "today" ? "Show today" : "Show task",
+    completeLabel: "Mark done",
+    canComplete: true,
     window: candidate.window,
     tone: candidate.window,
-    ariaLabel: `Next task: ${title}. ${priorityLabel} priority. ${duePhrase}`
+    ariaLabel: `Next task: ${title}. ${priorityLabel} priority. ${duePhrase}`,
+    completeAriaLabel: `Mark next task done: ${title}`
   };
 }
 
