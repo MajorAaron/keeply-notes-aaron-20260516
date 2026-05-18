@@ -12,7 +12,7 @@
 - Mobile/layout verification: browser screenshot review found no obvious overlap or clipping around the task detail toggle; exact narrow-phone viewport resizing was not available in the browser tool, so verification was limited to the visible responsive browser width.
 - Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, or token assignments.
 - Git status: feature commit `a5ed326` (`Add collapsible task details`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
-- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0ac8bf50df13ed7aa8de92` and post-log deploy `6a0ac8ffeb0a6f220a392370` are live at `https://keeply-notes-aaron-20260516.netlify.app`; post-log deploy permalink is `https://6a0ac8ffeb0a6f220a392370--keeply-notes-aaron-20260516.netlify.app`.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0ac8bf50df13ed7aa8de92`, post-log deploy `6a0ac8ffeb0a6f220a392370`, and final production deploy `6a0ac9185ab03e21b19a7258` are live at `https://keeply-notes-aaron-20260516.netlify.app`; final deploy permalink is `https://6a0ac9185ab03e21b19a7258--keeply-notes-aaron-20260516.netlify.app`.
 - Production verification: feature deploy permalink loaded in browser, showed the `Collapsible Task Details` What's New popup, and browser console reported no errors.
 
 ## 2026-05-18 01:05:19 MDT
