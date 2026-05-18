@@ -732,3 +732,19 @@
 - Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
 - Git status: feature commit `f0fc5e0` (`Add composer checklist insertion`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b712c4be7224691852b00` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b712c4be7224691852b00--keeply-notes-aaron-20260516.netlify.app`.
+## 2026-05-18 15:05:44 MDT
+
+- Added mobile-first Task Checklist Progress for markdown checkbox details.
+- Task cards now show a compact `1/3 checked`-style pill when task details contain `- [ ]` or `- [x]` checklist rows, helping checklist-heavy tasks scan faster on mobile.
+- Checklist-free tasks stay unchanged with no extra metadata pill.
+- Added `task-checklist-meta.mjs` and `test/task-checklist-meta.test.mjs`; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-task-checklist-progress`, title `Task Checklist Progress`, and 3 user-facing bullets.
+- UI/code areas touched: task card template in `index.html`, task rendering in `app.js`, mobile-friendly pill styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local checklist metadata only.
+- Verification: full `npm test` passed with 145 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Task Checklist Progress` What's New popup, dismiss behavior, a task with checklist details showing `1/3 CHECKED`, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the new checklist progress pill and task-card meta row readable with no obvious overlap, clipping, or horizontal overflow in the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Task Checklist Progress` What's New popup, and a production browser smoke task with checklist details rendered `1/2 CHECKED`; browser console reported no errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `f037f4b` (`Add task checklist progress pills`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b7f0fb59f1475736cac4f` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b7f0fb59f1475736cac4f--keeply-notes-aaron-20260516.netlify.app`.
