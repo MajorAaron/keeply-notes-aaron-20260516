@@ -35,6 +35,7 @@ import { compareNotesForDisplay } from "./note-sort.mjs";
 import { getTodayTaskProgress } from "./task-today-progress.mjs";
 import { getNextTaskHighlight } from "./next-task.mjs";
 import { getNoteSpotlight } from "./note-spotlight.mjs";
+import { getCleanupSpotlight } from "./cleanup-spotlight.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 
@@ -207,6 +208,11 @@ const els = {
   noteSpotlightTitle: document.querySelector("#noteSpotlightTitle"),
   noteSpotlightSummary: document.querySelector("#noteSpotlightSummary"),
   noteSpotlightButton: document.querySelector("#noteSpotlightButton"),
+  cleanupSpotlightCard: document.querySelector("#cleanupSpotlightCard"),
+  cleanupSpotlightKicker: document.querySelector("#cleanupSpotlightKicker"),
+  cleanupSpotlightTitle: document.querySelector("#cleanupSpotlightTitle"),
+  cleanupSpotlightSummary: document.querySelector("#cleanupSpotlightSummary"),
+  cleanupSpotlightButton: document.querySelector("#cleanupSpotlightButton"),
   nextTaskCard: document.querySelector("#nextTaskCard"),
   nextTaskKicker: document.querySelector("#nextTaskKicker"),
   nextTaskTitle: document.querySelector("#nextTaskTitle"),
@@ -620,6 +626,7 @@ function render() {
   renderTaskFilters();
   renderTaskPriorityFilters();
   renderNoteSpotlight();
+  renderCleanupSpotlight();
   renderNextTaskHighlight();
   renderTaskTodayProgress();
   renderTaskBulkActions();
@@ -800,6 +807,39 @@ function focusNoteSpotlight() {
   const targetList = spotlight.pinned ? els.pinnedNotes : els.notesGrid;
   targetList.scrollIntoView({ behavior: "smooth", block: "start" });
   showToast("Showing spotlight note");
+}
+
+function renderCleanupSpotlight() {
+  const spotlight = getCleanupSpotlight({ view: state.view, notes: state.notes, tasks: state.tasks });
+  els.cleanupSpotlightCard.hidden = !spotlight.visible;
+  els.cleanupSpotlightKicker.textContent = spotlight.kicker;
+  els.cleanupSpotlightTitle.textContent = spotlight.title;
+  els.cleanupSpotlightSummary.textContent = spotlight.summary;
+  els.cleanupSpotlightButton.textContent = spotlight.buttonLabel;
+  els.cleanupSpotlightButton.disabled = !spotlight.available;
+  els.cleanupSpotlightButton.setAttribute("aria-label", spotlight.ariaLabel);
+}
+
+function focusCleanupSpotlight() {
+  const spotlight = getCleanupSpotlight({ view: state.view, notes: state.notes, tasks: state.tasks });
+  if (!spotlight.available) {
+    showToast(state.view === "trash" ? "Trash is empty" : "Archive is clear");
+    return;
+  }
+
+  state.label = "all";
+  state.noteColor = "all";
+  state.taskWindow = "all";
+  state.taskPriority = "all";
+  state.query = spotlight.query;
+  els.searchInput.value = spotlight.query;
+  syncNav();
+  saveViewPreferences();
+  render();
+  requestAnimationFrame(() => {
+    document.querySelector(`[data-id="${CSS.escape(spotlight.id)}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  showToast(`Reviewing ${spotlight.type}`);
 }
 
 function renderNextTaskHighlight() {
@@ -2693,6 +2733,7 @@ els.filterClearButton.addEventListener("click", clearActiveFilters);
 els.emptyStateAction.addEventListener("click", clearActiveFilters);
 els.emptyStateCapture.addEventListener("click", captureSearchDraft);
 els.noteSpotlightButton.addEventListener("click", focusNoteSpotlight);
+els.cleanupSpotlightButton.addEventListener("click", focusCleanupSpotlight);
 els.nextTaskButton.addEventListener("click", focusNextTaskWindow);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);

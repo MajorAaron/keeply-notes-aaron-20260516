@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-cleanup-spotlight",
+    title: "Cleanup Spotlight",
+    bullets: [
+      "Archive and Trash now show a compact spotlight for the latest saved-away item.",
+      "The card summarizes note/task counts so cleanup views are easier to scan on mobile.",
+      "Tap Review note or Review task to clear filters and jump straight to the highlighted card."
+    ]
+  },
+  {
     id: "2026-05-18-note-label-shortcuts",
     title: "Note Label Shortcuts",
     bullets: [
