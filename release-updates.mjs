@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-today-task-progress",
+    title: "Today Task Progress",
+    bullets: [
+      "Tasks now show a compact Today progress card above the mobile composer.",
+      "See done, open, high-priority, and tomorrow counts without changing filters.",
+      "A lightweight progress bar makes the day’s task load easier to scan."
+    ]
+  },
+  {
     id: "2026-05-18-collapsible-task-details",
     title: "Collapsible Task Details",
     bullets: [

@@ -148,6 +148,22 @@
           </div>
         </section>
 
+        <section class="task-today-progress" id="taskTodayProgress" aria-label="Today's task progress" hidden>
+          <div class="task-progress-copy">
+            <span class="task-progress-kicker">Today</span>
+            <h2 id="taskTodayTitle">No tasks due today</h2>
+            <p id="taskTodaySummary">Nothing due today or tomorrow.</p>
+          </div>
+          <strong class="task-progress-percent" id="taskTodayPercent">0%</strong>
+          <div class="task-progress-meter" id="taskTodayMeter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="No tasks due today">
+            <span id="taskTodayFill"></span>
+          </div>
+          <div class="task-progress-pills" aria-label="Today task counts">
+            <span id="taskTodayOpen">0 open</span>
+            <span id="taskTodayHigh">0 high</span>
+          </div>
+        </section>
+
         <section class="composer" id="composer" aria-label="Create item">
           <div class="composer-mode" role="tablist" aria-label="Item type">
             <button class="mode-button active" data-mode="note" role="tab" aria-selected="true">Note</button>

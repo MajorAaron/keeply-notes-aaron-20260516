@@ -30,6 +30,7 @@ import { getNoteReadingMeta } from "./note-reading-meta.mjs";
 import { getTaskPriorityFilterCounts, matchesTaskPriorityFilter, normalizeTaskPriorityFilter } from "./task-priority-filters.mjs";
 import { getNoteColorFilterCounts, matchesNoteColorFilter, normalizeNoteColorFilter } from "./note-color-filters.mjs";
 import { compareTasksForDisplay } from "./task-sort.mjs";
+import { getTodayTaskProgress } from "./task-today-progress.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -193,6 +194,14 @@ const els = {
   filterSummaryChips: document.querySelector("#filterSummaryChips"),
   filterClearButton: document.querySelector("#filterClearButton"),
   taskBulkActions: document.querySelector("#taskBulkActions"),
+  taskTodayProgress: document.querySelector("#taskTodayProgress"),
+  taskTodayTitle: document.querySelector("#taskTodayTitle"),
+  taskTodaySummary: document.querySelector("#taskTodaySummary"),
+  taskTodayMeter: document.querySelector("#taskTodayMeter"),
+  taskTodayFill: document.querySelector("#taskTodayFill"),
+  taskTodayPercent: document.querySelector("#taskTodayPercent"),
+  taskTodayOpen: document.querySelector("#taskTodayOpen"),
+  taskTodayHigh: document.querySelector("#taskTodayHigh"),
   archiveCompletedButton: document.querySelector("#archiveCompletedButton"),
   archiveCompletedCount: document.querySelector("#archiveCompletedCount"),
   snoozeOverdueButton: document.querySelector("#snoozeOverdueButton"),
@@ -584,6 +593,7 @@ function render() {
   renderNoteColorFilters();
   renderTaskFilters();
   renderTaskPriorityFilters();
+  renderTaskTodayProgress();
   renderTaskBulkActions();
 }
 
@@ -708,6 +718,19 @@ function renderTaskPriorityFilters() {
     button.setAttribute("aria-pressed", String(active));
     button.querySelector(".task-filter-count").textContent = counts[filter] ?? 0;
   });
+}
+
+function renderTaskTodayProgress() {
+  const summary = getTodayTaskProgress(state.tasks);
+  els.taskTodayProgress.hidden = state.view !== "tasks";
+  els.taskTodayTitle.textContent = summary.title;
+  els.taskTodaySummary.textContent = summary.summary;
+  els.taskTodayPercent.textContent = `${summary.percent}%`;
+  els.taskTodayOpen.textContent = `${summary.open} open`;
+  els.taskTodayHigh.textContent = `${summary.highOpen} high`;
+  els.taskTodayMeter.setAttribute("aria-valuenow", String(summary.percent));
+  els.taskTodayMeter.setAttribute("aria-label", summary.ariaLabel);
+  els.taskTodayFill.style.width = `${summary.percent}%`;
 }
 
 function renderTaskBulkActions() {
