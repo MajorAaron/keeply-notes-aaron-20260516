@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-smart-bulk-task-hints",
+    title: "Smart Bulk Task Hints",
+    bullets: [
+      "Pasted task lists now understand quick hints like today, tomorrow, !high, and @home.",
+      "Each pasted line can set its own due date, priority, or label while the composer defaults still fill the gaps.",
+      "Hint words are cleaned from the final task title so mobile list capture stays tidy."
+    ]
+  },
+  {
     id: "2026-05-18-task-checklist-progress",
     title: "Task Checklist Progress",
     bullets: [
