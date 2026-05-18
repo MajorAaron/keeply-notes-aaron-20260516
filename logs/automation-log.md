@@ -1,4 +1,20 @@
 
+## 2026-05-18 10:09:43 MDT
+
+- Added a mobile-first Cleanup Spotlight for Archive and Trash review.
+- Archive and Trash now show a compact card for the latest saved-away note or task, including note/task counts and a Review action that clears filters/search context and jumps to the matching card.
+- Added `cleanup-spotlight.mjs` and `test/cleanup-spotlight.test.mjs`; wired both into `npm test` syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-cleanup-spotlight`, title `Cleanup Spotlight`, and 3 user-facing bullets.
+- UI areas touched: cleanup spotlight markup in `index.html`, archive/trash rendering and review-button wiring in `app.js`, mobile card styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 128 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Cleanup Spotlight` What's New popup, the Archive cleanup spotlight after archiving a note, the Review note action applying the search/jump flow, and no browser console errors.
+- Mobile/layout verification: browser snapshot and screenshot review found the Cleanup Spotlight card readable with no obvious overlap, clipping, or horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: production loaded at `https://keeply-notes-aaron-20260516.netlify.app`; the `Cleanup Spotlight` What's New popup appeared, seeded production localStorage verification showed the Archive Cleanup Spotlight with a Review note button, and browser console reported no errors. The initial deploy permalink navigation timed out once, but the canonical production URL loaded and verified the deploy.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `42d08a6` (`Add cleanup spotlight`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b396f9caeeb72190d9863` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b396f9caeeb72190d9863--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-18 09:06:16 MDT
 
 - Added mobile-friendly Note Label Shortcuts for faster note reclassification.
