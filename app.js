@@ -42,6 +42,7 @@ import { getCleanupSpotlight } from "./cleanup-spotlight.mjs";
 import { getAskSuggestions } from "./ask-suggestions.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
+import { getQuickAddTarget } from "./quick-add-target.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -640,6 +641,13 @@ function render() {
   renderNextTaskHighlight();
   renderTaskTodayProgress();
   renderTaskBulkActions();
+  renderQuickAddButton();
+}
+
+function renderQuickAddButton() {
+  const target = getQuickAddTarget(state.view);
+  els.quickAddButton.setAttribute("aria-label", target.ariaLabel);
+  els.quickAddButton.title = target.title;
 }
 
 function renderLabelChips() {
@@ -2820,9 +2828,13 @@ els.labelInput.addEventListener("change", saveComposerDraft);
 els.dueInput.addEventListener("input", saveComposerDraft);
 els.priorityInput.addEventListener("change", saveComposerDraft);
 els.quickAddButton.addEventListener("click", () => {
+  const target = getQuickAddTarget(state.view);
   if (state.editingItem) cancelEditDraft();
+  setComposerMode(target.mode);
+  renderQuickAddButton();
   els.titleInput.focus();
   window.scrollTo({ top: 0, behavior: "smooth" });
+  showToast(target.toast);
 });
 els.searchInput.addEventListener("input", (event) => {
   state.query = event.target.value;

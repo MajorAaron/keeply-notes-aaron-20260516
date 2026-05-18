@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-context-quick-add",
+    title: "Context Quick Add",
+    bullets: [
+      "The floating plus button now opens the right composer for the view you are in.",
+      "From Tasks, Quick Add switches straight to a task draft so mobile capture is one tap faster.",
+      "The button label updates for notes versus tasks, making the shortcut clearer for assistive tech."
+    ]
+  },
+  {
     id: "2026-05-18-smart-bulk-task-hints",
     title: "Smart Bulk Task Hints",
     bullets: [
