@@ -14,6 +14,7 @@ import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
 import { insertChecklistMarker } from "./composer-checklist.mjs";
+import { getTaskChecklistMeta } from "./task-checklist-meta.mjs";
 import { getNoteCaptureTitle } from "./note-title.mjs";
 import { formatLabelCount, getLabelCounts } from "./label-counts.mjs";
 import { buildViewPreferences, parseViewPreferences } from "./view-preferences.mjs";
@@ -1687,6 +1688,11 @@ function renderTask(task) {
   } else {
     dueTime.removeAttribute("datetime");
   }
+  const checklistMeta = getTaskChecklistMeta(task.details);
+  const checklistMetaElement = node.querySelector(".task-checklist-meta");
+  checklistMetaElement.hidden = !checklistMeta.available;
+  checklistMetaElement.textContent = checklistMeta.label;
+  checklistMetaElement.setAttribute("aria-label", checklistMeta.ariaLabel);
 
   const checkButton = node.querySelector(".task-check");
   const archiveButton = node.querySelector(".archive-action");

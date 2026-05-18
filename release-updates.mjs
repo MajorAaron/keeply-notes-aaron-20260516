@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-task-checklist-progress",
+    title: "Task Checklist Progress",
+    bullets: [
+      "Tasks with markdown checkboxes now show a compact progress pill on each card.",
+      "The pill counts checked and unchecked rows so mobile task lists are easier to scan.",
+      "Checklist-free tasks stay clean with no extra metadata."
+    ]
+  },
+  {
     id: "2026-05-18-composer-checklists",
     title: "Composer Checklists",
     bullets: [
