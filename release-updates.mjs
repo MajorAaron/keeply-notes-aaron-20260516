@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-composer-checklists",
+    title: "Composer Checklists",
+    bullets: [
+      "The mobile composer now has a Checklist button for quick note or task outlines.",
+      "Tap it to insert a fresh checkbox line without fighting the keyboard cursor.",
+      "Selected lines are converted into checkbox items while preserving existing checked-off rows."
+    ]
+  },
+  {
     id: "2026-05-18-next-task-done-button",
     title: "Next Task Done Button",
     bullets: [

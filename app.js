@@ -13,6 +13,7 @@ import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-compos
 import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
+import { insertChecklistMarker } from "./composer-checklist.mjs";
 import { getNoteCaptureTitle } from "./note-title.mjs";
 import { formatLabelCount, getLabelCounts } from "./label-counts.mjs";
 import { buildViewPreferences, parseViewPreferences } from "./view-preferences.mjs";
@@ -156,6 +157,7 @@ const els = {
   taskComposerPresets: document.querySelector("#taskComposerPresets"),
   colorDots: document.querySelector(".color-dots"),
   labelInput: document.querySelector("#labelInput"),
+  checklistButton: document.querySelector("#checklistButton"),
   shapeButton: document.querySelector("#shapeButton"),
   sparkButton: document.querySelector("#sparkButton"),
   sparkPanel: document.querySelector("#sparkPanel"),
@@ -2509,6 +2511,19 @@ function clearSavedComposerDraft() {
   localStorage.removeItem(COMPOSER_DRAFT_KEY);
 }
 
+function insertChecklistInComposer() {
+  const { value, selectionStart, selectionEnd } = insertChecklistMarker(
+    els.bodyInput.value,
+    els.bodyInput.selectionStart,
+    els.bodyInput.selectionEnd
+  );
+  els.bodyInput.value = value;
+  els.bodyInput.focus();
+  els.bodyInput.setSelectionRange(selectionStart, selectionEnd);
+  saveComposerDraft();
+  showToast("Checklist line added");
+}
+
 function restoreComposerDraft() {
   const saved = localStorage.getItem(COMPOSER_DRAFT_KEY);
   if (!saved) return;
@@ -2772,6 +2787,7 @@ els.removeImageButton.addEventListener("click", () => {
   clearDraftImage();
   showToast("Image removed");
 });
+els.checklistButton.addEventListener("click", insertChecklistInComposer);
 els.shapeButton.addEventListener("click", shapeDraft);
 els.sparkButton.addEventListener("click", sparkIdeas);
 els.focusButton.addEventListener("click", briefFocus);
