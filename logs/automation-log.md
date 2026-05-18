@@ -1,3 +1,18 @@
+## 2026-05-17 19:06:02 MDT
+
+- Added mobile task swipe triage.
+- Task cards now accept horizontal swipes: right swipe in Tasks completes or reopens with the existing Undo toast, left swipe archives, and right swipe from Archive or Trash restores without adding any destructive swipe-delete path.
+- Added `task-swipe-actions.mjs` and `test/task-swipe-actions.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-task-swipe-triage`, title `Swipe Task Triage`, and 3 user-facing bullets.
+- UI areas touched: `app.js` task rendering/swipe handling, `styles.css` task-card mobile drag behavior, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: watched the new task-swipe test fail before implementation, then pass; full `npm test` passed with 75 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the What's New popup for `Swipe Task Triage`; a simulated mobile right-swipe on an open task produced `Completed` with `Undo`, and Undo restored the task.
+- Secret scan of changed app/test/metadata/style/package/helper files found no committed `ANTHROPIC_API_KEY`, secret, token, or long `sk-` key patterns.
+- Git status: feature commit `7e9b0ea` (`Add task swipe triage`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded. Deploy `6a0a65d9dd96f7327ddbafb7` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a65d9dd96f7327ddbafb7--keeply-notes-aaron-20260516.netlify.app`.
+- Production browser verification loaded the deploy permalink and confirmed the `Swipe Task Triage` What's New popup. Shell `curl` verification of the `.app` hostname was blocked by the command security scanner's lookalike-TLD approval gate, so live verification used the browser instead.
+
 ## 2026-05-17 17:05:21 MDT
 
 - Added undo for note pinning.
