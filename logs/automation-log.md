@@ -1,3 +1,19 @@
+## 2026-05-18 00:08:09 MDT
+
+- Added mobile note color filters for faster visual note triage.
+- Notes view now has a horizontal color filter row for All colors, Sun, Mint, Sky, Rose, and Ink, with counts that respect the selected label.
+- The selected note color filters visible notes, label counts, the active-filter summary, Clear filters, and saved view preferences.
+- Added `note-color-filters.mjs` and `test/note-color-filters.test.mjs`; updated active-filter and view-preference helpers/tests plus `npm test` wiring.
+- Updated What's New metadata with latest id `2026-05-18-note-color-filters`, title `Note Color Filters`, and 3 user-facing bullets.
+- UI areas touched: note filter markup in `index.html`, note filtering/rendering in `app.js`, mobile filter styling in `styles.css`, release metadata, package test wiring, and helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 95 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Note Color Filters` What's New popup, visible color filter row/counts, Sky-note filtering, active-filter chip, and no browser console errors.
+- Production verification: deployed permalink loaded in browser, showed the `Note Color Filters` What's New popup, and the Notes view showed the new color filter row; clicking Sky filtered notes and showed the active-filter chip with no browser console errors.
+- Secret scan of changed files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, or token assignments.
+- Git status: feature commit `956652e` (`Add note color filters`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0aacae547906d5b2ead90b` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0aacae547906d5b2ead90b--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-17 23:10:33 MDT
 
 - Added mobile task priority filters for faster task triage.
