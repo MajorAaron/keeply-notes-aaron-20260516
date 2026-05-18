@@ -1488,13 +1488,15 @@ select {
 }
 
 .note-followups,
+.note-label-shortcuts,
 .note-color-shortcuts {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-.note-followups {
+.note-followups,
+.note-label-shortcuts {
   margin: 0 0 10px;
 }
 
@@ -1503,11 +1505,13 @@ select {
 }
 
 .note-followups[hidden],
+.note-label-shortcuts[hidden],
 .note-color-shortcuts[hidden] {
   display: none;
 }
 
-.note-followup {
+.note-followup,
+.note-label-shortcut {
   min-height: 34px;
   padding: 7px 10px;
   border: 1px solid var(--line);
@@ -1518,8 +1522,15 @@ select {
   font-weight: 900;
 }
 
+.note-label-shortcut {
+  border-radius: 999px;
+  background: rgba(255, 248, 222, 0.62);
+}
+
 .note-followup:focus-visible,
-.note-followup:hover {
+.note-followup:hover,
+.note-label-shortcut:focus-visible,
+.note-label-shortcut:hover {
   border-color: rgba(35, 36, 38, 0.34);
   background: var(--paper);
 }

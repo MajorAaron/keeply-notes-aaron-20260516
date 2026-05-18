@@ -6,6 +6,7 @@ import { getTaskPriorityShortcutValue, getVisibleTaskPriorityShortcuts } from ".
 import { getTaskLabelShortcutValue, getVisibleTaskLabelShortcuts } from "./task-label-shortcuts.mjs";
 import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask, removeFollowUpTask } from "./note-followups.mjs";
 import { getNoteColorShortcutValue, getVisibleNoteColorShortcuts } from "./note-color-shortcuts.mjs";
+import { getNoteLabelShortcutValue, getVisibleNoteLabelShortcuts } from "./note-label-shortcuts.mjs";
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
 import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-composer-presets.mjs";
@@ -1420,12 +1421,14 @@ function renderNote(note) {
   const shareButton = node.querySelector(".share-action");
   const duplicateButton = node.querySelector(".duplicate-action");
   const followUpRow = node.querySelector(".note-followups");
+  const labelShortcutRow = node.querySelector(".note-label-shortcuts");
   const colorShortcutRow = node.querySelector(".note-color-shortcuts");
 
   pinButton.hidden = state.view !== "active";
   pinButton.setAttribute("aria-label", getNotePinLabel(note));
   pinButton.title = getNotePinLabel(note);
   followUpRow.hidden = state.view !== "active";
+  labelShortcutRow.hidden = state.view !== "active";
   colorShortcutRow.hidden = state.view !== "active";
   followUpRow.replaceChildren(
     ...NOTE_FOLLOW_UP_SHORTCUTS.map((shortcut) => {
@@ -1434,6 +1437,21 @@ function renderNote(note) {
       button.type = "button";
       button.textContent = shortcut.label;
       button.addEventListener("click", () => createFollowUpTask(note, shortcut.key));
+      return button;
+    })
+  );
+  labelShortcutRow.replaceChildren(
+    ...getVisibleNoteLabelShortcuts(note).map((shortcut) => {
+      const button = document.createElement("button");
+      button.className = "note-label-shortcut";
+      button.type = "button";
+      button.textContent = shortcut.label;
+      button.setAttribute("aria-label", `Move note to ${shortcut.label}`);
+      button.addEventListener("click", () => {
+        const label = getNoteLabelShortcutValue(shortcut.key);
+        if (!label) return;
+        updateNote(note.id, { label }, `${shortcut.label} label`);
+      });
       return button;
     })
   );

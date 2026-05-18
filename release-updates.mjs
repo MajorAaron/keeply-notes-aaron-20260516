@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-note-label-shortcuts",
+    title: "Note Label Shortcuts",
+    bullets: [
+      "Note cards now show quick label chips for moving a note between Work, Home, Ideas, and Personal.",
+      "The current label is hidden so the available moves stay compact on mobile.",
+      "Changing a label updates the note immediately and keeps filters/counts in sync."
+    ]
+  },
+  {
     id: "2026-05-18-note-spotlight",
     title: "Note Spotlight",
     bullets: [
