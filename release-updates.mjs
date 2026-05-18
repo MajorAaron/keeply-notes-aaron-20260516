@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-task-swipe-triage",
+    title: "Swipe Task Triage",
+    bullets: [
+      "Task cards now respond to mobile swipes for faster cleanup.",
+      "Swipe right in Tasks to complete or reopen a task with Undo available.",
+      "Swipe left in Tasks to archive, and swipe right from Archive or Trash to restore."
+    ]
+  },
+  {
     id: "2026-05-17-bulk-task-paste",
     title: "Paste a Task List",
     bullets: [

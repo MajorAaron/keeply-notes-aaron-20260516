@@ -22,6 +22,7 @@ import { removeCopiedItem } from "./duplicate-undo.mjs";
 import { buildNoteEditPatch, buildTaskEditPatch } from "./edit-items.mjs";
 import { getNotePinLabel, toggleNotePin } from "./note-pin.mjs";
 import { buildBulkTasksFromText } from "./task-bulk-entry.mjs";
+import { getTaskSwipeAction } from "./task-swipe-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1444,7 +1445,7 @@ function renderTask(task) {
     }
     updateTaskWithUndo(task, { status: "trash" }, "Moved to trash");
   });
-
+  attachTaskSwipe(node, task);
   return node;
 }
 
@@ -1558,6 +1559,39 @@ function attachSwipe(node, note) {
         const status = state.view === "trash" ? "active" : "trash";
         updateNoteWithUndo(note, { status, pinned: false }, status === "trash" ? "Moved to trash" : "Restored");
       }
+    } else {
+      node.style.setProperty("--drag-x", "0px");
+    }
+    startX = 0;
+    currentX = 0;
+  });
+}
+
+function attachTaskSwipe(node, task) {
+  let startX = 0;
+  let currentX = 0;
+
+  node.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    startX = event.clientX;
+    currentX = 0;
+    node.setPointerCapture(event.pointerId);
+  });
+
+  node.addEventListener("pointermove", (event) => {
+    if (!startX) return;
+    currentX = Math.max(-92, Math.min(92, event.clientX - startX));
+    node.style.setProperty("--drag-x", `${currentX}px`);
+  });
+
+  node.addEventListener("pointerup", () => {
+    const action = getTaskSwipeAction({ deltaX: currentX, view: state.view, completed: task.completed });
+    if (action === "complete" || action === "reopen") {
+      toggleTaskCompletionWithUndo(task);
+    } else if (action === "archive") {
+      updateTaskWithUndo(task, { status: "archive" }, "Archived");
+    } else if (action === "restore") {
+      updateTaskWithUndo(task, { status: "active" }, "Restored");
     } else {
       node.style.setProperty("--drag-x", "0px");
     }
