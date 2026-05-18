@@ -1,3 +1,18 @@
+## 2026-05-18 01:05:19 MDT
+
+- Added priority-aware task ordering for faster mobile task triage.
+- Tasks due on the same day now sort High before Normal and Low while preserving existing open-before-completed, dated-before-undated, due-date, and newest-created ordering rules.
+- Added `task-sort.mjs` and `test/task-sort.test.mjs`; wired both into `npm test`, and updated `app.js` to use the shared comparator.
+- Updated What's New metadata with latest id `2026-05-18-priority-task-order`, title `Priority Task Ordering`, and 3 user-facing bullets.
+- UI areas touched: task list ordering in `app.js`, release metadata, package test wiring, and the new helper/test files. No visual style changes were needed.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 99 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Priority Task Ordering` What's New popup, the Tasks view loaded, and no browser console errors; screenshot review found no obvious layout overlap or clipping.
+- Production verification: deployed permalink loaded in browser and showed the `Priority Task Ordering` What's New popup with no browser console errors.
+- Secret scan of changed files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, or token assignments.
+- Git status: feature commit `64a5210` (`Sort same-day tasks by priority`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Deploy `6a0aba1ddd96f7ec4edbaf27` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0aba1ddd96f7ec4edbaf27--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-18 00:08:09 MDT
 
 - Added mobile note color filters for faster visual note triage.
