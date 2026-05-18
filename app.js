@@ -30,6 +30,7 @@ import { getNoteReadingMeta } from "./note-reading-meta.mjs";
 import { getTaskPriorityFilterCounts, matchesTaskPriorityFilter, normalizeTaskPriorityFilter } from "./task-priority-filters.mjs";
 import { getNoteColorFilterCounts, matchesNoteColorFilter, normalizeNoteColorFilter } from "./note-color-filters.mjs";
 import { compareTasksForDisplay } from "./task-sort.mjs";
+import { compareNotesForDisplay } from "./note-sort.mjs";
 import { getTodayTaskProgress } from "./task-today-progress.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
@@ -538,7 +539,8 @@ function getVisibleNotes() {
     .filter((note) => {
       if (!query) return true;
       return `${note.title} ${note.body} ${note.label} ${note.image?.prompt || ""} ${note.image?.name || ""}`.toLowerCase().includes(query);
-    });
+    })
+    .sort(compareNotesForDisplay);
 }
 
 function getVisibleTasks() {

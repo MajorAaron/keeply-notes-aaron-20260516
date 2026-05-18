@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-recent-note-ordering",
+    title: "Recent Note Ordering",
+    bullets: [
+      "Notes now stay ordered by the most recently updated cards inside each pinned or unpinned group.",
+      "Edited notes move back toward the top so fresh context is easier to find on mobile.",
+      "Pinned notes still keep their priority while using the same newest-first ordering."
+    ]
+  },
+  {
     id: "2026-05-18-search-capture-drafts",
     title: "Capture Search Drafts",
     bullets: [
