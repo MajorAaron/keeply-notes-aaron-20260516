@@ -196,6 +196,7 @@ h1 {
 .focus-brief,
 .smart-sweep,
 .ask-keeply,
+.note-spotlight-card,
 .next-task-card,
 .note-card,
 .empty-state {
@@ -462,6 +463,64 @@ h1 {
 .task-bulk-button:disabled {
   cursor: default;
   opacity: 0.45;
+}
+
+.note-spotlight-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255, 248, 222, 0.86), rgba(248, 215, 95, 0.22));
+  box-shadow: 0 14px 34px rgba(38, 31, 15, 0.09);
+}
+
+.note-spotlight-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.note-spotlight-kicker {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.note-spotlight-card h2 {
+  margin: 0;
+  overflow: hidden;
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-spotlight-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.note-spotlight-button {
+  min-height: 38px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--ink);
+  color: white;
+  font-size: 0.84rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.note-spotlight-button:disabled {
+  cursor: default;
+  opacity: 0.48;
 }
 
 .next-task-card {
@@ -2085,10 +2144,12 @@ time {
     grid-template-columns: 1fr;
   }
 
+  .note-spotlight-card,
   .next-task-card {
     grid-template-columns: 1fr;
   }
 
+  .note-spotlight-button,
   .next-task-button {
     width: 100%;
   }

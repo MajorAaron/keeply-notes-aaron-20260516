@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-note-spotlight",
+    title: "Note Spotlight",
+    bullets: [
+      "Notes now show a compact spotlight card for your most relevant pinned or recent note.",
+      "The card previews the note body so important context is easier to scan on mobile.",
+      "Tap Show note to clear note filters and jump straight to the spotlighted card."
+    ]
+  },
+  {
     id: "2026-05-18-next-task-highlight",
     title: "Next Task Highlight",
     bullets: [

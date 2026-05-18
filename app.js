@@ -33,6 +33,7 @@ import { compareTasksForDisplay } from "./task-sort.mjs";
 import { compareNotesForDisplay } from "./note-sort.mjs";
 import { getTodayTaskProgress } from "./task-today-progress.mjs";
 import { getNextTaskHighlight } from "./next-task.mjs";
+import { getNoteSpotlight } from "./note-spotlight.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 
@@ -200,6 +201,11 @@ const els = {
   filterSummaryChips: document.querySelector("#filterSummaryChips"),
   filterClearButton: document.querySelector("#filterClearButton"),
   taskBulkActions: document.querySelector("#taskBulkActions"),
+  noteSpotlightCard: document.querySelector("#noteSpotlightCard"),
+  noteSpotlightKicker: document.querySelector("#noteSpotlightKicker"),
+  noteSpotlightTitle: document.querySelector("#noteSpotlightTitle"),
+  noteSpotlightSummary: document.querySelector("#noteSpotlightSummary"),
+  noteSpotlightButton: document.querySelector("#noteSpotlightButton"),
   nextTaskCard: document.querySelector("#nextTaskCard"),
   nextTaskKicker: document.querySelector("#nextTaskKicker"),
   nextTaskTitle: document.querySelector("#nextTaskTitle"),
@@ -612,6 +618,7 @@ function render() {
   renderNoteColorFilters();
   renderTaskFilters();
   renderTaskPriorityFilters();
+  renderNoteSpotlight();
   renderNextTaskHighlight();
   renderTaskTodayProgress();
   renderTaskBulkActions();
@@ -759,6 +766,39 @@ function renderTaskPriorityFilters() {
     button.setAttribute("aria-pressed", String(active));
     button.querySelector(".task-filter-count").textContent = counts[filter] ?? 0;
   });
+}
+
+function renderNoteSpotlight() {
+  const spotlight = getNoteSpotlight(state.notes);
+  els.noteSpotlightCard.hidden = state.view !== "active";
+  els.noteSpotlightKicker.textContent = spotlight.kicker;
+  els.noteSpotlightTitle.textContent = spotlight.title;
+  els.noteSpotlightSummary.textContent = spotlight.summary;
+  els.noteSpotlightButton.textContent = spotlight.buttonLabel;
+  els.noteSpotlightButton.disabled = !spotlight.available;
+  els.noteSpotlightButton.setAttribute("aria-label", spotlight.ariaLabel);
+}
+
+function focusNoteSpotlight() {
+  const spotlight = getNoteSpotlight(state.notes);
+  if (!spotlight.available) {
+    setComposerMode("note");
+    scrollComposerIntoView();
+    showToast("Ready for a new note");
+    return;
+  }
+
+  state.view = "active";
+  state.label = "all";
+  state.noteColor = "all";
+  state.query = spotlight.query;
+  els.searchInput.value = spotlight.query;
+  syncNav();
+  saveViewPreferences();
+  render();
+  const targetList = spotlight.pinned ? els.pinnedNotes : els.notesGrid;
+  targetList.scrollIntoView({ behavior: "smooth", block: "start" });
+  showToast("Showing spotlight note");
 }
 
 function renderNextTaskHighlight() {
@@ -2634,6 +2674,7 @@ els.askForm.addEventListener("submit", askKeeply);
 els.filterClearButton.addEventListener("click", clearActiveFilters);
 els.emptyStateAction.addEventListener("click", clearActiveFilters);
 els.emptyStateCapture.addEventListener("click", captureSearchDraft);
+els.noteSpotlightButton.addEventListener("click", focusNoteSpotlight);
 els.nextTaskButton.addEventListener("click", focusNextTaskWindow);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
