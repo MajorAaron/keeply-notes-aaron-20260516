@@ -1,4 +1,19 @@
 
+## 2026-05-18 09:06:16 MDT
+
+- Added mobile-friendly Note Label Shortcuts for faster note reclassification.
+- Note cards now show compact Work/Home/Ideas/Personal chips that hide the card’s current label and let the user move a note immediately without opening Edit.
+- Added `note-label-shortcuts.mjs` and `test/note-label-shortcuts.test.mjs`; wired both into `npm test` syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-note-label-shortcuts`, title `Note Label Shortcuts`, and 3 user-facing bullets.
+- UI areas touched: note card template in `index.html`, note rendering/update wiring in `app.js`, mobile chip styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 125 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Note Label Shortcuts` What's New popup, visible note label shortcut chips, a label chip updating a note/counts, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the quick note label chips readable with no obvious overlap, clipping, or horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded in browser, showed the `Note Label Shortcuts` What's New popup and note label shortcut chips, and browser console reported no errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `00331f5` (`Add note label shortcuts`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b2ad2f767c73ea0bafe62` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b2ad2f767c73ea0bafe62--keeply-notes-aaron-20260516.netlify.app`.
 ## 2026-05-18 08:06:42 MDT
 
 - Added a mobile-first Note Spotlight card for faster note resurfacing.
