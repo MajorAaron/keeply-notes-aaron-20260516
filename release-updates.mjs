@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-note-reading-metadata",
+    title: "Note Reading Details",
+    bullets: [
+      "Note cards now show a compact word count and reading-time pill.",
+      "Longer notes are easier to triage before expanding them.",
+      "Empty image or title-only notes stay labeled as quick notes."
+    ]
+  },
+  {
     id: "2026-05-17-task-due-badges",
     title: "Task Due Badges",
     bullets: [

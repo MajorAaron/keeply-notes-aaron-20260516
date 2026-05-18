@@ -25,6 +25,7 @@ import { buildBulkTasksFromText } from "./task-bulk-entry.mjs";
 import { getTaskSwipeAction } from "./task-swipe-actions.mjs";
 import { buildNotePreview } from "./note-preview.mjs";
 import { getTaskDueBadge } from "./task-due-badge.mjs";
+import { getNoteReadingMeta } from "./note-reading-meta.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1208,6 +1209,7 @@ function renderNote(note) {
   const bodyPreview = buildNotePreview(noteBody, { emptyText: note.image ? "Image note" : "No extra details" });
   const bodyElement = node.querySelector("p");
   const expandButton = node.querySelector(".note-preview-toggle");
+  const readingMeta = getNoteReadingMeta(noteBody);
   renderHighlightedText(bodyElement, bodyPreview.text, highlightTerms);
   expandButton.hidden = !bodyPreview.isTruncated;
   if (bodyPreview.isTruncated) {
@@ -1220,6 +1222,9 @@ function renderNote(note) {
     });
   }
   node.querySelector("time").textContent = formatDate(note.createdAt);
+  const readingMetaElement = node.querySelector(".note-reading-meta");
+  readingMetaElement.textContent = readingMeta.label;
+  readingMetaElement.setAttribute("aria-label", readingMeta.ariaLabel);
 
   const image = normalizeNoteImage(note.image);
   const figure = node.querySelector(".note-image");
