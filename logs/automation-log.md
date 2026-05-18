@@ -1,3 +1,19 @@
+## 2026-05-17 23:10:33 MDT
+
+- Added mobile task priority filters for faster task triage.
+- Tasks view now has a second horizontal filter row for All priorities, High, Normal, and Low, with counts that respect the selected date window and label.
+- The selected priority filter participates in visible task filtering, label counts, the active-filter summary, Clear filters, and saved view preferences.
+- Added `task-priority-filters.mjs` and `test/task-priority-filters.test.mjs`; updated active-filter and view-preference helpers/tests plus `npm test` wiring.
+- Updated What's New metadata with latest id `2026-05-17-task-priority-filters`, title `Task Priority Filters`, and 3 user-facing bullets.
+- UI areas touched: task filter markup in `index.html`, task filtering/rendering in `app.js`, mobile filter styling in `styles.css`, release metadata, package test wiring, and helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: full `npm test` passed with 92 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Task Priority Filters` What's New popup, visible priority filter chips/counts, High-priority filtering, active-filter chip, and no browser console errors.
+- Production verification: deployed permalink loaded in browser, showed the `Task Priority Filters` What's New popup, and the Tasks view showed the new priority filter row/counts with no browser console errors.
+- Secret scan of changed files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, or secret/token values; only pre-existing `tokenize` function-name false positives appeared in `app.js`.
+- Git status: feature commit `63c8d8f` (`Add task priority filters`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0a9f2bfbbca071671a1e8c` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a9f2bfbbca071671a1e8c--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-17 22:04:13 MDT
 
 - Added compact note reading metadata for faster mobile note triage.
