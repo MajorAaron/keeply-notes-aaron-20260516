@@ -700,3 +700,19 @@
 - Git status: feature commit `fe7d867` (`Add bulk task list paste`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded from a clean temporary worktree with explicit site id `1d285a70-4cc9-4e30-a1e5-e84b6d00a57c` and `--no-build`. Final current-tree deploy `6a0a583c5479061b01ead90d` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a583c5479061b01ead90d--keeply-notes-aaron-20260516.netlify.app`.
 - Live shell verification limit: direct live-site `curl` was blocked by the command security scanner for the `.app` production hostname, so live HTTP verification was not run after deploy.
+
+## 2026-05-18 13:06:39 MDT
+
+- Added a mobile-first Mark done action to the Next task card for faster task triage.
+- The Tasks dashboard now shows `Mark done` beside the existing Show action when a next task is available; tapping it completes the highlighted task, refreshes the next recommendation, and keeps the existing Undo toast flow.
+- Updated `next-task.mjs` metadata returned to the UI (`canComplete`, `completeLabel`, and accessible complete labels) and extended `test/next-task.test.mjs` coverage.
+- Updated What's New metadata with latest id `2026-05-18-next-task-done-button`, title `Next Task Done Button`, and 3 user-facing bullets.
+- UI/code areas touched: `index.html` Next task card actions, `app.js` completion wiring, `styles.css` responsive button layout, `next-task.mjs`, release metadata, and `test/next-task.test.mjs`.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task-completion wiring only.
+- Verification: full `npm test` passed with 136 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Next Task Done Button` What's New popup, visible Mark done and Show buttons on the Tasks view Next task card, Mark done completing the highlighted task and refreshing the recommendation, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the Next task action buttons readable with no overlap or clipping in the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool, but CSS stacks/wraps the actions for smaller widths.
+- Production verification: production loaded at `https://keeply-notes-aaron-20260516.netlify.app`; the `Next Task Done Button` What's New popup appeared, the Tasks view exposed the Mark done button, clicking it completed the highlighted task and changed the card to `No open tasks`, and browser console reported no errors. The deploy permalink timed out once, but the canonical production URL loaded and verified the deploy.
+- Secret scan of changed app/style/test/metadata/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `d8e6aac` (`Add next task done button`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Deploy `6a0b63019a0b7a00dc664b1a` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b63019a0b7a00dc664b1a--keeply-notes-aaron-20260516.netlify.app`.
