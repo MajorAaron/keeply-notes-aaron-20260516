@@ -1,3 +1,19 @@
+## 2026-05-17 20:07:15 MDT
+
+- Added collapsible note previews for mobile-friendly reading.
+- Long note bodies now render as compact, word-boundary previews with a `Read more` / `Show less` toggle that expands the full body in place.
+- Search highlighting continues to run through both collapsed previews and expanded note text.
+- Added `note-preview.mjs` and `test/note-preview.test.mjs`; wired both into `npm test`.
+- Updated What's New metadata with latest id `2026-05-17-collapsible-note-previews`, title `Collapsible Note Previews`, and 3 user-facing bullets.
+- UI areas touched: note card template in `index.html`, note rendering in `app.js`, preview toggle styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: watched the new note-preview test fail before implementation, then pass; full `npm test` passed with 79 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the What's New popup for `Collapsible Note Previews`; a long local note showed `Read more`, expanded to full text with `Show less`, and had no obvious desktop layout overlap in screenshot review.
+- Secret scan of changed app/test/metadata/style/package/helper files found no committed `ANTHROPIC_API_KEY`, secret, token, or long `sk-` key patterns; only false-positive `tokenize` function names appeared.
+- Git status: feature commit `82365d8` (`Add collapsible note previews`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded. Deploy `6a0a743eca12654c2bdfcef2` is ready at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a743eca12654c2bdfcef2--keeply-notes-aaron-20260516.netlify.app`.
+- Production browser verification loaded the deploy permalink and confirmed the `Collapsible Note Previews` What's New popup. Live production note-toggle verification was not performed to avoid mutating production note data.
+
 ## 2026-05-17 19:06:02 MDT
 
 - Added mobile task swipe triage.
