@@ -24,6 +24,7 @@ import { getNotePinLabel, toggleNotePin } from "./note-pin.mjs";
 import { buildBulkTasksFromText } from "./task-bulk-entry.mjs";
 import { getTaskSwipeAction } from "./task-swipe-actions.mjs";
 import { buildNotePreview } from "./note-preview.mjs";
+import { getTaskDueBadge } from "./task-due-badge.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1373,7 +1374,16 @@ function renderTask(task) {
   node.querySelector(".task-priority").textContent = task.priority;
   renderHighlightedText(node.querySelector("h3"), task.title, highlightTerms);
   renderHighlightedText(node.querySelector("p"), task.details || "No extra details", highlightTerms);
-  node.querySelector("time").textContent = task.dueAt ? formatDueDate(task.dueAt) : "No due date";
+  const dueBadge = getTaskDueBadge(task);
+  const dueTime = node.querySelector("time");
+  dueTime.textContent = dueBadge.label;
+  dueTime.className = `task-due-badge ${dueBadge.tone}`;
+  dueTime.setAttribute("aria-label", dueBadge.ariaLabel);
+  if (dueBadge.dateTime) {
+    dueTime.dateTime = dueBadge.dateTime;
+  } else {
+    dueTime.removeAttribute("datetime");
+  }
 
   const checkButton = node.querySelector(".task-check");
   const archiveButton = node.querySelector(".archive-action");

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-17-task-due-badges",
+    title: "Task Due Badges",
+    bullets: [
+      "Task cards now show color-coded due badges for faster mobile scanning.",
+      "Overdue, Today, Tomorrow, and future dates are labeled at a glance.",
+      "Completed and unscheduled tasks stay visually quiet so urgent work stands out."
+    ]
+  },
+  {
     id: "2026-05-17-collapsible-note-previews",
     title: "Collapsible Note Previews",
     bullets: [
