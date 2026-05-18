@@ -13,6 +13,7 @@ import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-compos
 import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
+import { getNoteCaptureTitle } from "./note-title.mjs";
 import { formatLabelCount, getLabelCounts } from "./label-counts.mjs";
 import { buildViewPreferences, parseViewPreferences } from "./view-preferences.mjs";
 import { getSearchHighlightTerms, splitHighlightedText } from "./search-highlights.mjs";
@@ -466,9 +467,11 @@ function addNote() {
 
   const now = new Date().toISOString();
 
+  const noteTitle = getNoteCaptureTitle({ title, body, hasImage: Boolean(state.draftImage) });
+
   state.notes.unshift({
     id: crypto.randomUUID(),
-    title: title || "Untitled",
+    title: noteTitle,
     body,
     image: state.draftImage,
     label: els.labelInput.value,

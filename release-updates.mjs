@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-body-first-note-titles",
+    title: "Body-First Note Titles",
+    bullets: [
+      "Notes saved without a title now use the first meaningful body line as a compact title.",
+      "Bullet and checklist markers are cleaned up so quick mobile captures stay readable.",
+      "Image-only notes get a clearer Image note label instead of appearing as Untitled."
+    ]
+  },
+  {
     id: "2026-05-18-ask-suggestions",
     title: "Ask Suggestions",
     bullets: [
