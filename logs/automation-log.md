@@ -716,3 +716,19 @@
 - Secret scan of changed app/style/test/metadata/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
 - Git status: feature commit `d8e6aac` (`Add next task done button`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Deploy `6a0b63019a0b7a00dc664b1a` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b63019a0b7a00dc664b1a--keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-18 14:06:36 MDT
+
+- Added mobile-first Composer Checklists for faster note/task outline capture.
+- The composer now includes a `Checklist` button that inserts a fresh `- [ ]` line at the cursor or converts selected body/detail lines into checklist rows while preserving existing checked rows.
+- Added `composer-checklist.mjs` and `test/composer-checklist.test.mjs`; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-composer-checklists`, title `Composer Checklists`, and 3 user-facing bullets.
+- UI/code areas touched: composer toolbar markup in `index.html`, checklist insertion wiring in `app.js`, mobile-friendly button styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local composer text insertion only.
+- Verification: full `npm test` passed with 141 tests after correcting two expected selection-length assertions; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Composer Checklists` What's New popup, dismiss behavior, visible Checklist button, selected-line conversion to `- [ ] Milk` / `- [ ] Bread`, no document-level horizontal overflow, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the composer controls, including Checklist, readable with no obvious overlap, clipping, or horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Composer Checklists` What's New popup and Checklist button, converted selected lines to `- [ ] Alpha` / `- [ ] Beta`, had no document-level horizontal overflow, and browser console reported no errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `f0fc5e0` (`Add composer checklist insertion`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b712c4be7224691852b00` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b712c4be7224691852b00--keeply-notes-aaron-20260516.netlify.app`.
