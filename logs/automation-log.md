@@ -11,7 +11,7 @@
 - Production verification: deployed permalink loaded in browser, showed the `Note Reading Details` What's New popup, visible note reading metadata, and no browser console errors.
 - Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, secret, token, or long `sk-` key patterns.
 - Git status: feature commit `2ce58b4` (`Add note reading metadata`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
-- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Deploy `6a0a8fac65506c5221466796` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a8fac65506c5221466796--keeply-notes-aaron-20260516.netlify.app`.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Initial feature deploy `6a0a8fac65506c5221466796` verified the user-facing change; final post-log production deploy `6a0a8fe60640df578dd2e2f6` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a8fe60640df578dd2e2f6--keeply-notes-aaron-20260516.netlify.app`.
 
 ## 2026-05-17 21:06:21 MDT
 
