@@ -11,7 +11,7 @@
 - Production verification: deployed permalink loaded in browser and showed the `Priority Task Ordering` What's New popup with no browser console errors.
 - Secret scan of changed files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, or token assignments.
 - Git status: feature commit `64a5210` (`Sort same-day tasks by priority`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
-- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Deploy `6a0aba1ddd96f7ec4edbaf27` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0aba1ddd96f7ec4edbaf27--keeply-notes-aaron-20260516.netlify.app`.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0aba1ddd96f7ec4edbaf27` and final post-log deploy `6a0aba6050df13c09fa8df72` are live at `https://keeply-notes-aaron-20260516.netlify.app`; final deploy permalink is `https://6a0aba6050df13c09fa8df72--keeply-notes-aaron-20260516.netlify.app`.
 
 ## 2026-05-18 00:08:09 MDT
 
