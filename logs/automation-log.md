@@ -1,3 +1,18 @@
+## 2026-05-17 22:04:13 MDT
+
+- Added compact note reading metadata for faster mobile note triage.
+- Note cards now show a word-count and estimated reading-time pill in the footer; empty or title-only notes display a quiet `Quick note` label.
+- Added `note-reading-meta.mjs` and `test/note-reading-meta.test.mjs`; wired both into `npm test` syntax checks and the full `node --test` suite.
+- Updated What's New metadata with latest id `2026-05-17-note-reading-metadata`, title `Note Reading Details`, and 3 user-facing bullets.
+- UI areas touched: note rendering in `app.js`, note template footer in `index.html`, footer pill styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added.
+- Verification: watched the new note-reading-meta test fail before implementation, then pass; full `npm test` passed with 89 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Note Reading Details` What's New popup and visible reading-time pills; screenshot review found no obvious layout overlap or clipping.
+- Production verification: deployed permalink loaded in browser, showed the `Note Reading Details` What's New popup, visible note reading metadata, and no browser console errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, secret, token, or long `sk-` key patterns.
+- Git status: feature commit `2ce58b4` (`Add note reading metadata`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Deploy `6a0a8fac65506c5221466796` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0a8fac65506c5221466796--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-17 21:06:21 MDT
 
 - Added color-coded task due badges for faster mobile task scanning.
