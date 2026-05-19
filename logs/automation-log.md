@@ -912,3 +912,19 @@
 - Secret scan of changed app/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
 - Git status: feature commit `716a847` (`Add trash restore actions`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0befd494a2e7f29ec6d7fd` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0befd494a2e7f29ec6d7fd--keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-19 02:07:52 MDT
+
+- Added a mobile-first Sync Status Pill for clearer cloud/local save awareness.
+- The top bar now shows a compact status badge that updates across Syncing, Synced, Offline, Local changes, and Saved locally states, with accessible status text and a colored dot that fits beside the theme button.
+- Added `sync-status.mjs` and `test/sync-status.test.mjs`; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-19-sync-status-pill`, title `Sync Status Pill`, and 3 user-facing bullets.
+- UI/code areas touched: topbar markup in `index.html`, sync state transitions in `app.js`, responsive pill styling in `styles.css`, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic sync-status UI around the existing `/api/items` save/load flow.
+- Verification: full `npm test` passed with 180 tests across the existing suite plus the new sync-status helper tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Sync Status Pill` What's New popup, the topbar badge reaching `Synced`, a simulated failed save showing `Saved locally`, no browser console errors after verification, and no document-level horizontal overflow.
+- Mobile/layout verification: browser screenshot review after dismissing the popup found the `Saved locally` pill readable with no overlap against the Notes title or theme button, no clipping, and no obvious horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Sync Status Pill` What's New popup, and production browser smoke confirmed the topbar badge reached `Synced` with no console errors and no horizontal overflow.
+- Secret scan of added lines in changed app/index/style/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `d9f8d74` (`Add sync status pill`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c1a42889aea5fdfb82d2a` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c1a42889aea5fdfb82d2a--keeply-notes-aaron-20260516.netlify.app`.
