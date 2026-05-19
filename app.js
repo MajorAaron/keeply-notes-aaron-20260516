@@ -30,6 +30,7 @@ import { buildNoteEditPatch, buildTaskEditPatch } from "./edit-items.mjs";
 import { getNotePinLabel, toggleNotePin } from "./note-pin.mjs";
 import { buildBulkTasksFromText } from "./task-bulk-entry.mjs";
 import { getTaskSwipeAction } from "./task-swipe-actions.mjs";
+import { getNoteSwipeAction } from "./note-swipe-actions.mjs";
 import { buildNotePreview } from "./note-preview.mjs";
 import { getTaskDueBadge } from "./task-due-badge.mjs";
 import { buildTaskDetailPreview } from "./task-detail-preview.mjs";
@@ -1930,13 +1931,15 @@ function attachSwipe(node, note) {
   });
 
   node.addEventListener("pointerup", () => {
-    if (Math.abs(currentX) > 70) {
-      if (currentX > 0 && state.view === "active") {
-        toggleNotePinWithUndo(note);
-      } else {
-        const status = state.view === "trash" ? "active" : "trash";
-        updateNoteWithUndo(note, { status, pinned: false }, status === "trash" ? "Moved to trash" : "Restored");
-      }
+    const action = getNoteSwipeAction({ deltaX: currentX, view: state.view, pinned: note.pinned });
+    if (action === "pin" || action === "unpin") {
+      toggleNotePinWithUndo(note);
+    } else if (action === "archive") {
+      updateNoteWithUndo(note, { status: "archive", pinned: false }, "Archived");
+    } else if (action === "restore") {
+      updateNoteWithUndo(note, { status: "active", pinned: false }, "Restored");
+    } else if (action === "trash") {
+      updateNoteWithUndo(note, { status: "trash", pinned: false }, "Moved to trash");
     } else {
       node.style.setProperty("--drag-x", "0px");
     }

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-note-swipe-triage",
+    title: "Note Swipe Triage",
+    bullets: [
+      "Active notes now swipe left into Archive instead of jumping straight to Trash.",
+      "Archive notes can swipe right to restore or left to move to Trash for faster mobile cleanup.",
+      "Pinned-note swipes still work on active notes, now backed by clearer tested swipe rules."
+    ]
+  },
+  {
     id: "2026-05-18-trash-restore-actions",
     title: "Trash Restore Actions",
     bullets: [
