@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-search-clear-shortcut",
+    title: "Search Clear Shortcut",
+    bullets: [
+      "Search fields now show a compact Clear button as soon as you type.",
+      "One tap clears the query while keeping your current labels, colors, and task filters in place.",
+      "The shortcut uses note or task wording so mobile search recovery is clearer for assistive tech."
+    ]
+  },
+  {
     id: "2026-05-19-note-swipe-triage",
     title: "Note Swipe Triage",
     bullets: [

@@ -41,10 +41,11 @@
         </header>
 
         <section class="search-panel">
-          <label class="search-box">
+          <div class="search-box">
             <span class="icon icon-search"></span>
-            <input id="searchInput" type="search" autocomplete="off" placeholder="Search notes" />
-          </label>
+            <input id="searchInput" type="search" autocomplete="off" placeholder="Search notes" aria-label="Search notes" />
+            <button class="search-clear-button" id="searchClearButton" type="button" aria-label="Clear note search" hidden>Clear</button>
+          </div>
           <button class="layout-button" id="layoutButton" aria-label="Toggle compact layout">
             <span class="icon icon-grid"></span>
           </button>

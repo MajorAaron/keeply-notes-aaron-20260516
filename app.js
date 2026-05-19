@@ -47,6 +47,7 @@ import { getAskSuggestions } from "./ask-suggestions.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 import { getQuickAddTarget } from "./quick-add-target.mjs";
+import { getSearchClearState } from "./search-clear.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -148,6 +149,7 @@ const els = {
   composer: document.querySelector("#composer"),
   viewTitle: document.querySelector("#viewTitle"),
   searchInput: document.querySelector("#searchInput"),
+  searchClearButton: document.querySelector("#searchClearButton"),
   titleInput: document.querySelector("#titleInput"),
   bodyInput: document.querySelector("#bodyInput"),
   imageInput: document.querySelector("#imageInput"),
@@ -614,6 +616,8 @@ function render() {
 
   els.viewTitle.textContent = getViewTitle();
   els.searchInput.placeholder = showTasks ? "Search tasks" : "Search notes";
+  els.searchInput.setAttribute("aria-label", showTasks ? "Search tasks" : "Search notes");
+  renderSearchClearButton();
   els.pinnedHeading.hidden = pinned.length === 0 || state.view !== "active";
   els.othersHeading.textContent = showTasks ? "Tasks" : "Others";
   els.othersHeading.hidden = !showTasks && notes.length === 0;
@@ -665,6 +669,22 @@ function renderQuickAddButton() {
   const target = getQuickAddTarget(state.view);
   els.quickAddButton.setAttribute("aria-label", target.ariaLabel);
   els.quickAddButton.title = target.title;
+}
+
+function renderSearchClearButton() {
+  const clearState = getSearchClearState(state.query, { view: state.view });
+  els.searchClearButton.hidden = !clearState.visible;
+  els.searchClearButton.setAttribute("aria-label", clearState.label);
+  els.searchClearButton.title = clearState.title;
+}
+
+function clearSearchQuery() {
+  if (!state.query) return;
+  state.query = "";
+  els.searchInput.value = "";
+  render();
+  els.searchInput.focus();
+  showToast("Search cleared");
 }
 
 function renderLabelChips() {
@@ -2873,6 +2893,7 @@ els.askForm.addEventListener("submit", askKeeply);
 els.filterClearButton.addEventListener("click", clearActiveFilters);
 els.emptyStateAction.addEventListener("click", clearActiveFilters);
 els.emptyStateCapture.addEventListener("click", captureSearchDraft);
+els.searchClearButton.addEventListener("click", clearSearchQuery);
 els.noteSpotlightButton.addEventListener("click", focusNoteSpotlight);
 els.cleanupSpotlightButton.addEventListener("click", focusCleanupSpotlight);
 els.nextTaskButton.addEventListener("click", focusNextTaskWindow);
