@@ -1,4 +1,18 @@
 
+## 2026-05-19 03:06:21 MDT
+
+- Added mobile-first Navigation Badges for at-a-glance workspace counts in the side rail.
+- Rail buttons now show compact badges for active notes, unfinished active tasks, archived items, and trashed items; completed active tasks are excluded from the task badge so the count reflects open work.
+- Updated What's New metadata with latest id `2026-05-19-navigation-badges`, title `Navigation Badges`, and 3 user-facing bullets.
+- UI/code areas touched: rail badge markup/accessibility in `index.html`, badge rendering in `app.js`, compact badge styling in `styles.css`, release metadata, package test wiring, and the new `navigation-badges.mjs` helper plus `test/navigation-badges.test.mjs`.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local UI/count behavior only.
+- Verification: full `npm test` passed with the existing suite plus 2 new navigation-badge tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Navigation Badges` What's New popup, accessible rail labels with counts, visible badges after dismissing the popup, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the rail badges visible and readable with no obvious overlap, clipping, or horizontal overflow around the side rail/top app at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Navigation Badges` What's New popup, exposed rail labels for `Notes, 3 active notes` and `Tasks, 1 open task`, and browser console reported no errors.
+- Secret scan of added lines in changed app/index/style/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `a8b56e8` (`Add navigation badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c27fb6b9f0b6bbafc4fd0` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c27fb6b9f0b6bbafc4fd0--keeply-notes-aaron-20260516.netlify.app`.
 ## 2026-05-19 01:07:20 MDT
 
 - Added a mobile-first Search Clear Shortcut for faster recovery from note/task searches.
