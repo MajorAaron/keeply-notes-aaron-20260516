@@ -37,6 +37,28 @@ export function hasComposerDraftContent(draft) {
   return Boolean(normalized.title.trim() || normalized.body.trim() || normalized.image?.src);
 }
 
+export function getComposerDraftResume(draft) {
+  const normalized = normalizeComposerDraft(draft);
+  const kind = normalized.mode === "task" ? "task" : "note";
+  const title = normalized.title.trim() || firstMeaningfulLine(normalized.body) || (normalized.image?.src ? "Image draft" : "Untitled draft");
+  const details = [titleCase(kind), titleCase(normalized.label)];
+
+  if (kind === "task") {
+    if (normalized.priority !== "normal") details.push(`${titleCase(normalized.priority)} priority`);
+    if (normalized.dueAt) details.push("Due date set");
+  } else if (normalized.image?.src) {
+    details.push("Image attached");
+  }
+
+  return {
+    available: hasComposerDraftContent(normalized),
+    kicker: "Draft restored",
+    title: truncateText(title, 56),
+    summary: details.join(" • "),
+    action: "Discard"
+  };
+}
+
 function normalizeDraftImage(image) {
   if (!image || typeof image !== "object" || typeof image.src !== "string" || !image.src.startsWith("data:image/")) {
     return null;
@@ -55,6 +77,23 @@ function normalizeDraftImage(image) {
 
 function stringValue(value, maxLength) {
   return typeof value === "string" ? value.slice(0, maxLength) : "";
+}
+
+function firstMeaningfulLine(value) {
+  return String(value || "")
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^\s*(?:[-*•]|\d+[.)]|\[[ xX]\])\s*/, "").trim())
+    .find(Boolean) || "";
+}
+
+function truncateText(value, maxLength) {
+  const text = stringValue(value, maxLength + 1).trim();
+  return text.length > maxLength ? `${text.slice(0, maxLength - 1).trimEnd()}…` : text;
+}
+
+function titleCase(value) {
+  const text = String(value || "");
+  return text ? `${text.charAt(0).toUpperCase()}${text.slice(1)}` : "";
 }
 
 function isDateInput(value) {

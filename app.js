@@ -12,7 +12,7 @@ import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
 import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate, getTaskComposerDueHint } from "./task-composer-presets.mjs";
 import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
-import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
+import { buildComposerDraft, getComposerDraftResume, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
 import { insertChecklistMarker } from "./composer-checklist.mjs";
 import { getTaskChecklistMeta } from "./task-checklist-meta.mjs";
 import { getNoteChecklistMeta } from "./note-checklist-meta.mjs";
@@ -159,6 +159,11 @@ const els = {
   priorityInput: document.querySelector("#priorityInput"),
   taskFields: document.querySelector("#taskFields"),
   taskComposerPresets: document.querySelector("#taskComposerPresets"),
+  composerDraftResume: document.querySelector("#composerDraftResume"),
+  composerDraftKicker: document.querySelector("#composerDraftKicker"),
+  composerDraftTitle: document.querySelector("#composerDraftTitle"),
+  composerDraftSummary: document.querySelector("#composerDraftSummary"),
+  composerDraftDiscard: document.querySelector("#composerDraftDiscard"),
   colorDots: document.querySelector(".color-dots"),
   labelInput: document.querySelector("#labelInput"),
   checklistButton: document.querySelector("#checklistButton"),
@@ -2530,6 +2535,29 @@ function saveComposerDraft() {
 
 function clearSavedComposerDraft() {
   localStorage.removeItem(COMPOSER_DRAFT_KEY);
+  hideComposerDraftResume();
+}
+
+function showComposerDraftResume(draft) {
+  const resume = getComposerDraftResume(draft);
+  if (!resume.available) {
+    hideComposerDraftResume();
+    return;
+  }
+  els.composerDraftKicker.textContent = resume.kicker;
+  els.composerDraftTitle.textContent = resume.title;
+  els.composerDraftSummary.textContent = resume.summary;
+  els.composerDraftDiscard.textContent = resume.action;
+  els.composerDraftResume.hidden = false;
+}
+
+function hideComposerDraftResume() {
+  els.composerDraftResume.hidden = true;
+}
+
+function discardComposerDraft() {
+  clearComposer();
+  showToast("Draft discarded");
 }
 
 function insertChecklistInComposer() {
@@ -2566,6 +2594,7 @@ function restoreComposerDraft() {
     state.draftImage = draft.image;
     renderDraftImage();
     renderTaskComposerPresets();
+    showComposerDraftResume(draft);
     saveComposerDraft();
     showToast("Draft restored");
   } catch {
@@ -2829,6 +2858,7 @@ els.taskComposerPresets.addEventListener("click", (event) => {
   if (!button) return;
   applyTaskComposerDuePreset(button.dataset.preset);
 });
+els.composerDraftDiscard.addEventListener("click", discardComposerDraft);
 els.dueInput.addEventListener("input", renderTaskComposerPresets);
 els.titleInput.addEventListener("input", saveComposerDraft);
 els.bodyInput.addEventListener("input", saveComposerDraft);

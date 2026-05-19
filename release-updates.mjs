@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-draft-resume-card",
+    title: "Draft Resume Card",
+    bullets: [
+      "Unsaved note or task drafts now reopen with a compact resume card above the composer.",
+      "The card summarizes the restored draft type, label, priority, due-date state, or attached image.",
+      "A one-tap Discard button clears the restored draft when you no longer need it."
+    ]
+  },
+  {
     id: "2026-05-18-task-due-hints",
     title: "Task Due Hints",
     bullets: [

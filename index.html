@@ -199,6 +199,14 @@
             <button class="mode-button active" data-mode="note" role="tab" aria-selected="true">Note</button>
             <button class="mode-button" data-mode="task" role="tab" aria-selected="false">Task</button>
           </div>
+          <section class="composer-draft-resume" id="composerDraftResume" aria-live="polite" hidden>
+            <div>
+              <span id="composerDraftKicker">Draft restored</span>
+              <strong id="composerDraftTitle">Unsaved draft</strong>
+              <small id="composerDraftSummary">Ready to finish</small>
+            </div>
+            <button id="composerDraftDiscard" type="button">Discard</button>
+          </section>
           <input id="titleInput" class="composer-title" placeholder="Title" maxlength="90" />
           <textarea id="bodyInput" class="composer-body" placeholder="Take a note..." rows="3"></textarea>
           <input id="imageInput" class="image-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" />

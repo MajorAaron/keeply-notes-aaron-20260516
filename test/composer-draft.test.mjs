@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "../composer-draft.mjs";
+import { buildComposerDraft, getComposerDraftResume, hasComposerDraftContent, normalizeComposerDraft } from "../composer-draft.mjs";
 
 test("buildComposerDraft keeps valid note draft fields", () => {
   const draft = buildComposerDraft({
@@ -68,4 +68,35 @@ test("task drafts do not carry note images", () => {
   assert.equal(draft.dueAt, "2026-05-18");
   assert.equal(draft.priority, "high");
   assert.equal(hasComposerDraftContent(draft), true);
+});
+
+test("getComposerDraftResume summarizes restored task drafts", () => {
+  const resume = getComposerDraftResume({
+    mode: "task",
+    title: "Send launch recap to Sam",
+    body: "Owners and decisions.",
+    label: "work",
+    dueAt: "2026-05-19",
+    priority: "high"
+  });
+
+  assert.deepEqual(resume, {
+    available: true,
+    kicker: "Draft restored",
+    title: "Send launch recap to Sam",
+    summary: "Task • Work • High priority • Due date set",
+    action: "Discard"
+  });
+});
+
+test("getComposerDraftResume falls back to body or image context", () => {
+  assert.equal(
+    getComposerDraftResume({ mode: "note", body: "- Call Sam about venue\n- Bring deck", label: "personal" }).title,
+    "Call Sam about venue"
+  );
+  assert.equal(
+    getComposerDraftResume({ mode: "note", image: { src: "data:image/png;base64,abc" }, label: "ideas" }).summary,
+    "Note • Ideas • Image attached"
+  );
+  assert.equal(getComposerDraftResume({ mode: "note" }).available, false);
 });
