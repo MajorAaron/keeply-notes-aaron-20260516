@@ -1,4 +1,18 @@
 
+## 2026-05-19 04:12:55 MDT
+
+- Added Next Week Scheduling for faster mobile task planning beyond today/tomorrow.
+- Task composer due presets and per-task due shortcut chips now include `Next week`, which sets the task due date 7 days from the current local date; typed single-task titles and pasted bulk task lines also understand `next week` and strip the hint from the saved title.
+- Updated What's New metadata with latest id `2026-05-19-next-week-scheduling`, title `Next Week Scheduling`, and 3 user-facing bullets.
+- UI/code areas touched: task due shortcut helper, task composer preset helper, bulk/single task hint parsing, responsive preset grid CSS, release metadata, and task scheduling tests.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task scheduling/parsing only.
+- Verification: full `npm test` passed with 175 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Next Week Scheduling` What's New popup/bullets, dismiss persistence to `keeply-last-seen-update`, `Next week` composer preset setting a due date 7 days out with `Due in 7 days`, visible task-card `Next week` chips, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the four composer due presets and task-card due shortcut chips readable with no obvious overlap, clipping, or horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Next Week Scheduling` What's New popup, persisted dismissal, exposed the `Next week` composer preset/task-card shortcut, and the preset set a due date 7 days out with no browser console errors.
+- Secret scan of added lines in changed metadata/style/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `bcbf851` (`Add next week task scheduling`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c378073599db2b936b181` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c378073599db2b936b181--keeply-notes-aaron-20260516.netlify.app`.
 ## 2026-05-19 03:06:21 MDT
 
 - Added mobile-first Navigation Badges for at-a-glance workspace counts in the side rail.
