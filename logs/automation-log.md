@@ -1016,3 +1016,17 @@
 - Production verification: deploy permalink loaded, showed the `Next Week Note Follow-Ups` What's New popup after clearing the local last-seen key, exposed `Task today`/`Task tomorrow`/`Task next week` follow-up buttons, reported no horizontal overflow, and browser console reported no errors.
 - Git status: feature commit `1584fbd` (`Add next week note follow-ups`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c6e37a881e759dcfd7691` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c6e37a881e759dcfd7691--keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-19 16:00:45 MDT
+
+- Added mobile-first Tomorrow Task Filter for faster next-day task planning in the Tasks view.
+- Tasks date filters now include a dedicated `Tomorrow` chip between Today and Upcoming; the chip has a live count, composes with label/priority/status/search filters, appears in the active-filter summary, and persists through view preferences.
+- Updated What's New metadata with latest id `2026-05-19-tomorrow-task-filter`, title `Tomorrow Task Filter`, and 3 user-facing bullets.
+- UI/code areas touched: task date filter helper, task filter markup in `index.html`, active filter labels, view preference validation, release metadata, and task/filter preference tests.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task filtering behavior only.
+- Verification: full `npm test` passed with 182 passing tests; `git diff --check` passed; secret scan of added lines found no committed `ANTHROPIC_API_KEY`, long `sk-` key, API key, secret, or token assignment patterns.
+- Local smoke verification: port 4175 was already in use, so `HOST=127.0.0.1 PORT=4180 npm start` served `http://127.0.0.1:4180/` with HTTP 200. Browser verification confirmed the `Tomorrow Task Filter` What's New popup and bullets, dismiss persistence to `keeply-last-seen-update`, the Tasks-view Tomorrow chip with live counts, active-filter summary, no browser console errors, and no document horizontal overflow.
+- Mobile/layout verification: browser screenshot review found the expanded task filter rows readable with the new Tomorrow chip active, no obvious overlap or clipping, and no visible horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Tomorrow Task Filter` What's New popup after clearing the local last-seen key, exposed the Tasks-view Tomorrow chip with count `1`, persisted dismissal, selected the Tomorrow filter, reported no horizontal overflow, and browser console reported no errors.
+- Git status: feature commit `3721683` (`Add tomorrow task filter`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0cdd6ff93d2b0811a1d6b5` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0cdd6ff93d2b0811a1d6b5--keeply-notes-aaron-20260516.netlify.app`.
