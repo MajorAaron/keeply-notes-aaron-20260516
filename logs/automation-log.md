@@ -847,3 +847,20 @@
 - Secret scan of changed app/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
 - Git status: feature commit `7fc0ec6` (`Add detail-first task titles`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0bd3a78623a0abc2d2e9f9` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0bd3a78623a0abc2d2e9f9--keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-18 22:06:49 MDT
+
+- Added single task capture hints for faster mobile task entry.
+- Quick task titles now understand hints like `tomorrow`, `!high`, `#low`, `@home`, `#ideas`, `urgent`, and `asap`; Keeply strips those hints from the saved title while applying the due date, priority, and label.
+- Detail-first task capture reuses the same hint parsing when the first detail line becomes the task title.
+- Added `task-capture-hints.mjs` and `test/task-capture-hints.test.mjs`; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-single-task-hints`, title `Single Task Hints`, and 3 user-facing bullets.
+- UI/code areas touched: single-task creation in `app.js`, release metadata, package test wiring, and the new task capture helper/test. No CSS changes or new dependencies were needed.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local parsing only.
+- Verification: full `npm test` passed with 167 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Single Task Hints` What's New popup/dismissal and a task typed as `Pay insurance tomorrow !high @personal` saved as `Pay insurance` with Personal label, High priority, and tomorrow due date. Browser console reported no errors.
+- Mobile/layout verification: browser screenshot review found no obvious overlap, clipping, or horizontal overflow around the task filters, composer controls, task cards, or floating Quick Add button at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Single Task Hints` What's New popup, and a production smoke test saved `Renew parking tomorrow !high @personal` as `Renew parking` with Personal label, High priority, and tomorrow due date. Browser console reported no errors.
+- Secret scan of added lines in changed app/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `e36d7fd` (`Add single task capture hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0be1acf9f01ed16106ed29` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0be1acf9f01ed16106ed29--keeply-notes-aaron-20260516.netlify.app`.
