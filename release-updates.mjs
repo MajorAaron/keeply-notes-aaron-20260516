@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-sync-status-pill",
+    title: "Sync Status Pill",
+    bullets: [
+      "Keeply now shows a compact sync badge in the top bar so cloud save state is visible at a glance.",
+      "The badge updates for syncing, synced, offline, and saved-local states as notes and tasks change.",
+      "Offline or local-only saves stay clearly labeled while your data remains saved on this device."
+    ]
+  },
+  {
     id: "2026-05-19-search-clear-shortcut",
     title: "Search Clear Shortcut",
     bullets: [

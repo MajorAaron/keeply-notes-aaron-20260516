@@ -148,6 +148,59 @@ button {
   min-width: 0;
 }
 
+.topbar-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.sync-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  max-width: 132px;
+  padding: 0 11px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sync-status-pill::before {
+  flex: 0 0 auto;
+  width: 0.48rem;
+  height: 0.48rem;
+  margin-right: 6px;
+  border-radius: 999px;
+  background: var(--sky);
+  content: "";
+}
+
+.sync-status-pill[data-sync-status="synced"]::before {
+  background: var(--mint);
+}
+
+.sync-status-pill[data-sync-status="offline"]::before,
+.sync-status-pill[data-sync-status="local"]::before {
+  background: var(--rose);
+}
+
+.sync-status-pill[data-sync-status="syncing"]::before {
+  background: var(--sun);
+}
+
+body.night .sync-status-pill {
+  background: rgba(255, 248, 222, 0.08);
+}
+
 .eyebrow {
   margin: 0 0 2px;
   color: var(--muted);
@@ -2314,7 +2367,16 @@ time {
 
   .topbar {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 48px;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .topbar-actions {
+    gap: 8px;
+  }
+
+  .sync-status-pill {
+    max-width: 116px;
+    padding: 0 9px;
   }
 
   .search-panel {

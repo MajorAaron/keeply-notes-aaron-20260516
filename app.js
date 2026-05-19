@@ -48,6 +48,7 @@ import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 import { getQuickAddTarget } from "./quick-add-target.mjs";
 import { getSearchClearState } from "./search-clear.mjs";
+import { getSyncStatusView } from "./sync-status.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -130,6 +131,7 @@ const state = {
   syncReady: false,
   syncTimer: 0,
   syncInFlight: false,
+  syncStatus: "syncing",
   dirtyWhileLoading: false,
   view: savedPreferences.view,
   label: savedPreferences.label,
@@ -148,6 +150,7 @@ const state = {
 const els = {
   composer: document.querySelector("#composer"),
   viewTitle: document.querySelector("#viewTitle"),
+  syncStatusPill: document.querySelector("#syncStatusPill"),
   searchInput: document.querySelector("#searchInput"),
   searchClearButton: document.querySelector("#searchClearButton"),
   titleInput: document.querySelector("#titleInput"),
@@ -260,6 +263,16 @@ const els = {
   taskTemplate: document.querySelector("#taskTemplate")
 };
 
+function setSyncStatus(status) {
+  state.syncStatus = status;
+  if (!els.syncStatusPill) return;
+  const view = getSyncStatusView(status, { pendingDeletes: state.deletedIds.length });
+  els.syncStatusPill.textContent = view.label;
+  els.syncStatusPill.title = view.title;
+  els.syncStatusPill.setAttribute("aria-label", view.ariaLabel);
+  els.syncStatusPill.dataset.syncStatus = view.tone;
+}
+
 function loadData() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
@@ -295,7 +308,12 @@ function loadData() {
 function saveData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks, deletedIds: state.deletedIds }));
   state.hasLocalData = true;
-  if (!state.syncReady) state.dirtyWhileLoading = true;
+  if (!state.syncReady) {
+    state.dirtyWhileLoading = true;
+    setSyncStatus("pending");
+  } else {
+    setSyncStatus("syncing");
+  }
   queueRemoteSave();
 }
 
@@ -316,7 +334,11 @@ async function loadRemoteData() {
       state.tasks = state.dirtyWhileLoading ? mergeByUpdatedAt(remoteTasks, state.tasks, state.deletedIds) : filterDeletedItems(remoteTasks, state.deletedIds);
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks, deletedIds: state.deletedIds }));
       render();
-      if (state.dirtyWhileLoading || state.deletedIds.length > 0) queueRemoteSave(true);
+      if (state.dirtyWhileLoading || state.deletedIds.length > 0) {
+        queueRemoteSave(true);
+      } else {
+        setSyncStatus("synced");
+      }
       state.dirtyWhileLoading = false;
       showToast("Synced");
       return;
@@ -326,8 +348,10 @@ async function loadRemoteData() {
       queueRemoteSave(true);
     }
     state.dirtyWhileLoading = false;
+    setSyncStatus("synced");
   } catch (error) {
     console.warn("Keeply sync unavailable", error);
+    setSyncStatus("offline");
     showToast("Offline mode");
   }
 }
@@ -357,6 +381,7 @@ function queueRemoteSave(immediate = false) {
   window.clearTimeout(state.syncTimer);
   if (!state.syncReady) return;
 
+  setSyncStatus("syncing");
   state.syncTimer = window.setTimeout(syncRemoteData, immediate ? 0 : 350);
 }
 
@@ -367,6 +392,7 @@ async function syncRemoteData() {
   }
 
   state.syncInFlight = true;
+  setSyncStatus("syncing");
 
   try {
     const response = await fetch(API_URL, {
@@ -382,9 +408,11 @@ async function syncRemoteData() {
     state.tasks = Array.isArray(data.tasks) ? data.tasks : state.tasks;
     state.deletedIds = [];
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ notes: state.notes, tasks: state.tasks, deletedIds: state.deletedIds }));
+    setSyncStatus("synced");
     render();
   } catch (error) {
     console.warn("Keeply sync failed", error);
+    setSyncStatus("local");
     showToast("Saved locally");
   } finally {
     state.syncInFlight = false;
@@ -2948,6 +2976,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 applyViewPreferences();
+setSyncStatus(state.syncStatus);
 render();
 restoreComposerDraft();
 loadRemoteData();
