@@ -1,13 +1,21 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildFollowUpTask, getNoteFollowUpDueDate, removeFollowUpTask } from "../note-followups.mjs";
+import { buildFollowUpTask, getNoteFollowUpDueDate, getNoteFollowUpToast, removeFollowUpTask } from "../note-followups.mjs";
 
 const baseDate = new Date("2026-05-17T12:00:00");
 
 test("note follow-up shortcuts produce stable task due dates", () => {
   assert.equal(getNoteFollowUpDueDate("today", baseDate), "2026-05-17");
   assert.equal(getNoteFollowUpDueDate("tomorrow", baseDate), "2026-05-18");
+  assert.equal(getNoteFollowUpDueDate("next-week", baseDate), "2026-05-24");
   assert.equal(getNoteFollowUpDueDate("later", baseDate), null);
+});
+
+test("note follow-up shortcuts produce concise toast copy", () => {
+  assert.equal(getNoteFollowUpToast("today"), "Task added for today");
+  assert.equal(getNoteFollowUpToast("tomorrow"), "Task added for tomorrow");
+  assert.equal(getNoteFollowUpToast("next-week"), "Task added for next week");
+  assert.equal(getNoteFollowUpToast("later"), "Task added");
 });
 
 test("buildFollowUpTask carries note context into a task", () => {

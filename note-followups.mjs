@@ -1,12 +1,21 @@
 export const NOTE_FOLLOW_UP_SHORTCUTS = [
   { key: "today", label: "Task today" },
-  { key: "tomorrow", label: "Task tomorrow" }
+  { key: "tomorrow", label: "Task tomorrow" },
+  { key: "next-week", label: "Task next week" }
 ];
 
 export function getNoteFollowUpDueDate(shortcut, baseDate = new Date()) {
   if (shortcut === "today") return toDateInput(baseDate);
   if (shortcut === "tomorrow") return toDateInput(addDays(baseDate, 1));
+  if (shortcut === "next-week") return toDateInput(addDays(baseDate, 7));
   return null;
+}
+
+export function getNoteFollowUpToast(shortcut) {
+  if (shortcut === "today") return "Task added for today";
+  if (shortcut === "tomorrow") return "Task added for tomorrow";
+  if (shortcut === "next-week") return "Task added for next week";
+  return "Task added";
 }
 
 export function buildFollowUpTask(note, options = {}) {

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-note-next-week-followups",
+    title: "Next Week Note Follow-Ups",
+    bullets: [
+      "Active notes now include a Task next week shortcut beside the today and tomorrow buttons.",
+      "One tap turns a note into a dated task for the following week while keeping the note title, body, and label.",
+      "Follow-up task confirmations now use clearer timing copy and still support Undo."
+    ]
+  },
+  {
     id: "2026-05-19-task-status-filters",
     title: "Task Status Filters",
     bullets: [

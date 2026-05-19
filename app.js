@@ -4,7 +4,7 @@ import { buildLocalNoteImage, dataUrlBytes } from "./note-images.mjs";
 import { getTaskDueShortcutDate, getVisibleTaskDueShortcuts } from "./task-due-shortcuts.mjs";
 import { getTaskPriorityShortcutValue, getVisibleTaskPriorityShortcuts } from "./task-priority-shortcuts.mjs";
 import { getTaskLabelShortcutValue, getVisibleTaskLabelShortcuts } from "./task-label-shortcuts.mjs";
-import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask, removeFollowUpTask } from "./note-followups.mjs";
+import { NOTE_FOLLOW_UP_SHORTCUTS, buildFollowUpTask, getNoteFollowUpToast, removeFollowUpTask } from "./note-followups.mjs";
 import { getNoteColorShortcutValue, getVisibleNoteColorShortcuts } from "./note-color-shortcuts.mjs";
 import { getNoteLabelShortcutValue, getVisibleNoteLabelShortcuts } from "./note-label-shortcuts.mjs";
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
@@ -1679,6 +1679,7 @@ function renderNote(note) {
       button.className = "note-followup";
       button.type = "button";
       button.textContent = shortcut.label;
+      button.setAttribute("aria-label", `Create ${shortcut.label.toLowerCase()} from ${note.title || "note"}`);
       button.addEventListener("click", () => createFollowUpTask(note, shortcut.key));
       return button;
     })
@@ -1770,7 +1771,7 @@ function createFollowUpTask(note, shortcut) {
   state.tasks.unshift(task);
   saveData();
   render();
-  showUndoToast(shortcut === "today" ? "Task added for today" : "Task added for tomorrow", () => {
+  showUndoToast(getNoteFollowUpToast(shortcut), () => {
     const result = removeFollowUpTask(state.tasks, task);
     if (!result.removed) {
       showToast("Task already changed");
