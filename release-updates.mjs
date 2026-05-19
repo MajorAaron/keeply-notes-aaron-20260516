@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-composer-label-chips",
+    title: "Composer Label Chips",
+    bullets: [
+      "The note and task composer now shows Work, Home, Ideas, and Personal chips near the save controls.",
+      "The selected label stays highlighted as you tap chips or change the label menu.",
+      "Mobile capture is faster because you can relabel drafts without opening the select menu."
+    ]
+  },
+  {
     id: "2026-05-19-priority-composer-chips",
     title: "Priority Composer Chips",
     bullets: [

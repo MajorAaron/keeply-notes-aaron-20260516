@@ -11,6 +11,7 @@ import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
 import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate, getTaskComposerDueHint } from "./task-composer-presets.mjs";
 import { TASK_COMPOSER_PRIORITY_PRESETS, getTaskComposerPriorityLabel, normalizeTaskComposerPriority } from "./task-composer-priorities.mjs";
+import { getComposerLabelPresetState, normalizeComposerLabel } from "./composer-labels.mjs";
 import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 import { buildComposerDraft, getComposerDraftResume, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
@@ -171,6 +172,7 @@ const els = {
   taskFields: document.querySelector("#taskFields"),
   taskComposerPresets: document.querySelector("#taskComposerPresets"),
   taskComposerPriorities: document.querySelector("#taskComposerPriorities"),
+  composerLabelPresets: document.querySelector("#composerLabelPresets"),
   composerDraftResume: document.querySelector("#composerDraftResume"),
   composerDraftKicker: document.querySelector("#composerDraftKicker"),
   composerDraftTitle: document.querySelector("#composerDraftTitle"),
@@ -2564,6 +2566,7 @@ function setComposerMode(mode, options = {}) {
   els.generateImageButton.hidden = mode === "task";
   els.imagePreview.hidden = mode === "task" || !state.draftImage;
   els.bodyInput.placeholder = mode === "task" ? "Task details or paste a list..." : "Take a note...";
+  els.labelInput.setAttribute("aria-label", mode === "task" ? "Task label" : "Note label");
   updateComposerEditingState();
   document.querySelectorAll(".mode-button").forEach((button) => {
     const active = button.dataset.mode === mode;
@@ -2703,6 +2706,8 @@ function restoreComposerDraft() {
 function renderTaskComposerPresets() {
   const activeDue = els.dueInput.value;
   const activePriority = normalizeTaskComposerPriority(els.priorityInput.value);
+  const activeLabel = normalizeComposerLabel(els.labelInput.value);
+  els.labelInput.value = activeLabel;
   els.dueInputHint.textContent = getTaskComposerDueHint(activeDue);
   els.taskComposerPresets.replaceChildren(
     ...TASK_COMPOSER_DUE_PRESETS.map((preset) => {
@@ -2732,6 +2737,19 @@ function renderTaskComposerPresets() {
       return button;
     })
   );
+  els.composerLabelPresets.replaceChildren(
+    ...getComposerLabelPresetState(activeLabel).map((preset) => {
+      const button = document.createElement("button");
+      button.className = "composer-label-preset";
+      button.type = "button";
+      button.textContent = preset.label;
+      button.dataset.label = preset.key;
+      button.classList.toggle("active", preset.active);
+      button.setAttribute("aria-pressed", String(preset.active));
+      button.setAttribute("aria-label", preset.ariaLabel);
+      return button;
+    })
+  );
 }
 
 function applyTaskComposerDuePreset(key) {
@@ -2744,6 +2762,12 @@ function applyTaskComposerDuePreset(key) {
 
 function applyTaskComposerPriorityPreset(key) {
   els.priorityInput.value = normalizeTaskComposerPriority(key);
+  renderTaskComposerPresets();
+  saveComposerDraft();
+}
+
+function applyComposerLabelPreset(key) {
+  els.labelInput.value = normalizeComposerLabel(key, els.labelInput.value);
   renderTaskComposerPresets();
   saveComposerDraft();
 }
@@ -2983,9 +3007,15 @@ els.taskComposerPriorities.addEventListener("click", (event) => {
   if (!button) return;
   applyTaskComposerPriorityPreset(button.dataset.priority);
 });
+els.composerLabelPresets.addEventListener("click", (event) => {
+  const button = event.target.closest(".composer-label-preset");
+  if (!button) return;
+  applyComposerLabelPreset(button.dataset.label);
+});
 els.composerDraftDiscard.addEventListener("click", discardComposerDraft);
 els.dueInput.addEventListener("input", renderTaskComposerPresets);
 els.priorityInput.addEventListener("change", renderTaskComposerPresets);
+els.labelInput.addEventListener("change", renderTaskComposerPresets);
 els.titleInput.addEventListener("input", saveComposerDraft);
 els.bodyInput.addEventListener("input", saveComposerDraft);
 els.labelInput.addEventListener("change", saveComposerDraft);
