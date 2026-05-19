@@ -52,6 +52,7 @@ import { getQuickAddTarget } from "./quick-add-target.mjs";
 import { getSearchClearState } from "./search-clear.mjs";
 import { getSyncStatusView } from "./sync-status.mjs";
 import { getNavigationBadges } from "./navigation-badges.mjs";
+import { getTaskCompletionFilterCounts, matchesTaskCompletionFilter, normalizeTaskCompletionFilter } from "./task-completion-filters.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -140,6 +141,7 @@ const state = {
   label: savedPreferences.label,
   taskWindow: savedPreferences.taskWindow,
   taskPriority: savedPreferences.taskPriority,
+  taskCompletion: savedPreferences.taskCompletion,
   noteColor: savedPreferences.noteColor,
   query: "",
   color: "sun",
@@ -227,6 +229,7 @@ const els = {
   noteColorFilters: document.querySelector("#noteColorFilters"),
   taskFilters: document.querySelector("#taskFilters"),
   taskPriorityFilters: document.querySelector("#taskPriorityFilters"),
+  taskCompletionFilters: document.querySelector("#taskCompletionFilters"),
   filterSummary: document.querySelector("#filterSummary"),
   filterSummaryChips: document.querySelector("#filterSummaryChips"),
   filterClearButton: document.querySelector("#filterClearButton"),
@@ -632,6 +635,7 @@ function getVisibleTasks() {
     .filter((task) => task.status === status)
     .filter((task) => state.view !== "tasks" || matchesTaskWindow(task, state.taskWindow))
     .filter((task) => state.view !== "tasks" || matchesTaskPriorityFilter(task, state.taskPriority))
+    .filter((task) => state.view !== "tasks" || matchesTaskCompletionFilter(task, state.taskCompletion))
     .filter((task) => state.label === "all" || task.label === state.label)
     .filter((task) => {
       if (!query) return true;
@@ -661,6 +665,7 @@ function render() {
   els.noteColorFilters.hidden = state.view !== "active";
   els.taskFilters.hidden = !showTasks;
   els.taskPriorityFilters.hidden = !showTasks;
+  els.taskCompletionFilters.hidden = !showTasks;
   els.taskBulkActions.hidden = !showTasks;
   els.pinnedNotes.replaceChildren(...pinned.map(renderNote));
   els.notesGrid.replaceChildren(...others.map(renderNote));
@@ -670,6 +675,7 @@ function render() {
     label: state.label,
     taskWindow: state.taskWindow,
     taskPriority: state.taskPriority,
+    taskCompletion: state.taskCompletion,
     noteColor: state.noteColor,
     query: state.query
   });
@@ -690,6 +696,7 @@ function render() {
   renderNoteColorFilters();
   renderTaskFilters();
   renderTaskPriorityFilters();
+  renderTaskCompletionFilters();
   renderAskSuggestions();
   renderNoteSpotlight();
   renderCleanupSpotlight();
@@ -757,7 +764,11 @@ function renderLabelChips() {
 function getLabelCountItems() {
   if (state.view === "tasks") {
     return state.tasks.filter(
-      (task) => task.status === "active" && matchesTaskWindow(task, state.taskWindow) && matchesTaskPriorityFilter(task, state.taskPriority)
+      (task) =>
+        task.status === "active" &&
+        matchesTaskWindow(task, state.taskWindow) &&
+        matchesTaskPriorityFilter(task, state.taskPriority) &&
+        matchesTaskCompletionFilter(task, state.taskCompletion)
     );
   }
 
@@ -774,6 +785,7 @@ function renderFilterSummary() {
     label: state.label,
     taskWindow: state.taskWindow,
     taskPriority: state.taskPriority,
+    taskCompletion: state.taskCompletion,
     noteColor: state.noteColor,
     query: state.query
   });
@@ -794,6 +806,7 @@ function clearActiveFilters() {
   state.query = "";
   state.taskWindow = "all";
   state.taskPriority = "all";
+  state.taskCompletion = "all";
   state.noteColor = "all";
   els.searchInput.value = "";
   saveViewPreferences();
@@ -858,8 +871,14 @@ function renderNoteColorFilters() {
 }
 
 function renderTaskFilters() {
-  const activeTasks = state.tasks.filter((task) => task.status === "active");
-  const counts = getTaskWindowCounts(activeTasks);
+  const countableTasks = state.tasks.filter(
+    (task) =>
+      task.status === "active" &&
+      matchesTaskPriorityFilter(task, state.taskPriority) &&
+      matchesTaskCompletionFilter(task, state.taskCompletion) &&
+      (state.label === "all" || task.label === state.label)
+  );
+  const counts = getTaskWindowCounts(countableTasks);
 
   els.taskFilters.querySelectorAll(".task-filter").forEach((button) => {
     const active = button.dataset.window === state.taskWindow;
@@ -872,13 +891,37 @@ function renderTaskFilters() {
 
 function renderTaskPriorityFilters() {
   const countableTasks = state.tasks.filter(
-    (task) => task.status === "active" && matchesTaskWindow(task, state.taskWindow) && (state.label === "all" || task.label === state.label)
+    (task) =>
+      task.status === "active" &&
+      matchesTaskWindow(task, state.taskWindow) &&
+      matchesTaskCompletionFilter(task, state.taskCompletion) &&
+      (state.label === "all" || task.label === state.label)
   );
   const counts = getTaskPriorityFilterCounts(countableTasks);
 
   els.taskPriorityFilters.querySelectorAll(".task-priority-filter").forEach((button) => {
     const filter = normalizeTaskPriorityFilter(button.dataset.priorityFilter);
     const active = filter === state.taskPriority;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+    button.querySelector(".task-filter-count").textContent = counts[filter] ?? 0;
+  });
+}
+
+
+function renderTaskCompletionFilters() {
+  const countableTasks = state.tasks.filter(
+    (task) =>
+      task.status === "active" &&
+      matchesTaskWindow(task, state.taskWindow) &&
+      matchesTaskPriorityFilter(task, state.taskPriority) &&
+      (state.label === "all" || task.label === state.label)
+  );
+  const counts = getTaskCompletionFilterCounts(countableTasks);
+
+  els.taskCompletionFilters.querySelectorAll(".task-completion-filter").forEach((button) => {
+    const filter = normalizeTaskCompletionFilter(button.dataset.completionFilter);
+    const active = filter === state.taskCompletion;
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", String(active));
     button.querySelector(".task-filter-count").textContent = counts[filter] ?? 0;
@@ -940,6 +983,7 @@ function focusCleanupSpotlight() {
   state.noteColor = "all";
   state.taskWindow = "all";
   state.taskPriority = "all";
+  state.taskCompletion = "all";
   state.query = spotlight.query;
   els.searchInput.value = spotlight.query;
   syncNav();
@@ -973,6 +1017,7 @@ function focusNextTaskWindow() {
   state.label = "all";
   state.query = "";
   state.taskPriority = "all";
+  state.taskCompletion = "all";
   state.taskWindow = highlight.window === "unscheduled" ? "unscheduled" : highlight.window === "all" ? "all" : highlight.window;
   els.searchInput.value = "";
   syncNav();
@@ -1549,6 +1594,9 @@ function jumpToSource(source) {
   state.view = source.type === "task" ? "tasks" : "active";
   state.label = "all";
   state.noteColor = "all";
+  state.taskWindow = "all";
+  state.taskPriority = "all";
+  state.taskCompletion = "all";
   state.query = source.title || "";
   els.searchInput.value = state.query;
   document.querySelectorAll(".chip").forEach((chip) => chip.classList.toggle("active", chip.dataset.label === "all"));
@@ -1816,6 +1864,8 @@ function renderTask(task) {
   const labelShortcutRow = node.querySelector(".task-label-shortcuts");
 
   checkButton.hidden = state.view !== "tasks";
+  checkButton.setAttribute("aria-label", task.completed ? "Reopen task" : "Complete task");
+  checkButton.title = task.completed ? "Reopen task" : "Complete task";
   dueShortcutRow.hidden = state.view !== "tasks" || task.completed;
   priorityShortcutRow.hidden = state.view !== "tasks" || task.completed;
   labelShortcutRow.hidden = state.view !== "tasks" || task.completed;
@@ -2950,6 +3000,14 @@ document.querySelectorAll(".task-filter").forEach((button) => {
 document.querySelectorAll(".task-priority-filter").forEach((button) => {
   button.addEventListener("click", () => {
     state.taskPriority = normalizeTaskPriorityFilter(button.dataset.priorityFilter);
+    saveViewPreferences();
+    render();
+  });
+});
+
+document.querySelectorAll(".task-completion-filter").forEach((button) => {
+  button.addEventListener("click", () => {
+    state.taskCompletion = normalizeTaskCompletionFilter(button.dataset.completionFilter);
     saveViewPreferences();
     render();
   });

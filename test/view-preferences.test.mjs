@@ -9,6 +9,7 @@ test("view preferences preserve valid workspace choices", () => {
       label: "work",
       taskWindow: "overdue",
       taskPriority: "high",
+      taskCompletion: "done",
       noteColor: "mint",
       compact: true,
       theme: "night"
@@ -18,6 +19,7 @@ test("view preferences preserve valid workspace choices", () => {
       label: "work",
       taskWindow: "overdue",
       taskPriority: "high",
+      taskCompletion: "done",
       noteColor: "mint",
       compact: true,
       theme: "night"
@@ -32,6 +34,7 @@ test("view preferences fall back from unknown values", () => {
       label: "errands",
       taskWindow: "later",
       taskPriority: "urgent",
+      taskCompletion: "finished",
       noteColor: "purple",
       compact: "yes",
       theme: "blue"
@@ -41,6 +44,7 @@ test("view preferences fall back from unknown values", () => {
       label: "all",
       taskWindow: "all",
       taskPriority: "all",
+      taskCompletion: "all",
       noteColor: "all",
       compact: false,
       theme: "morning"
@@ -54,6 +58,7 @@ test("view preferences parse malformed storage safely", () => {
     label: "all",
     taskWindow: "all",
     taskPriority: "all",
+    taskCompletion: "all",
     noteColor: "all",
     compact: false,
     theme: "morning"
@@ -67,6 +72,7 @@ test("view preferences build from app state", () => {
       label: "personal",
       taskWindow: "today",
       taskPriority: "low",
+      taskCompletion: "open",
       noteColor: "rose",
       compact: true,
       theme: "night"
@@ -76,6 +82,7 @@ test("view preferences build from app state", () => {
       label: "personal",
       taskWindow: "today",
       taskPriority: "low",
+      taskCompletion: "open",
       noteColor: "rose",
       compact: true,
       theme: "night"

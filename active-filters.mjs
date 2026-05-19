@@ -21,6 +21,12 @@ const TASK_PRIORITIES = {
   low: "Low priority"
 };
 
+const TASK_COMPLETIONS = {
+  all: "All status",
+  open: "Open tasks",
+  done: "Done tasks"
+};
+
 const NOTE_COLORS = {
   all: "All colors",
   sun: "Sun notes",
@@ -35,6 +41,7 @@ export function getActiveFilterSummary(filters = {}) {
   const label = filters.label || "all";
   const taskWindow = filters.taskWindow || "all";
   const taskPriority = filters.taskPriority || "all";
+  const taskCompletion = filters.taskCompletion || "all";
   const noteColor = filters.noteColor || "all";
   const query = String(filters.query || "").trim();
 
@@ -48,6 +55,10 @@ export function getActiveFilterSummary(filters = {}) {
 
   if (filters.view === "tasks" && taskPriority !== "all") {
     chips.push({ key: "taskPriority", label: TASK_PRIORITIES[taskPriority] || titleCase(taskPriority) });
+  }
+
+  if (filters.view === "tasks" && taskCompletion !== "all") {
+    chips.push({ key: "taskCompletion", label: TASK_COMPLETIONS[taskCompletion] || titleCase(taskCompletion) });
   }
 
   if (filters.view === "active" && noteColor !== "all") {

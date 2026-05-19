@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-task-status-filters",
+    title: "Task Status Filters",
+    bullets: [
+      "Tasks view now has compact All, Open, and Done status chips with live counts.",
+      "Status filtering works alongside date, priority, label, and search filters.",
+      "Keeply remembers your chosen task status filter on this device for faster mobile review."
+    ]
+  },
+  {
     id: "2026-05-19-composer-label-chips",
     title: "Composer Label Chips",
     bullets: [

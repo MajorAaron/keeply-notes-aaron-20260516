@@ -396,7 +396,8 @@ h1 {
 
 .note-color-filters,
 .task-filters,
-.task-priority-filters {
+.task-priority-filters,
+.task-completion-filters {
   display: flex;
   gap: 8px;
   margin: 10px -22px 0;
@@ -407,13 +408,15 @@ h1 {
 
 .note-color-filters::-webkit-scrollbar,
 .task-filters::-webkit-scrollbar,
-.task-priority-filters::-webkit-scrollbar {
+.task-priority-filters::-webkit-scrollbar,
+.task-completion-filters::-webkit-scrollbar {
   display: none;
 }
 
 .note-color-filter,
 .task-filter,
-.task-priority-filter {
+.task-priority-filter,
+.task-completion-filter {
   display: inline-flex;
   flex: 0 0 auto;
   gap: 8px;
@@ -430,7 +433,8 @@ h1 {
 
 .note-color-filter.active,
 .task-filter.active,
-.task-priority-filter.active {
+.task-priority-filter.active,
+.task-completion-filter.active {
   background: var(--ink);
   color: white;
 }
@@ -449,7 +453,8 @@ h1 {
 
 .note-color-filter.active .task-filter-count,
 .task-filter.active .task-filter-count,
-.task-priority-filter.active .task-filter-count {
+.task-priority-filter.active .task-filter-count,
+.task-completion-filter.active .task-filter-count {
   background: rgba(255, 255, 255, 0.18);
 }
 
@@ -2459,7 +2464,8 @@ time {
   }
 
   .task-filters,
-  .task-priority-filters {
+  .task-priority-filters,
+  .task-completion-filters {
     margin-right: -14px;
     margin-left: -14px;
     padding-right: 14px;

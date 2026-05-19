@@ -140,6 +140,21 @@
           </button>
         </nav>
 
+        <nav class="task-completion-filters" id="taskCompletionFilters" aria-label="Task completion filters" hidden>
+          <button class="task-completion-filter active" type="button" data-completion-filter="all" aria-pressed="true">
+            <span>All status</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+          <button class="task-completion-filter" type="button" data-completion-filter="open" aria-pressed="false">
+            <span>Open</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+          <button class="task-completion-filter" type="button" data-completion-filter="done" aria-pressed="false">
+            <span>Done</span>
+            <strong class="task-filter-count">0</strong>
+          </button>
+        </nav>
+
         <section class="filter-summary" id="filterSummary" aria-label="Active filters" hidden>
           <div class="filter-summary-chips" id="filterSummaryChips"></div>
           <button class="filter-clear-button" id="filterClearButton" type="button">Clear filters</button>

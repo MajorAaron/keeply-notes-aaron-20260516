@@ -5,10 +5,10 @@ function hasText(value) {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-export function hasRecoverableEmptyStateFilters({ view = "active", label = "all", taskWindow = "all", taskPriority = "all", noteColor = "all", query = "" } = {}) {
+export function hasRecoverableEmptyStateFilters({ view = "active", label = "all", taskWindow = "all", taskPriority = "all", taskCompletion = "all", noteColor = "all", query = "" } = {}) {
   if (label !== "all" || hasText(query)) return true;
   if (view === "active" && noteColor !== "all") return true;
-  if (view === "tasks" && (taskWindow !== "all" || taskPriority !== "all")) return true;
+  if (view === "tasks" && (taskWindow !== "all" || taskPriority !== "all" || taskCompletion !== "all")) return true;
   return false;
 }
 
