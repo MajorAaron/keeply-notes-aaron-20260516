@@ -797,3 +797,20 @@
 - Secret scan of changed app/style/test/metadata/package/helper files found no committed ANTHROPIC_API_KEY, long sk- key, secret assignments, token assignments, or API key assignments.
 - Git status: feature commit 1d7f242 (Add note checklist progress pills) was pushed to origin main; unrelated untracked backups/ was left untouched.
 - Netlify production deploy succeeded with Netlify CLI. Feature deploy 6a0ba910c69e7a4f03f888df is live at https://keeply-notes-aaron-20260516.netlify.app and deploy permalink is https://6a0ba910c69e7a4f03f888df--keeply-notes-aaron-20260516.netlify.app
+
+
+## 2026-05-18 19:06:13 MDT
+
+- Added Task Due Hints for clearer mobile task capture.
+- The task composer now shows a plain-language due-date hint under the date picker, updating for no date, today, tomorrow, overdue dates, and upcoming dates when presets or manual date changes are used.
+- Added `getTaskComposerDueHint` to `task-composer-presets.mjs` and expanded `test/task-composer-presets.test.mjs` coverage for relative, overdue, far-future, and invalid dates.
+- Updated What's New metadata with latest id `2026-05-18-task-due-hints`, title `Task Due Hints`, and 3 user-facing bullets.
+- UI/code areas touched: task composer markup in `index.html`, due-hint rendering in `app.js`, task composer hint styling in `styles.css`, release metadata, and task composer preset helper/tests. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local date copy only.
+- Verification: full `npm test` passed with 156 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Task Due Hints` What's New popup, task composer `No date selected`, preset-driven `Due today` / `Due tomorrow`, manual overdue `Overdue by 1 day`, no document-level horizontal overflow, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the due-date hint visible and readable with no obvious clipping, overlapping controls, or horizontal overflow in the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Task Due Hints` What's New popup, and a production console smoke test confirmed the task composer `Due tomorrow` hint/preset state with no horizontal overflow and no browser console errors.
+- Secret scan of added lines in changed app/style/HTML/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `c74804a` (`Add task due hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0bb76aa94d75717ddb78a8` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0bb76aa94d75717ddb78a8--keeply-notes-aaron-20260516.netlify.app`.
