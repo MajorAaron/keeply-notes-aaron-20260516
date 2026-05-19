@@ -70,3 +70,21 @@ test("buildTaskCaptureFields returns an empty title for blank drafts", () => {
   assert.equal(task.dueAt, "");
   assert.equal(task.usedHints, false);
 });
+
+test("buildTaskCaptureFields applies next week title hints", () => {
+  const task = buildTaskCaptureFields(
+    {
+      title: "Prep board update next week @work",
+      details: "",
+      label: "ideas",
+      priority: "normal",
+      dueAt: ""
+    },
+    { today: "2026-05-18" }
+  );
+
+  assert.equal(task.title, "Prep board update");
+  assert.equal(task.label, "work");
+  assert.equal(task.dueAt, "2026-05-25");
+  assert.equal(task.usedHints, true);
+});

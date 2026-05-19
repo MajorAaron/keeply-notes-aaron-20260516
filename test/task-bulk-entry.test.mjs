@@ -82,3 +82,12 @@ test("bulk task hints override shared metadata per pasted line", () => {
   assert.equal(tasks[1].priority, "normal");
   assert.equal(tasks[1].dueAt, "2026-05-20");
 });
+
+test("parseBulkTaskLine extracts next week scheduling hints", () => {
+  assert.deepEqual(parseBulkTaskLine("Draft launch recap next week #normal @work", { today: "2026-05-18" }), {
+    title: "Draft launch recap",
+    dueAt: "2026-05-25",
+    priority: "normal",
+    label: "work"
+  });
+});

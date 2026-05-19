@@ -7,17 +7,18 @@ const baseDate = new Date("2026-05-17T12:00:00");
 test("task due shortcuts produce stable date input values", () => {
   assert.equal(getTaskDueShortcutDate("today", baseDate), "2026-05-17");
   assert.equal(getTaskDueShortcutDate("tomorrow", baseDate), "2026-05-18");
+  assert.equal(getTaskDueShortcutDate("next-week", baseDate), "2026-05-24");
   assert.equal(getTaskDueShortcutDate("clear", baseDate), "");
-  assert.equal(getTaskDueShortcutDate("next-week", baseDate), null);
+  assert.equal(getTaskDueShortcutDate("later", baseDate), null);
 });
 
 test("visible due shortcuts skip the task's current due state", () => {
   assert.deepEqual(
     getVisibleTaskDueShortcuts({ dueAt: "2026-05-17" }, baseDate).map((shortcut) => shortcut.key),
-    ["tomorrow", "clear"]
+    ["tomorrow", "next-week", "clear"]
   );
   assert.deepEqual(
     getVisibleTaskDueShortcuts({ dueAt: "" }, baseDate).map((shortcut) => shortcut.key),
-    ["today", "tomorrow"]
+    ["today", "tomorrow", "next-week"]
   );
 });

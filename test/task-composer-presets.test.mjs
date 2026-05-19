@@ -5,7 +5,7 @@ import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate, getTaskComposerDueHi
 test("task composer due presets expose mobile-friendly choices", () => {
   assert.deepEqual(
     TASK_COMPOSER_DUE_PRESETS.map((preset) => preset.key),
-    ["today", "tomorrow", "none"]
+    ["today", "tomorrow", "next-week", "none"]
   );
 });
 
@@ -13,6 +13,7 @@ test("task composer due presets resolve relative dates", () => {
   const now = new Date("2026-05-17T12:00:00");
   assert.equal(getTaskComposerDueDate("today", now), "2026-05-17");
   assert.equal(getTaskComposerDueDate("tomorrow", now), "2026-05-18");
+  assert.equal(getTaskComposerDueDate("next-week", now), "2026-05-24");
   assert.equal(getTaskComposerDueDate("none", now), "");
 });
 
@@ -27,6 +28,7 @@ test("task composer due hint explains relative dates", () => {
   assert.equal(getTaskComposerDueHint("2026-05-17", now), "Due today");
   assert.equal(getTaskComposerDueHint("2026-05-18", now), "Due tomorrow");
   assert.equal(getTaskComposerDueHint("2026-05-21", now), "Due in 4 days");
+  assert.equal(getTaskComposerDueHint("2026-05-24", now), "Due in 7 days");
 });
 
 test("task composer due hint handles older and custom dates", () => {

@@ -1,6 +1,7 @@
 export const TASK_COMPOSER_DUE_PRESETS = [
   { key: "today", label: "Today" },
   { key: "tomorrow", label: "Tomorrow" },
+  { key: "next-week", label: "Next week" },
   { key: "none", label: "No date" }
 ];
 
@@ -9,6 +10,7 @@ const dayMs = 86400000;
 export function getTaskComposerDueDate(key, now = new Date()) {
   if (key === "today") return toDateInput(now);
   if (key === "tomorrow") return toDateInput(new Date(now.getTime() + dayMs));
+  if (key === "next-week") return toDateInput(new Date(now.getTime() + dayMs * 7));
   if (key === "none") return "";
   return null;
 }

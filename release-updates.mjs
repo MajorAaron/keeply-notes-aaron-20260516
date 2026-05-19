@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-next-week-scheduling",
+    title: "Next Week Scheduling",
+    bullets: [
+      "Task composer presets now include Next week for quick mobile planning beyond tomorrow.",
+      "Task cards show the same Next week shortcut when rescheduling open tasks.",
+      "Single and pasted task titles understand “next week” hints and keep the saved title clean."
+    ]
+  },
+  {
     id: "2026-05-19-navigation-badges",
     title: "Navigation Badges",
     bullets: [

@@ -24,8 +24,8 @@ export function parseBulkTaskLine(line, options = {}) {
   let label = "";
   const baseDate = getBaseDate(options);
 
-  title = title.replace(/\b(today|tomorrow)\b/gi, (match) => {
-    dueAt = dueAt || getRelativeDate(match.toLowerCase(), baseDate);
+  title = title.replace(/\b(next\s+week|today|tomorrow)\b/gi, (match) => {
+    dueAt = dueAt || getRelativeDate(match.toLowerCase().replace(/\s+/g, "-"), baseDate);
     return " ";
   });
 
@@ -111,6 +111,8 @@ function getRelativeDate(value, baseDate) {
   const date = new Date(baseDate);
   if (value === "tomorrow") {
     date.setDate(date.getDate() + 1);
+  } else if (value === "next-week") {
+    date.setDate(date.getDate() + 7);
   }
   return toDateInput(date);
 }
