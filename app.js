@@ -49,6 +49,7 @@ import { getSearchCaptureDraft } from "./search-capture.mjs";
 import { getQuickAddTarget } from "./quick-add-target.mjs";
 import { getSearchClearState } from "./search-clear.mjs";
 import { getSyncStatusView } from "./sync-status.mjs";
+import { getNavigationBadges } from "./navigation-badges.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -149,6 +150,7 @@ const state = {
 
 const els = {
   composer: document.querySelector("#composer"),
+  railButtons: document.querySelectorAll(".rail-button"),
   viewTitle: document.querySelector("#viewTitle"),
   syncStatusPill: document.querySelector("#syncStatusPill"),
   searchInput: document.querySelector("#searchInput"),
@@ -691,6 +693,26 @@ function render() {
   renderTaskTodayProgress();
   renderTaskBulkActions();
   renderQuickAddButton();
+  renderNavigationBadges();
+}
+
+function renderNavigationBadges() {
+  const badges = getNavigationBadges({ notes: state.notes, tasks: state.tasks });
+  els.railButtons.forEach((button) => {
+    const view = button.dataset.view;
+    const badge = badges[view];
+    const badgeElement = button.querySelector(".rail-badge");
+    const baseLabel = button.dataset.baseLabel || button.getAttribute("aria-label") || titleCase(view);
+    button.dataset.baseLabel = baseLabel;
+    if (!badge || !badgeElement) {
+      button.setAttribute("aria-label", baseLabel);
+      return;
+    }
+    badgeElement.hidden = !badge.visible;
+    badgeElement.textContent = badge.label;
+    badgeElement.setAttribute("aria-label", badge.ariaLabel);
+    button.setAttribute("aria-label", badge.visible ? `${baseLabel}, ${badge.ariaLabel}` : baseLabel);
+  });
 }
 
 function renderQuickAddButton() {

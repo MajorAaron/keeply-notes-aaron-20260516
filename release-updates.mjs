@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-navigation-badges",
+    title: "Navigation Badges",
+    bullets: [
+      "The side rail now shows compact counts for active notes, open tasks, Archive, and Trash.",
+      "Task badges focus on unfinished work so completed tasks do not inflate your mobile queue.",
+      "Navigation labels include the same counts for clearer screen-reader context."
+    ]
+  },
+  {
     id: "2026-05-19-sync-status-pill",
     title: "Sync Status Pill",
     bullets: [

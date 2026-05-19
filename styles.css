@@ -110,11 +110,42 @@ button {
 }
 
 .rail-button {
+  position: relative;
   width: 48px;
   height: 48px;
   border-radius: 18px;
   background: transparent;
   transition: background 160ms ease, transform 160ms ease;
+}
+
+.rail-badge {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 2px solid rgba(255, 250, 229, 0.95);
+  border-radius: 999px;
+  background: var(--rose);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  box-shadow: 0 8px 18px rgba(35, 36, 38, 0.18);
+}
+
+.rail-button.active .rail-badge {
+  background: var(--sun);
+  color: var(--ink);
+}
+
+body.night .rail-badge {
+  border-color: rgba(36, 32, 26, 0.95);
 }
 
 .rail-button.active {
