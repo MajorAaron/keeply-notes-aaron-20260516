@@ -971,3 +971,33 @@
 - Secret scan of added lines in changed app/index/style/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long standalone `sk-` key, secret assignment, token assignment, or API key assignment. A naive `sk-` regex matched CSS class substrings in `task-composer-priority-preset`, which was manually reviewed as a false positive.
 - Git status: feature commit `089bc36` (`Add task priority composer chips`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c44adcc01ec070efbc919` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c44adcc01ec070efbc919--keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-19 06:12:54 MDT
+
+- Added mobile-first Composer Label Chips for faster task/note capture without opening the label select menu.
+- Composer mode now shows Ideas, Work, Home, and Personal chips; the active chip stays highlighted and stays in sync with the label dropdown for quick one-tap relabeling.
+- Updated What's New metadata with latest id `2026-05-19-composer-label-chips`, title `Composer Label Chips`, and concise user-facing bullets.
+- UI/code areas touched: composer markup in `index.html`, label chip rendering/wiring in `app.js`, responsive chip styling in `styles.css`, release metadata, package test wiring, and the new `composer-labels.mjs` helper plus `test/composer-labels.test.mjs`.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local composer UI behavior only.
+- Verification: full `npm test` passed with 181 tests; `git diff --check` passed during the run.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/`. Browser verification confirmed the `Composer Label Chips` What's New popup, task-mode label chips, chip-driven label dropdown updates, no browser console errors, and no obvious horizontal overflow.
+- Mobile/layout verification: browser screenshot review found the 2-column mobile chip grid readable with no obvious overlap, clipping, or horizontal overflow around the composer at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded at `https://6a0c52fa36e688007e88ee0c--keeply-notes-aaron-20260516.netlify.app/`, showing the latest production app after deployment.
+- Secret scan of the final diff found no committed `ANTHROPIC_API_KEY`, long `sk-` key, `api_key`, secret assignment, or token assignment patterns.
+- Git status: feature commit `9bcf439` (`Add composer label chips`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded. Feature deploy permalink is `https://6a0c52fa36e688007e88ee0c--keeply-notes-aaron-20260516.netlify.app/`; production site is `https://keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-19 07:12:35 MDT
+
+- Added mobile-first Task Status Filters to the Tasks view: compact All status, Open, and Done chips with live counts.
+- Status filtering now composes with task date windows, priority filters, labels, and search; the active filter summary/empty-state recovery includes the new completion filter.
+- Persisted the selected task status filter in local view preferences, and completed tasks now expose a clearer `Reopen task` control label when visible through the Done filter.
+- Updated What's New metadata with latest id `2026-05-19-task-status-filters`, title `Task Status Filters`, and 3 user-facing bullets.
+- UI/code areas touched: task filter markup in `index.html`, task filtering/rendering in `app.js`, responsive chip styling in `styles.css`, release metadata, active-filter and empty-state helpers, view preferences, package test wiring, and the new `task-completion-filters.mjs` helper plus `test/task-completion-filters.test.mjs`.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task filtering behavior only.
+- Verification: full `npm test` passed; `git diff --check` passed; secret scan of the final diff found no committed `ANTHROPIC_API_KEY`, long `sk-` key, `api_key`, secret assignment, or token assignment patterns.
+- Local smoke verification: existing local server at `http://127.0.0.1:4175/` loaded successfully. Browser verification confirmed the `Task Status Filters` What's New popup, dismissal, Tasks view All/Open/Done chips with counts, Done filtering, active filter chip, `Reopen task` accessibility labels for completed tasks, no browser console errors, and no obvious horizontal overflow.
+- Mobile/layout verification: browser screenshot review found the date, priority, and completion filter rows readable with no obvious overlap, clipping, or horizontal page overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded at `https://6a0c61a49806522b5f3eb911--keeply-notes-aaron-20260516.netlify.app/`, showed the `Task Status Filters` What's New popup, exposed the new completion chips in Tasks, and browser console reported no errors.
+- Git status: feature commit `410927d` (`Add task status filters`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c61a49806522b5f3eb911` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c61a49806522b5f3eb911--keeply-notes-aaron-20260516.netlify.app`.
