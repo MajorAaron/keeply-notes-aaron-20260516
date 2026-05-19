@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-single-task-hints",
+    title: "Single Task Hints",
+    bullets: [
+      "Quick task titles now understand hints like tomorrow, !high, and @home.",
+      "Keeply applies the hinted due date, priority, or label while saving a clean task title.",
+      "Detail-first task capture can use the same hints when the first detail line becomes the title."
+    ]
+  },
+  {
     id: "2026-05-18-detail-first-task-titles",
     title: "Detail-First Task Titles",
     bullets: [
