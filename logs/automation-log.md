@@ -831,3 +831,19 @@
 - Secret scan of added lines in changed app/style/HTML/metadata/helper/test files found no committed ANTHROPIC_API_KEY, long sk- key, secret assignment, token assignment, or API key assignment.
 - Git status: feature commit 8ae1d03 (Add draft resume card) was pushed to origin main; unrelated untracked backups/ was left untouched.
 - Netlify production deploy succeeded with npx netlify deploy --prod --dir . --no-build --json. Feature deploy 6a0bc576566d098d5227d3d0 is live at https://keeply-notes-aaron-20260516.netlify.app and deploy permalink is https://6a0bc576566d098d5227d3d0--keeply-notes-aaron-20260516.netlify.app
+
+## 2026-05-18 21:06:57 MDT
+
+- Added detail-first task titles for faster mobile task capture when the title box is skipped.
+- Task mode now derives a compact title from the first meaningful details line for single-detail drafts, cleaning bullet, checklist, and numbered prefixes; multi-line pasted lists still use the existing bulk-task flow.
+- Added `task-title.mjs` and `test/task-title.test.mjs`; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-detail-first-task-titles`, title `Detail-First Task Titles`, and 3 user-facing bullets.
+- UI/code areas touched: task creation in `app.js`, release metadata, package test wiring, and the new task-title helper/test files. No CSS changes, Netlify functions, AI endpoint changes, or new dependencies were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task-title cleanup only.
+- Verification: full `npm test` passed with 163 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Detail-First Task Titles` What's New popup, a details-only checklist task saving as `Refill printer paper`, no document-level horizontal overflow, and no browser console errors. A first multi-line trial correctly exercised the pre-existing bulk-task paste path instead of the single-task title derivation.
+- Mobile/layout verification: browser screenshot review found no obvious overlap, clipping, or horizontal overflow around the task composer and task cards at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Detail-First Task Titles` What's New popup, and a production console smoke test confirmed a details-only checklist task saved as `Refill travel toiletries`, with no horizontal overflow and no browser console errors.
+- Secret scan of changed app/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `7fc0ec6` (`Add detail-first task titles`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0bd3a78623a0abc2d2e9f9` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0bd3a78623a0abc2d2e9f9--keeply-notes-aaron-20260516.netlify.app`.
