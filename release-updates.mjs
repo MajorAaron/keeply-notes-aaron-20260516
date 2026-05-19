@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-note-checklist-progress",
+    title: "Note Checklist Progress",
+    bullets: [
+      "Notes with markdown checkboxes now show a compact progress pill on each card.",
+      "The pill counts checked and unchecked rows so mobile note lists are easier to scan.",
+      "Checklist-free notes stay unchanged with no extra metadata."
+    ]
+  },
+  {
     id: "2026-05-18-context-quick-add",
     title: "Context Quick Add",
     bullets: [

@@ -15,6 +15,7 @@ import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
 import { insertChecklistMarker } from "./composer-checklist.mjs";
 import { getTaskChecklistMeta } from "./task-checklist-meta.mjs";
+import { getNoteChecklistMeta } from "./note-checklist-meta.mjs";
 import { getNoteCaptureTitle } from "./note-title.mjs";
 import { formatLabelCount, getLabelCounts } from "./label-counts.mjs";
 import { buildViewPreferences, parseViewPreferences } from "./view-preferences.mjs";
@@ -1502,6 +1503,11 @@ function renderNote(note) {
   const readingMetaElement = node.querySelector(".note-reading-meta");
   readingMetaElement.textContent = readingMeta.label;
   readingMetaElement.setAttribute("aria-label", readingMeta.ariaLabel);
+  const checklistMeta = getNoteChecklistMeta(noteBody);
+  const checklistMetaElement = node.querySelector(".note-checklist-meta");
+  checklistMetaElement.hidden = !checklistMeta.available;
+  checklistMetaElement.textContent = checklistMeta.label;
+  checklistMetaElement.setAttribute("aria-label", checklistMeta.ariaLabel);
 
   const image = normalizeNoteImage(note.image);
   const figure = node.querySelector(".note-image");

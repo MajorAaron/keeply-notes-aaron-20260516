@@ -1664,7 +1664,8 @@ select {
   min-width: 0;
 }
 
-.note-reading-meta {
+.note-reading-meta,
+.note-checklist-meta {
   display: inline-flex;
   align-items: center;
   min-height: 26px;
@@ -1677,7 +1678,14 @@ select {
   white-space: nowrap;
 }
 
-.note-card[data-color="ink"] .note-reading-meta {
+.note-checklist-meta {
+  background: rgba(130, 215, 162, 0.24);
+  color: #315d40;
+  letter-spacing: 0.01em;
+}
+
+.note-card[data-color="ink"] .note-reading-meta,
+.note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.72);
 }
