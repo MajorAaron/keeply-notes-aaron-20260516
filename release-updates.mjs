@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-trash-restore-actions",
+    title: "Trash Restore Actions",
+    bullets: [
+      "Archive and Trash cards now show a clear Restore button when an item can be brought back.",
+      "Restoring from Trash returns notes and tasks straight to active lists instead of moving them to Archive first.",
+      "Archive, restore, trash, and delete actions now have clearer labels for mobile and assistive tech."
+    ]
+  },
+  {
     id: "2026-05-18-single-task-hints",
     title: "Single Task Hints",
     bullets: [

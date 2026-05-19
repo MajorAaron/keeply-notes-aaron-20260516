@@ -23,6 +23,7 @@ import { buildViewPreferences, parseViewPreferences } from "./view-preferences.m
 import { getSearchHighlightTerms, splitHighlightedText } from "./search-highlights.mjs";
 import { getActiveFilterSummary } from "./active-filters.mjs";
 import { buildNoteSharePayload, buildTaskSharePayload } from "./item-share.mjs";
+import { getArchiveRestoreAction, getTrashAction } from "./item-status-actions.mjs";
 import { duplicateNote, duplicateTask } from "./duplicate-items.mjs";
 import { removeCopiedItem } from "./duplicate-undo.mjs";
 import { buildNoteEditPatch, buildTaskEditPatch } from "./edit-items.mjs";
@@ -1590,16 +1591,23 @@ function renderNote(note) {
       return button;
     })
   );
-  archiveButton.setAttribute("aria-label", state.view === "archive" ? "Restore note" : "Archive note");
-  trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move note to trash");
+  const archiveAction = getArchiveRestoreAction({ view: state.view, type: "note" });
+  const trashAction = getTrashAction({ view: state.view, type: "note" });
+  archiveButton.setAttribute("aria-label", archiveAction.ariaLabel);
+  archiveButton.title = archiveAction.title;
+  archiveButton.classList.toggle("restore-action", archiveAction.action === "restore");
+  if (archiveAction.buttonLabel) {
+    archiveButton.textContent = archiveAction.buttonLabel;
+  }
+  trashButton.setAttribute("aria-label", trashAction.ariaLabel);
+  trashButton.title = trashAction.title;
 
   pinButton.addEventListener("click", () => toggleNotePinWithUndo(note));
   editButton.addEventListener("click", () => startNoteEdit(note));
   shareButton.addEventListener("click", () => shareItem(buildNoteSharePayload(note), "Note copied"));
   duplicateButton.addEventListener("click", () => duplicateNoteCard(note));
   archiveButton.addEventListener("click", () => {
-    const status = state.view === "archive" ? "active" : "archive";
-    updateNoteWithUndo(note, { status, pinned: false }, status === "archive" ? "Archived" : "Restored");
+    updateNoteWithUndo(note, { status: archiveAction.status, pinned: false }, archiveAction.message);
   });
   trashButton.addEventListener("click", () => {
     if (state.view === "trash") {
@@ -1778,16 +1786,23 @@ function renderTask(task) {
       return button;
     })
   );
-  archiveButton.setAttribute("aria-label", state.view === "archive" ? "Restore task" : "Archive task");
-  trashButton.setAttribute("aria-label", state.view === "trash" ? "Delete forever" : "Move task to trash");
+  const archiveAction = getArchiveRestoreAction({ view: state.view, type: "task" });
+  const trashAction = getTrashAction({ view: state.view, type: "task" });
+  archiveButton.setAttribute("aria-label", archiveAction.ariaLabel);
+  archiveButton.title = archiveAction.title;
+  archiveButton.classList.toggle("restore-action", archiveAction.action === "restore");
+  if (archiveAction.buttonLabel) {
+    archiveButton.textContent = archiveAction.buttonLabel;
+  }
+  trashButton.setAttribute("aria-label", trashAction.ariaLabel);
+  trashButton.title = trashAction.title;
 
   checkButton.addEventListener("click", () => toggleTaskCompletionWithUndo(task));
   editButton.addEventListener("click", () => startTaskEdit(task));
   shareButton.addEventListener("click", () => shareItem(buildTaskSharePayload(task), "Task copied"));
   duplicateButton.addEventListener("click", () => duplicateTaskCard(task));
   archiveButton.addEventListener("click", () => {
-    const status = state.view === "archive" ? "active" : "archive";
-    updateTaskWithUndo(task, { status }, status === "archive" ? "Archived" : "Restored");
+    updateTaskWithUndo(task, { status: archiveAction.status }, archiveAction.message);
   });
   trashButton.addEventListener("click", () => {
     if (state.view === "trash") {
