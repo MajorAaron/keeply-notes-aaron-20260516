@@ -1,4 +1,20 @@
 
+## 2026-05-19 01:07:20 MDT
+
+- Added a mobile-first Search Clear Shortcut for faster recovery from note/task searches.
+- Search rows now show a compact Clear button as soon as a query is typed; tapping it clears only the query, keeps active label/color/task filters in place, returns focus to search, and hides the shortcut again.
+- Added search-clear.mjs and test/search-clear.test.mjs; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id 2026-05-19-search-clear-shortcut, title Search Clear Shortcut, and 3 user-facing bullets.
+- UI/code areas touched: search row markup/accessibility in index.html, search-clear rendering/click wiring in app.js, mobile pill styling in styles.css, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local UI behavior only.
+- Verification: full npm test passed with 176 tests across the existing suite plus the new search-clear helper tests; git diff --check passed.
+- Local smoke verification: the local Node server on 127.0.0.1:4175 returned HTTP 200. Browser verification confirmed the Search Clear Shortcut What's New popup, visible Clear note search for market button after typing, one-tap query clearing, restored search input label, and no browser console errors.
+- Mobile/layout verification: browser screenshot review with an active query found the Clear button readable with no obvious overlap, clipping, or horizontal overflow around the search row and layout-toggle button at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the Search Clear Shortcut What's New popup, and production browser smoke confirmed the Clear button appears for market, clears the query, hides afterward, and reports no browser console errors.
+- Secret scan of added lines in changed app/index/style/package/metadata/helper/test files found no committed ANTHROPIC_API_KEY, long sk- key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit e0f0491 (Add search clear shortcut) was pushed to origin main; unrelated untracked backups/ was left untouched.
+- Netlify production deploy succeeded with the existing production no-build command. Feature deploy 6a0c0bfecbcd4922a28473d7 is live at https://keeply-notes-aaron-20260516.netlify.app; deploy permalink is https://6a0c0bfecbcd4922a28473d7--keeply-notes-aaron-20260516.netlify.app.
+
 ## 2026-05-19 00:05:50 MDT
 
 - Added Note Swipe Triage for safer mobile note cleanup.
