@@ -1001,3 +1001,18 @@
 - Production verification: deploy permalink loaded at `https://6a0c61a49806522b5f3eb911--keeply-notes-aaron-20260516.netlify.app/`, showed the `Task Status Filters` What's New popup, exposed the new completion chips in Tasks, and browser console reported no errors.
 - Git status: feature commit `410927d` (`Add task status filters`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c61a49806522b5f3eb911` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c61a49806522b5f3eb911--keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-19 08:06:11 MDT
+
+- Added mobile-first Next Week Note Follow-Ups so active notes can become dated follow-up tasks for the following week without opening the composer.
+- Note cards now show `Task today`, `Task tomorrow`, and `Task next week` follow-up shortcuts; each created task keeps the note title/body/label/source note and gets the selected due date.
+- Updated follow-up confirmation copy for all shortcut timings while preserving the existing Undo flow.
+- Updated What's New metadata with latest id `2026-05-19-note-next-week-followups`, title `Next Week Note Follow-Ups`, and 3 user-facing bullets.
+- UI/code areas touched: `note-followups.mjs`, note-card follow-up rendering in `app.js`, mobile follow-up grid styling in `styles.css`, release metadata, and `test/note-followups.test.mjs`.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local note-to-task scheduling behavior only.
+- Verification: full `npm test` passed with 182 passing tests; `git diff --check` passed; secret scan of added lines found no committed `ANTHROPIC_API_KEY`, long `sk-` key, API key, secret, or token assignment patterns.
+- Local smoke verification: local server on port 4176 served `http://127.0.0.1:4176/` with HTTP 200. Browser verification confirmed the `Next Week Note Follow-Ups` What's New popup, dismissal persistence to `keeply-last-seen-update`, visible `Task next week` note buttons, next-week task creation with a due date 7 days out, no browser console errors, and no document horizontal overflow.
+- Mobile/layout verification: browser screenshot review found the new follow-up button visible/readable with no obvious overlap, clipping, or horizontal overflow; at the available responsive viewport the flex row wrapped the third button cleanly on wider cards, while the mobile media rule uses a compact three-column grid. Exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Next Week Note Follow-Ups` What's New popup after clearing the local last-seen key, exposed `Task today`/`Task tomorrow`/`Task next week` follow-up buttons, reported no horizontal overflow, and browser console reported no errors.
+- Git status: feature commit `1584fbd` (`Add next week note follow-ups`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c6e37a881e759dcfd7691` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c6e37a881e759dcfd7691--keeply-notes-aaron-20260516.netlify.app`.
