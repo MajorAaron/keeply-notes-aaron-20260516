@@ -864,3 +864,19 @@
 - Secret scan of added lines in changed app/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
 - Git status: feature commit `e36d7fd` (`Add single task capture hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0be1acf9f01ed16106ed29` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0be1acf9f01ed16106ed29--keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-18 23:07:04 MDT
+
+- Added clear Trash/Archive restore actions for safer mobile cleanup recovery.
+- Cards in Archive and Trash now show a visible `Restore` button, and Trash restore returns notes/tasks directly to active lists instead of moving them to Archive first.
+- Added `item-status-actions.mjs` and `test/item-status-actions.test.mjs`; wired the helper into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-18-trash-restore-actions`, title `Trash Restore Actions`, and 3 user-facing bullets.
+- UI/code areas touched: note/task card action wiring in `app.js`, restore button styling in `styles.css`, release metadata, package test wiring, and the new status-action helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local UI/status handling only.
+- Verification: full `npm test` passed with 170 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Trash Restore Actions` What's New popup, visible Trash-view `Restore note` buttons, restoring a trash note back to active status, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the Trash-view Restore buttons readable with no obvious overlap, clipping, or horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded and showed the `Trash Restore Actions` What's New popup. A production dynamic-import smoke check confirmed Trash/Archive restore action metadata resolves to active status and delete-forever labels remain scoped to Trash; browser console reported no errors.
+- Secret scan of changed app/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit `716a847` (`Add trash restore actions`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0befd494a2e7f29ec6d7fd` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0befd494a2e7f29ec6d7fd--keeply-notes-aaron-20260516.netlify.app`.
