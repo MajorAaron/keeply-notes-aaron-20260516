@@ -10,6 +10,7 @@ import { getNoteLabelShortcutValue, getVisibleNoteLabelShortcuts } from "./note-
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
 import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate, getTaskComposerDueHint } from "./task-composer-presets.mjs";
+import { TASK_COMPOSER_PRIORITY_PRESETS, getTaskComposerPriorityLabel, normalizeTaskComposerPriority } from "./task-composer-priorities.mjs";
 import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 import { buildComposerDraft, getComposerDraftResume, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
@@ -169,6 +170,7 @@ const els = {
   priorityInput: document.querySelector("#priorityInput"),
   taskFields: document.querySelector("#taskFields"),
   taskComposerPresets: document.querySelector("#taskComposerPresets"),
+  taskComposerPriorities: document.querySelector("#taskComposerPriorities"),
   composerDraftResume: document.querySelector("#composerDraftResume"),
   composerDraftKicker: document.querySelector("#composerDraftKicker"),
   composerDraftTitle: document.querySelector("#composerDraftTitle"),
@@ -2700,6 +2702,7 @@ function restoreComposerDraft() {
 
 function renderTaskComposerPresets() {
   const activeDue = els.dueInput.value;
+  const activePriority = normalizeTaskComposerPriority(els.priorityInput.value);
   els.dueInputHint.textContent = getTaskComposerDueHint(activeDue);
   els.taskComposerPresets.replaceChildren(
     ...TASK_COMPOSER_DUE_PRESETS.map((preset) => {
@@ -2715,12 +2718,32 @@ function renderTaskComposerPresets() {
       return button;
     })
   );
+  els.taskComposerPriorities.replaceChildren(
+    ...TASK_COMPOSER_PRIORITY_PRESETS.map((preset) => {
+      const button = document.createElement("button");
+      const active = preset.key === activePriority;
+      button.className = "task-composer-preset task-composer-priority-preset";
+      button.type = "button";
+      button.textContent = preset.label;
+      button.dataset.priority = preset.key;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+      button.setAttribute("aria-label", active ? getTaskComposerPriorityLabel(preset.key) : `Set ${preset.label} priority`);
+      return button;
+    })
+  );
 }
 
 function applyTaskComposerDuePreset(key) {
   const dueAt = getTaskComposerDueDate(key);
   if (dueAt === null) return;
   els.dueInput.value = dueAt;
+  renderTaskComposerPresets();
+  saveComposerDraft();
+}
+
+function applyTaskComposerPriorityPreset(key) {
+  els.priorityInput.value = normalizeTaskComposerPriority(key);
   renderTaskComposerPresets();
   saveComposerDraft();
 }
@@ -2955,8 +2978,14 @@ els.taskComposerPresets.addEventListener("click", (event) => {
   if (!button) return;
   applyTaskComposerDuePreset(button.dataset.preset);
 });
+els.taskComposerPriorities.addEventListener("click", (event) => {
+  const button = event.target.closest(".task-composer-priority-preset");
+  if (!button) return;
+  applyTaskComposerPriorityPreset(button.dataset.priority);
+});
 els.composerDraftDiscard.addEventListener("click", discardComposerDraft);
 els.dueInput.addEventListener("input", renderTaskComposerPresets);
+els.priorityInput.addEventListener("change", renderTaskComposerPresets);
 els.titleInput.addEventListener("input", saveComposerDraft);
 els.bodyInput.addEventListener("input", saveComposerDraft);
 els.labelInput.addEventListener("change", saveComposerDraft);

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-priority-composer-chips",
+    title: "Priority Composer Chips",
+    bullets: [
+      "Task mode now shows High, Normal, and Low priority chips right under the due presets.",
+      "The active priority stays highlighted as you tap chips or change the dropdown.",
+      "Quick priority capture is easier on mobile without opening the select menu."
+    ]
+  },
+  {
     id: "2026-05-19-next-week-scheduling",
     title: "Next Week Scheduling",
     bullets: [
