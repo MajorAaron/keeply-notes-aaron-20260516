@@ -10,6 +10,7 @@ const TASK_WINDOWS = {
   all: "All dates",
   overdue: "Overdue",
   today: "Today",
+  tomorrow: "Tomorrow",
   upcoming: "Upcoming",
   unscheduled: "No date"
 };

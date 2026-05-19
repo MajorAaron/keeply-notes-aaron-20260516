@@ -11,7 +11,7 @@ const DEFAULT_PREFERENCES = {
 
 const VALID_VIEWS = new Set(["active", "tasks", "archive", "trash"]);
 const VALID_LABELS = new Set(["all", "work", "home", "ideas", "personal"]);
-const VALID_TASK_WINDOWS = new Set(["all", "overdue", "today", "upcoming", "unscheduled"]);
+const VALID_TASK_WINDOWS = new Set(["all", "overdue", "today", "tomorrow", "upcoming", "unscheduled"]);
 const VALID_TASK_PRIORITIES = new Set(["all", "high", "normal", "low"]);
 const VALID_TASK_COMPLETIONS = new Set(["all", "open", "done"]);
 const VALID_NOTE_COLORS = new Set(["all", "sun", "mint", "sky", "rose", "ink"]);

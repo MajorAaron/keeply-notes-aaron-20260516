@@ -1,4 +1,4 @@
-export const TASK_WINDOWS = ["all", "overdue", "today", "upcoming", "unscheduled"];
+export const TASK_WINDOWS = ["all", "overdue", "today", "tomorrow", "upcoming", "unscheduled"];
 
 export function matchesTaskWindow(task, windowName, baseDate = new Date()) {
   if (!TASK_WINDOWS.includes(windowName) || windowName === "all") return true;
@@ -10,6 +10,7 @@ export function matchesTaskWindow(task, windowName, baseDate = new Date()) {
   if (!dueAt) return false;
   if (windowName === "overdue") return !task.completed && dueAt < today;
   if (windowName === "today") return dueAt === today;
+  if (windowName === "tomorrow") return dueAt === offsetDateInput(baseDate, 1);
   if (windowName === "upcoming") return dueAt > today;
 
   return true;
@@ -33,4 +34,10 @@ function toDateInput(date) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function offsetDateInput(date, days) {
+  const offset = new Date(date);
+  offset.setDate(offset.getDate() + days);
+  return toDateInput(offset);
 }

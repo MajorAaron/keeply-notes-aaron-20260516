@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-tomorrow-task-filter",
+    title: "Tomorrow Task Filter",
+    bullets: [
+      "Tasks view now has a dedicated Tomorrow date chip between Today and Upcoming.",
+      "Tomorrow counts update live and still combine with priority, status, label, and search filters.",
+      "Keeply remembers the Tomorrow filter on this device for faster next-day mobile planning."
+    ]
+  },
+  {
     id: "2026-05-19-note-next-week-followups",
     title: "Next Week Note Follow-Ups",
     bullets: [
