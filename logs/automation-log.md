@@ -814,3 +814,20 @@
 - Secret scan of added lines in changed app/style/HTML/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
 - Git status: feature commit `c74804a` (`Add task due hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0bb76aa94d75717ddb78a8` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0bb76aa94d75717ddb78a8--keeply-notes-aaron-20260516.netlify.app`.
+
+
+## 2026-05-18 20:06:14 MDT
+
+- Added a mobile-first Draft Resume Card for unsaved note/task composer drafts.
+- When Keeply restores a saved composer draft on load, the composer now shows a compact card with the draft type, title/body fallback, label, task priority/due-state, or attached-image context, plus a one-tap Discard action.
+- Added getComposerDraftResume to composer-draft.mjs and expanded test/composer-draft.test.mjs coverage for task summaries, body fallback titles, image context, and empty drafts.
+- Updated What's New metadata with latest id 2026-05-18-draft-resume-card, title Draft Resume Card, and 3 user-facing bullets.
+- UI/code areas touched: composer markup in index.html, restored-draft rendering/discard wiring in app.js, mobile-friendly card styling in styles.css, release metadata, and composer draft helper/tests. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local draft-resume UI only.
+- Verification: full npm test passed with 158 tests; git diff --check passed.
+- Local smoke verification: local server on port 4175 served Keeply with HTTP 200. Browser verification confirmed the Draft Resume Card What's New popup, a seeded restored task draft showing the resume card, restored task composer fields, Discard clearing the composer/localStorage draft, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the composer and new draft resume card readable with no obvious overlap, clipped text, or horizontal overflow in the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the Draft Resume Card What's New popup, and a production console smoke test confirmed latest release metadata plus a seeded restored task draft card with Add task state and no browser console errors.
+- Secret scan of added lines in changed app/style/HTML/metadata/helper/test files found no committed ANTHROPIC_API_KEY, long sk- key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit 8ae1d03 (Add draft resume card) was pushed to origin main; unrelated untracked backups/ was left untouched.
+- Netlify production deploy succeeded with npx netlify deploy --prod --dir . --no-build --json. Feature deploy 6a0bc576566d098d5227d3d0 is live at https://keeply-notes-aaron-20260516.netlify.app and deploy permalink is https://6a0bc576566d098d5227d3d0--keeply-notes-aaron-20260516.netlify.app
