@@ -780,3 +780,20 @@
 - Secret scan of changed app/style/test/metadata/package/helper files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignments, token assignments, or API key assignments.
 - Git status: feature commit `f037f4b` (`Add task checklist progress pills`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0b7f0fb59f1475736cac4f` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0b7f0fb59f1475736cac4f--keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-18 18:05:07 MDT
+
+- Added mobile-first Note Checklist Progress for markdown checkbox notes.
+- Note cards now show a compact 1/3 checked-style pill when note bodies contain markdown checklist rows, helping checklist-heavy notes scan faster on mobile.
+- Checklist-free notes stay unchanged with no extra metadata.
+- Added note-checklist-meta.mjs and test/note-checklist-meta.test.mjs; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id 2026-05-18-note-checklist-progress, title Note Checklist Progress, and 3 user-facing bullets.
+- UI/code areas touched: note card template in index.html, note rendering in app.js, mobile-friendly pill styling in styles.css, release metadata, package test wiring, and the new helper/test files.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local checklist metadata only.
+- Verification: full npm test passed with 154 tests; git diff --check passed.
+- Local smoke verification: the local server served Keeply with HTTP 200. Browser verification confirmed the Note Checklist Progress What's New popup, dismiss behavior, a note with checklist body showing 1/3 checked, no document-level horizontal overflow, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the new checklist progress pill visible and unclipped with no obvious overlap or horizontal overflow in the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the Note Checklist Progress What's New popup, and dynamic module smoke checks confirmed latest release metadata plus getNoteChecklistMeta on one checked and one unchecked item returning 1/2 checked; browser console reported no errors.
+- Secret scan of changed app/style/test/metadata/package/helper files found no committed ANTHROPIC_API_KEY, long sk- key, secret assignments, token assignments, or API key assignments.
+- Git status: feature commit 1d7f242 (Add note checklist progress pills) was pushed to origin main; unrelated untracked backups/ was left untouched.
+- Netlify production deploy succeeded with Netlify CLI. Feature deploy 6a0ba910c69e7a4f03f888df is live at https://keeply-notes-aaron-20260516.netlify.app and deploy permalink is https://6a0ba910c69e7a4f03f888df--keeply-notes-aaron-20260516.netlify.app
