@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-detail-first-task-titles",
+    title: "Detail-First Task Titles",
+    bullets: [
+      "Tasks saved without a typed title now use the first meaningful detail line as the title.",
+      "Bullet, checklist, and numbered prefixes are cleaned so quick mobile task capture stays readable.",
+      "Blank task drafts now focus the details box, matching where fast captures usually start."
+    ]
+  },
+  {
     id: "2026-05-18-draft-resume-card",
     title: "Draft Resume Card",
     bullets: [

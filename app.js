@@ -17,6 +17,7 @@ import { insertChecklistMarker } from "./composer-checklist.mjs";
 import { getTaskChecklistMeta } from "./task-checklist-meta.mjs";
 import { getNoteChecklistMeta } from "./note-checklist-meta.mjs";
 import { getNoteCaptureTitle } from "./note-title.mjs";
+import { getTaskCaptureTitle } from "./task-title.mjs";
 import { formatLabelCount, getLabelCounts } from "./label-counts.mjs";
 import { buildViewPreferences, parseViewPreferences } from "./view-preferences.mjs";
 import { getSearchHighlightTerms, splitHighlightedText } from "./search-highlights.mjs";
@@ -524,9 +525,10 @@ function addTask() {
     return;
   }
 
-  if (!title) {
-    showToast("Name the task or paste a list");
-    els.titleInput.focus();
+  const taskTitle = getTaskCaptureTitle({ title, details });
+  if (!taskTitle) {
+    showToast("Name the task or add details");
+    els.bodyInput.focus();
     return;
   }
 
@@ -534,7 +536,7 @@ function addTask() {
 
   state.tasks.unshift({
     id: crypto.randomUUID(),
-    title,
+    title: taskTitle,
     details,
     label: els.labelInput.value,
     priority: els.priorityInput.value,
