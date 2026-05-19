@@ -956,3 +956,18 @@
 - Secret scan of added lines in changed app/index/style/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
 - Git status: feature commit `d9f8d74` (`Add sync status pill`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c1a42889aea5fdfb82d2a` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c1a42889aea5fdfb82d2a--keeply-notes-aaron-20260516.netlify.app`.
+
+## 2026-05-19 05:08:57 MDT
+
+- Added mobile-first Priority Composer Chips for faster task capture without opening the priority select menu.
+- Task mode now shows High, Normal, and Low chips below the due presets; the active chip stays highlighted and stays in sync with the dropdown.
+- Updated What's New metadata with latest id `2026-05-19-priority-composer-chips`, title `Priority Composer Chips`, and 3 user-facing bullets.
+- UI/code areas touched: task composer markup in `index.html`, priority chip rendering/wiring in `app.js`, responsive chip styling in `styles.css`, release metadata, package test wiring, and the new `task-composer-priorities.mjs` helper plus `test/task-composer-priorities.test.mjs`.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task-composer UI behavior only.
+- Verification: full `npm test` passed with 179 tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4175 npm start` served `http://127.0.0.1:4175/` with HTTP 200. Browser verification confirmed the `Priority Composer Chips` What's New popup, dismissal persistence to `keeply-last-seen-update`, task-mode High/Normal/Low priority chips, chip-driven priority updates, no document horizontal overflow, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the new priority chips visible/readable with no obvious overlap, clipping, or horizontal overflow around the task composer at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Priority Composer Chips` What's New popup, persisted dismissal, exposed the task composer priority chips, a chip click updated the priority/select state, and browser console reported no errors.
+- Secret scan of added lines in changed app/index/style/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long standalone `sk-` key, secret assignment, token assignment, or API key assignment. A naive `sk-` regex matched CSS class substrings in `task-composer-priority-preset`, which was manually reviewed as a false positive.
+- Git status: feature commit `089bc36` (`Add task priority composer chips`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0c44adcc01ec070efbc919` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0c44adcc01ec070efbc919--keeply-notes-aaron-20260516.netlify.app`.
