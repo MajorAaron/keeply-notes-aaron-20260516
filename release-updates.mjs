@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-18-task-due-hints",
+    title: "Task Due Hints",
+    bullets: [
+      "The task composer now explains the selected due date in plain language.",
+      "Today, tomorrow, overdue, and upcoming dates update immediately as you tap presets or choose a date.",
+      "The hint is tied to the due-date field so mobile and assistive-tech task capture is clearer."
+    ]
+  },
+  {
     id: "2026-05-18-note-checklist-progress",
     title: "Note Checklist Progress",
     bullets: [

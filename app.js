@@ -9,7 +9,7 @@ import { getNoteColorShortcutValue, getVisibleNoteColorShortcuts } from "./note-
 import { getNoteLabelShortcutValue, getVisibleNoteLabelShortcuts } from "./note-label-shortcuts.mjs";
 import { captureItemRestore, restoreItem } from "./undo-restore.mjs";
 import { archiveCompletedTasks } from "./completed-task-cleanup.mjs";
-import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate } from "./task-composer-presets.mjs";
+import { TASK_COMPOSER_DUE_PRESETS, getTaskComposerDueDate, getTaskComposerDueHint } from "./task-composer-presets.mjs";
 import { toggleTaskCompletion } from "./task-completion.mjs";
 import { snoozeOverdueTasks } from "./snooze-overdue-tasks.mjs";
 import { buildComposerDraft, hasComposerDraftContent, normalizeComposerDraft } from "./composer-draft.mjs";
@@ -155,6 +155,7 @@ const els = {
   generateImageButton: document.querySelector("#generateImageButton"),
   removeImageButton: document.querySelector("#removeImageButton"),
   dueInput: document.querySelector("#dueInput"),
+  dueInputHint: document.querySelector("#dueInputHint"),
   priorityInput: document.querySelector("#priorityInput"),
   taskFields: document.querySelector("#taskFields"),
   taskComposerPresets: document.querySelector("#taskComposerPresets"),
@@ -2574,6 +2575,7 @@ function restoreComposerDraft() {
 
 function renderTaskComposerPresets() {
   const activeDue = els.dueInput.value;
+  els.dueInputHint.textContent = getTaskComposerDueHint(activeDue);
   els.taskComposerPresets.replaceChildren(
     ...TASK_COMPOSER_DUE_PRESETS.map((preset) => {
       const button = document.createElement("button");

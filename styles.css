@@ -833,6 +833,16 @@ body.night .next-task-complete-button {
   padding: 0 10px;
 }
 
+.task-due-hint {
+  min-height: 1.1rem;
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.15;
+  text-transform: none;
+}
+
 .task-composer-presets {
   display: grid;
   grid-column: 1 / -1;

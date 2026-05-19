@@ -225,7 +225,8 @@
           <div class="task-fields" id="taskFields" hidden>
             <label>
               <span>Due</span>
-              <input id="dueInput" type="date" />
+              <input id="dueInput" type="date" aria-describedby="dueInputHint" />
+              <span class="task-due-hint" id="dueInputHint">No date selected</span>
             </label>
             <label>
               <span>Priority</span>
