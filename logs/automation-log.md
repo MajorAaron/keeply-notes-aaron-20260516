@@ -1,4 +1,19 @@
 
+## 2026-05-19 19:06:46 MDT
+
+- Added mobile-first Ask History Chips for faster repeated Ask Keeply follow-up questions.
+- Ask Keeply now stores the last four asked questions in localStorage key `keeply-ask-history-v1`, dedupes repeated questions case-insensitively, and renders recent question chips before the existing suggested prompts so a tap refills the Ask field.
+- Updated What's New metadata with latest id `2026-05-19-ask-history-chips`, title `Ask History Chips`, and 3 user-facing bullets.
+- UI/code areas touched: Ask Keeply chip rendering and localStorage wiring in `app.js`, chip styling in `styles.css`, release metadata, package test wiring, and new helper/test files `ask-history.mjs` plus `test/ask-history.test.mjs`.
+- AI/API behavior: no new endpoint or API key usage was added; submitted questions continue to use the existing `/api/ask` Anthropic flow with the existing local fallback, and history storage is deterministic local UI behavior.
+- Verification: full `npm test` passed with 190 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4177 npm start` served `http://127.0.0.1:4177/` with HTTP 200. Browser verification confirmed the `Ask History Chips` What's New popup/dismiss persistence, a submitted Ask saving `What launch tasks are still open?` to `keeply-ask-history-v1`, recent chip rendering before suggestions, answer rendering, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the What's New popup visible and the Ask Keeply input/button/chips contained without obvious clipping or horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Ask History Chips` What's New popup and bullets, persisted dismissal to `keeply-last-seen-update`, submitted `What tasks are due today?`, rendered a recent-history chip and answer, and reported no browser console errors.
+- Secret scan of changed app/style/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `7b8f79e` (`Add Ask Keeply history chips`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d08fa6db9856e5504a1e3` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d08fa6db9856e5504a1e3--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-19 18:04:22 MDT
 
 - Added mobile-first Note Pin Filters for faster pinned-note review in the Notes view.
