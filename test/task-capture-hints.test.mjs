@@ -88,3 +88,21 @@ test("buildTaskCaptureFields applies next week title hints", () => {
   assert.equal(task.dueAt, "2026-05-25");
   assert.equal(task.usedHints, true);
 });
+
+
+test("buildTaskCaptureFields applies weekend title hints", () => {
+  assert.deepEqual(
+    buildTaskCaptureFields(
+      { title: "Pack picnic basket this weekend @home", details: "" },
+      { today: "2026-05-18" }
+    ),
+    {
+      title: "Pack picnic basket",
+      details: "",
+      label: "home",
+      priority: "normal",
+      dueAt: "2026-05-23",
+      usedHints: true
+    }
+  );
+});

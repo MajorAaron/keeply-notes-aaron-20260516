@@ -1,6 +1,7 @@
 export const TASK_COMPOSER_DUE_PRESETS = [
   { key: "today", label: "Today" },
   { key: "tomorrow", label: "Tomorrow" },
+  { key: "weekend", label: "Weekend" },
   { key: "next-week", label: "Next week" },
   { key: "none", label: "No date" }
 ];
@@ -10,6 +11,7 @@ const dayMs = 86400000;
 export function getTaskComposerDueDate(key, now = new Date()) {
   if (key === "today") return toDateInput(now);
   if (key === "tomorrow") return toDateInput(new Date(now.getTime() + dayMs));
+  if (key === "weekend") return toDateInput(getUpcomingWeekendDate(now));
   if (key === "next-week") return toDateInput(new Date(now.getTime() + dayMs * 7));
   if (key === "none") return "";
   return null;
@@ -26,10 +28,20 @@ export function getTaskComposerDueHint(dueAt, now = new Date()) {
   const offset = Math.round((dueDate.getTime() - today.getTime()) / dayMs);
   if (offset === 0) return "Due today";
   if (offset === 1) return "Due tomorrow";
+  if (offset > 1 && offset <= 6 && dueDate.getDay() === 6) return "Due this weekend";
   if (offset === -1) return "Overdue by 1 day";
   if (offset < -1) return `Overdue by ${Math.abs(offset)} days`;
   if (offset <= 7) return `Due in ${offset} days`;
   return `Due ${new Intl.DateTimeFormat(undefined, { weekday: "short", month: "short", day: "numeric" }).format(dueDate)}`;
+}
+
+function getUpcomingWeekendDate(date) {
+  const next = new Date(date);
+  const day = next.getDay();
+  if (day === 0) return next;
+  const daysUntilSaturday = (6 - day + 7) % 7;
+  next.setDate(next.getDate() + daysUntilSaturday);
+  return next;
 }
 
 function parseDateInput(value) {

@@ -91,3 +91,19 @@ test("parseBulkTaskLine extracts next week scheduling hints", () => {
     label: "work"
   });
 });
+
+
+test("parseBulkTaskLine extracts weekend scheduling hints", () => {
+  assert.deepEqual(parseBulkTaskLine("Buy trail snacks this weekend @home", { today: "2026-05-18" }), {
+    title: "Buy trail snacks",
+    dueAt: "2026-05-23",
+    priority: "",
+    label: "home"
+  });
+  assert.deepEqual(parseBulkTaskLine("Plan brunch weekend !low", { today: "2026-05-24" }), {
+    title: "Plan brunch",
+    dueAt: "2026-05-24",
+    priority: "low",
+    label: ""
+  });
+});

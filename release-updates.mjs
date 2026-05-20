@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-weekend-scheduling",
+    title: "Weekend Scheduling",
+    bullets: [
+      "Task composer presets and task-card shortcuts now include Weekend for quick Saturday planning.",
+      "Single task titles and pasted task lists understand “weekend” and “this weekend” hints while keeping titles clean.",
+      "Weekend due dates resolve to the upcoming Saturday, or today if you are already in the weekend."
+    ]
+  },
+  {
     id: "2026-05-19-ask-history-chips",
     title: "Ask History Chips",
     bullets: [
