@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-ask-answer-notes",
+    title: "Ask Answer Notes",
+    bullets: [
+      "Ask Keeply answers now include a Save as note button.",
+      "Saved answers keep the question, answer, next step, and source list together.",
+      "The new note opens in your Notes view so mobile research can keep moving."
+    ]
+  },
+  {
     id: "2026-05-20-no-date-task-hints",
     title: "No-Date Task Hints",
     bullets: [

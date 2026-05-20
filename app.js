@@ -47,6 +47,7 @@ import { getNoteSpotlight } from "./note-spotlight.mjs";
 import { getCleanupSpotlight } from "./cleanup-spotlight.mjs";
 import { getAskSuggestions } from "./ask-suggestions.mjs";
 import { addAskHistoryQuestion, getAskHistoryChips, parseAskHistory, serializeAskHistory } from "./ask-history.mjs";
+import { buildAskAnswerNote } from "./ask-answer-note.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 import { getQuickAddTarget } from "./quick-add-target.mjs";
@@ -1585,12 +1586,12 @@ async function askKeeply(event) {
     const answer = await response.json();
     if (!response.ok) throw new Error(answer.error || "Ask failed");
     rememberAskQuestion(question);
-    renderAskAnswer(answer);
+    renderAskAnswer(answer, question);
     renderAskSuggestions();
     showToast("Answer ready");
   } catch (error) {
     rememberAskQuestion(question);
-    renderAskAnswer(buildLocalAskAnswer(question, context.items));
+    renderAskAnswer(buildLocalAskAnswer(question, context.items), question);
     renderAskSuggestions();
     showToast("Local answer ready");
   } finally {
@@ -1678,7 +1679,7 @@ function scoreAskItem(item, terms) {
   return terms.reduce((score, term) => score + (haystack.includes(term) ? 1 : 0), item.pinned ? 0.5 : 0);
 }
 
-function renderAskAnswer(answer) {
+function renderAskAnswer(answer, question = "") {
   const card = document.createElement("article");
   card.className = "ask-card";
 
@@ -1692,6 +1693,16 @@ function renderAskAnswer(answer) {
   next.className = "ask-next";
   next.textContent = answer.nextStep || "Save another note or ask a narrower question.";
 
+  const actions = document.createElement("div");
+  actions.className = "ask-answer-actions";
+  const saveButton = document.createElement("button");
+  saveButton.type = "button";
+  saveButton.className = "ask-save-note";
+  saveButton.textContent = "Save as note";
+  saveButton.setAttribute("aria-label", "Save this Ask Keeply answer as a note");
+  saveButton.addEventListener("click", () => saveAskAnswerAsNote(answer, question, saveButton));
+  actions.append(saveButton);
+
   const sources = document.createElement("div");
   sources.className = "ask-sources";
   for (const source of Array.isArray(answer.sources) ? answer.sources.slice(0, 4) : []) {
@@ -1703,8 +1714,37 @@ function renderAskAnswer(answer) {
     sources.append(badge);
   }
 
-  card.append(title, body, next, sources);
+  card.append(title, body, next, actions, sources);
   els.askAnswer.replaceChildren(card);
+}
+
+function saveAskAnswerAsNote(answer, question, button) {
+  const note = buildAskAnswerNote(answer, {
+    question,
+    id: crypto.randomUUID(),
+    now: new Date(),
+    label: "ideas",
+    color: "sky"
+  });
+
+  state.notes.unshift(note);
+  state.view = "active";
+  state.label = "all";
+  state.noteColor = "all";
+  state.notePin = "all";
+  state.query = note.title;
+  els.searchInput.value = state.query;
+  saveData();
+  syncNav();
+  render();
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Saved";
+  }
+  requestAnimationFrame(() => {
+    document.querySelector(`[data-id="${CSS.escape(note.id)}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  showToast("Answer saved as note");
 }
 
 function jumpToSource(source) {

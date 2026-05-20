@@ -1572,10 +1572,28 @@ select {
   line-height: 1.32;
 }
 
+.ask-answer-actions,
 .ask-sources {
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
+}
+
+.ask-save-note {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 900;
+  box-shadow: 0 10px 20px rgba(35, 36, 38, 0.16);
+}
+
+.ask-save-note:disabled {
+  cursor: default;
+  opacity: 0.62;
 }
 
 .ask-source {
