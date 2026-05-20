@@ -108,6 +108,38 @@ test("parseBulkTaskLine extracts weekend scheduling hints", () => {
   });
 });
 
+test("parseBulkTaskLine extracts weekday scheduling hints", () => {
+  assert.deepEqual(parseBulkTaskLine("Send invoices Friday @work", { today: "2026-05-18" }), {
+    title: "Send invoices",
+    dueAt: "2026-05-22",
+    priority: "",
+    label: "work"
+  });
+
+  assert.deepEqual(parseBulkTaskLine("Meal prep this Monday #home", { today: "2026-05-18" }), {
+    title: "Meal prep",
+    dueAt: "2026-05-18",
+    priority: "",
+    label: "home"
+  });
+});
+
+test("bulk task weekday hints override shared due dates per line", () => {
+  const tasks = buildBulkTasksFromText("Review contract Thursday\nCall plumber", {
+    label: "work",
+    priority: "normal",
+    dueAt: "2026-05-25",
+    today: "2026-05-18",
+    now: "2026-05-18T12:00:00.000Z",
+    createId: (index) => `task-${index}`
+  });
+
+  assert.equal(tasks[0].title, "Review contract");
+  assert.equal(tasks[0].dueAt, "2026-05-21");
+  assert.equal(tasks[1].title, "Call plumber");
+  assert.equal(tasks[1].dueAt, "2026-05-25");
+});
+
 test("no-date hints strip scheduling words and clear shared due dates", () => {
   assert.deepEqual(parseBulkTaskLine("Refill travel kit someday @home"), {
     title: "Refill travel kit",

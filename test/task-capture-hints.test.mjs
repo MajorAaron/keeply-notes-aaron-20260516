@@ -107,6 +107,28 @@ test("buildTaskCaptureFields applies weekend title hints", () => {
   );
 });
 
+test("buildTaskCaptureFields applies weekday title hints", () => {
+  const task = buildTaskCaptureFields(
+    {
+      title: "Send invoices Friday @work",
+      details: "",
+      label: "ideas",
+      priority: "normal",
+      dueAt: ""
+    },
+    { today: "2026-05-18" }
+  );
+
+  assert.deepEqual(task, {
+    title: "Send invoices",
+    details: "",
+    label: "work",
+    priority: "normal",
+    dueAt: "2026-05-22",
+    usedHints: true
+  });
+});
+
 test("buildTaskCaptureFields applies no-date title hints over selected due presets", () => {
   const task = buildTaskCaptureFields({
     title: "Inventory freezer someday @home",

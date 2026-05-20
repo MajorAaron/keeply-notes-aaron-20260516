@@ -6,6 +6,15 @@ const priorityAliases = new Map([
   ["asap", "high"],
   ["important", "high"]
 ]);
+const weekdayHints = new Map([
+  ["sunday", 0],
+  ["monday", 1],
+  ["tuesday", 2],
+  ["wednesday", 3],
+  ["thursday", 4],
+  ["friday", 5],
+  ["saturday", 6]
+]);
 
 export function getBulkTaskLines(text) {
   const lines = String(text || "")
@@ -26,7 +35,7 @@ export function parseBulkTaskLine(line, options = {}) {
 
   let clearsDue = false;
 
-  title = title.replace(/\b(next\s+week|this\s+weekend|weekend|today|tomorrow|no\s+date|unscheduled|someday)\b/gi, (match) => {
+  title = title.replace(/\b(next\s+week|this\s+weekend|weekend|today|tomorrow|this\s+(?:sunday|monday|tuesday|wednesday|thursday|friday|saturday)|sunday|monday|tuesday|wednesday|thursday|friday|saturday|no\s+date|unscheduled|someday)\b/gi, (match) => {
     const hint = match.toLowerCase().replace(/\s+/g, "-");
     if (isNoDateHint(hint)) {
       clearsDue = true;
@@ -122,6 +131,11 @@ function isNoDateHint(value) {
 
 function getRelativeDate(value, baseDate) {
   const date = new Date(baseDate);
+  const weekday = getWeekdayHint(value);
+  if (weekday !== null) {
+    return toDateInput(getUpcomingWeekdayDate(date, weekday));
+  }
+
   if (value === "tomorrow") {
     date.setDate(date.getDate() + 1);
   } else if (value === "weekend" || value === "this-weekend") {
@@ -130,6 +144,18 @@ function getRelativeDate(value, baseDate) {
     date.setDate(date.getDate() + 7);
   }
   return toDateInput(date);
+}
+
+function getWeekdayHint(value) {
+  const normalized = String(value || "").replace(/^this-/, "");
+  return weekdayHints.has(normalized) ? weekdayHints.get(normalized) : null;
+}
+
+function getUpcomingWeekdayDate(date, weekday) {
+  const next = new Date(date);
+  const daysUntilWeekday = (weekday - next.getDay() + 7) % 7;
+  next.setDate(next.getDate() + daysUntilWeekday);
+  return next;
 }
 
 function getUpcomingWeekendDate(date) {

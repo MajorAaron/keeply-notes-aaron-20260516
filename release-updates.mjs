@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-weekday-task-hints",
+    title: "Weekday Task Hints",
+    bullets: [
+      "Task capture now understands weekday names like Monday and Friday.",
+      "Single tasks and pasted task lists use those hints to set due dates automatically.",
+      "Weekday words are stripped from saved titles so mobile capture stays clean."
+    ]
+  },
+  {
     id: "2026-05-20-note-activity-badges",
     title: "Note Activity Badges",
     bullets: [
