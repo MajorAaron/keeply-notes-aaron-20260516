@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-cleanup-count-shortcuts",
+    title: "Cleanup Count Shortcuts",
+    bullets: [
+      "Task cleanup counts are now tappable shortcuts for faster review.",
+      "Tap overdue to jump straight to open overdue tasks before snoozing them.",
+      "Tap done to review completed tasks before archiving them from the mobile cleanup bar."
+    ]
+  },
+  {
     id: "2026-05-20-ask-followup-chips",
     title: "Ask Follow-Up Chips",
     bullets: [

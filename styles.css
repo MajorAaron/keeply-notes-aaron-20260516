@@ -555,11 +555,30 @@ h1 {
   min-width: 0;
 }
 
-.task-bulk-group span {
+.task-bulk-count {
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 900;
+  text-align: left;
   text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.task-bulk-count:disabled {
+  cursor: default;
+  opacity: 0.58;
+  text-decoration: none;
+}
+
+.task-bulk-count:not(:disabled):hover,
+.task-bulk-count:not(:disabled):focus-visible {
+  color: var(--ink);
 }
 
 .task-bulk-button {

@@ -57,6 +57,7 @@ import { getNavigationBadges } from "./navigation-badges.mjs";
 import { getTaskCompletionFilterCounts, matchesTaskCompletionFilter, normalizeTaskCompletionFilter } from "./task-completion-filters.mjs";
 import { getNotePinFilterCounts, matchesNotePinFilter, normalizeNotePinFilter } from "./note-pin-filters.mjs";
 import { getStatsShortcut } from "./stats-shortcuts.mjs";
+import { getTaskCleanupShortcut } from "./task-cleanup-shortcuts.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1160,10 +1161,42 @@ function renderTaskBulkActions() {
   const completedCount = state.tasks.filter((task) => task.status === "active" && task.completed).length;
   const today = toDateInput(new Date());
   const overdueCount = state.tasks.filter((task) => task.status === "active" && !task.completed && task.dueAt && task.dueAt < today).length;
-  els.archiveCompletedCount.textContent = `${completedCount} done`;
-  els.snoozeOverdueCount.textContent = `${overdueCount} overdue`;
+  const completedShortcut = getTaskCleanupShortcut("done", completedCount);
+  const overdueShortcut = getTaskCleanupShortcut("overdue", overdueCount);
+
+  renderTaskCleanupShortcut(els.archiveCompletedCount, completedShortcut);
+  renderTaskCleanupShortcut(els.snoozeOverdueCount, overdueShortcut);
   els.archiveCompletedButton.disabled = completedCount === 0;
   els.snoozeOverdueButton.disabled = overdueCount === 0;
+}
+
+function renderTaskCleanupShortcut(button, shortcut) {
+  if (!button || !shortcut) return;
+  button.textContent = shortcut.label;
+  button.disabled = shortcut.disabled;
+  button.setAttribute("aria-label", shortcut.ariaLabel);
+  button.title = shortcut.disabled ? shortcut.ariaLabel : shortcut.toast;
+}
+
+function applyTaskCleanupShortcut(kind) {
+  const completedCount = state.tasks.filter((task) => task.status === "active" && task.completed).length;
+  const today = toDateInput(new Date());
+  const overdueCount = state.tasks.filter((task) => task.status === "active" && !task.completed && task.dueAt && task.dueAt < today).length;
+  const shortcut = getTaskCleanupShortcut(kind, kind === "overdue" ? overdueCount : completedCount);
+  if (!shortcut || shortcut.disabled) return;
+
+  state.view = "tasks";
+  state.taskWindow = shortcut.taskWindow;
+  state.taskPriority = shortcut.taskPriority;
+  state.taskCompletion = shortcut.taskCompletion;
+  state.query = "";
+  els.searchInput.value = "";
+  setComposerMode("task");
+  syncNav();
+  saveViewPreferences();
+  render();
+  els.taskList.scrollIntoView({ behavior: "smooth", block: "start" });
+  showToast(shortcut.toast);
 }
 
 function renderAskSuggestions() {
@@ -3273,6 +3306,8 @@ els.statsButtons.forEach((button) => {
 });
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
+els.archiveCompletedCount.addEventListener("click", () => applyTaskCleanupShortcut("done"));
+els.snoozeOverdueCount.addEventListener("click", () => applyTaskCleanupShortcut("overdue"));
 els.taskComposerPresets.addEventListener("click", (event) => {
   const button = event.target.closest(".task-composer-preset");
   if (!button) return;
