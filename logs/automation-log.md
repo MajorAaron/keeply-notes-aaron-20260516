@@ -1,4 +1,18 @@
 
+## 2026-05-20 08:08:29 MDT
+
+- Added mobile-first Note Activity Badges for faster note triage.
+- Note cards now show compact `Created`, `Edited`, `Pinned`, or `Stale` activity badges beside reading/checklist/image metadata, with accessible labels and responsive wrapping for dense mobile card footers.
+- Updated What's New metadata with latest id `2026-05-20-note-activity-badges`, title `Note Activity Badges`, and 3 user-facing bullets.
+- UI/code areas touched: note card metadata rendering in `app.js`/`index.html`, note activity badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `note-activity-meta.mjs` plus `test/note-activity-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local note metadata display only.
+- Verification: full `npm test` passed with 216 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4189 npm start` served `http://127.0.0.1:4189/` with HTTP 200. Browser verification confirmed the `Note Activity Badges` What's New popup/dismissal persistence, visible note activity badges, no document-level horizontal overflow, and no browser console errors. Visual review found the badge/action area dense on some cards but readable with no clipping or overlap after footer wrapping.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-note-activity-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, displayed note activity badges (`Pinned today`, `Pinned 2d ago`, `Created yesterday`), reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of added lines in changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `4596cdc` (`Add note activity badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0dc0351a59788271d6afb7` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0dc0351a59788271d6afb7--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 07:07:13 MDT
 
 - Added mobile-first Note Image Badges for faster scanning of visual notes.
