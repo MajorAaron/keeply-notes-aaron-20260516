@@ -7,6 +7,9 @@ const baseDate = new Date("2026-05-17T12:00:00");
 test("note follow-up shortcuts produce stable task due dates", () => {
   assert.equal(getNoteFollowUpDueDate("today", baseDate), "2026-05-17");
   assert.equal(getNoteFollowUpDueDate("tomorrow", baseDate), "2026-05-18");
+  assert.equal(getNoteFollowUpDueDate("weekend", new Date("2026-05-20T12:00:00")), "2026-05-23");
+  assert.equal(getNoteFollowUpDueDate("weekend", new Date("2026-05-23T12:00:00")), "2026-05-23");
+  assert.equal(getNoteFollowUpDueDate("weekend", baseDate), "2026-05-17");
   assert.equal(getNoteFollowUpDueDate("next-week", baseDate), "2026-05-24");
   assert.equal(getNoteFollowUpDueDate("later", baseDate), null);
 });
@@ -14,6 +17,7 @@ test("note follow-up shortcuts produce stable task due dates", () => {
 test("note follow-up shortcuts produce concise toast copy", () => {
   assert.equal(getNoteFollowUpToast("today"), "Task added for today");
   assert.equal(getNoteFollowUpToast("tomorrow"), "Task added for tomorrow");
+  assert.equal(getNoteFollowUpToast("weekend"), "Task added for the weekend");
   assert.equal(getNoteFollowUpToast("next-week"), "Task added for next week");
   assert.equal(getNoteFollowUpToast("later"), "Task added");
 });

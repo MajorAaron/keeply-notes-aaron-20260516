@@ -1,12 +1,14 @@
 export const NOTE_FOLLOW_UP_SHORTCUTS = [
   { key: "today", label: "Task today" },
   { key: "tomorrow", label: "Task tomorrow" },
+  { key: "weekend", label: "Task weekend" },
   { key: "next-week", label: "Task next week" }
 ];
 
 export function getNoteFollowUpDueDate(shortcut, baseDate = new Date()) {
   if (shortcut === "today") return toDateInput(baseDate);
   if (shortcut === "tomorrow") return toDateInput(addDays(baseDate, 1));
+  if (shortcut === "weekend") return toDateInput(getUpcomingWeekendDate(baseDate));
   if (shortcut === "next-week") return toDateInput(addDays(baseDate, 7));
   return null;
 }
@@ -14,6 +16,7 @@ export function getNoteFollowUpDueDate(shortcut, baseDate = new Date()) {
 export function getNoteFollowUpToast(shortcut) {
   if (shortcut === "today") return "Task added for today";
   if (shortcut === "tomorrow") return "Task added for tomorrow";
+  if (shortcut === "weekend") return "Task added for the weekend";
   if (shortcut === "next-week") return "Task added for next week";
   return "Task added";
 }
@@ -58,6 +61,12 @@ function addDays(date, days) {
   const next = new Date(date);
   next.setDate(next.getDate() + days);
   return next;
+}
+
+function getUpcomingWeekendDate(date) {
+  const day = date.getDay();
+  if (day === 0 || day === 6) return date;
+  return addDays(date, 6 - day);
 }
 
 function toDateInput(date) {

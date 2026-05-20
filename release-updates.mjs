@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-weekend-note-followups",
+    title: "Weekend Note Follow-Ups",
+    bullets: [
+      "Active notes now include a Task weekend shortcut beside the today, tomorrow, and next-week follow-up buttons.",
+      "One tap turns a note into a weekend task while preserving the note title, body, and label.",
+      "Weekend follow-ups resolve to the upcoming Saturday, or today when you are already in the weekend."
+    ]
+  },
+  {
     id: "2026-05-19-weekend-scheduling",
     title: "Weekend Scheduling",
     bullets: [
