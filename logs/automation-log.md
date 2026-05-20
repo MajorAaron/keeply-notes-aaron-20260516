@@ -1153,3 +1153,19 @@
 - Production verification: deploy permalink loaded, showed the `Tomorrow Task Filter` What's New popup after clearing the local last-seen key, exposed the Tasks-view Tomorrow chip with count `1`, persisted dismissal, selected the Tomorrow filter, reported no horizontal overflow, and browser console reported no errors.
 - Git status: feature commit `3721683` (`Add tomorrow task filter`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
 - Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0cdd6ff93d2b0811a1d6b5` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0cdd6ff93d2b0811a1d6b5--keeply-notes-aaron-20260516.netlify.app`.
+## 2026-05-20 02:08:28 MDT
+
+- Added Ask Answer Notes so Ask Keeply results can be saved directly into the notes workspace from mobile.
+- Ask answer cards now show a `Save as note` action; saved notes include the original question, answer, next step, and up to four source references, then jump to the new note in Notes with the answer title in search.
+- Added `ask-answer-note.mjs` and `test/ask-answer-note.test.mjs`; wired both into syntax checks and the Node test suite.
+- Updated What's New metadata with latest id `2026-05-20-ask-answer-notes`, title `Ask Answer Notes`, and 3 user-facing bullets.
+- UI/code areas touched: Ask Keeply answer rendering in `app.js`, Ask answer button styling in `styles.css`, release metadata, package test wiring, and the new answer-to-note helper/test files.
+- AI/API behavior: no new endpoint or secret usage was added; the feature reuses the existing Ask Keeply `/api/ask` flow when available and still works with the existing local Ask fallback.
+- Verification: full `npm test` passed with 200 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4181 npm start` served `http://127.0.0.1:4181/` with HTTP 200. Browser verification confirmed the `Ask Answer Notes` What's New popup/localStorage dismissal, Ask answer `Save as note` button, saved note titled `Ask: What should I remember about dinner?`, no browser console errors, and no document horizontal overflow.
+- Mobile/layout verification: browser snapshot/DOM checks found the Ask answer action and saved-note search flow usable with no obvious horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Ask Answer Notes` What's New popup after clearing the local last-seen key, exposed the Ask answer `Save as note` action, saved an Ask answer as `Ask: What did I say about check-in?`, and browser console reported no errors.
+- Secret scan of changed app/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, API key, secret, or token assignment patterns.
+- Git status: feature commit `463054c` (`Add Ask answer note saving`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d6bc8498d885be1963a60` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d6bc8498d885be1963a60--keeply-notes-aaron-20260516.netlify.app`.
+
