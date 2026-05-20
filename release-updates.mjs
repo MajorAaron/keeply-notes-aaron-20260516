@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-task-blocker-badges",
+    title: "Task Blocker Badges",
+    bullets: [
+      "Open task cards now call out blocked, stuck, waiting, and dependency language.",
+      "Compact badges make stalled work easier to spot while scanning Tasks on mobile.",
+      "Completed tasks stay quiet so blocker badges focus on work that still needs attention."
+    ]
+  },
+  {
     id: "2026-05-20-link-count-badges",
     title: "Link Count Badges",
     bullets: [
