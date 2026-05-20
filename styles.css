@@ -1816,6 +1816,7 @@ select {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -1984,6 +1985,7 @@ select {
 }
 
 .note-reading-meta,
+.note-activity-meta,
 .note-image-meta,
 .note-checklist-meta {
   display: inline-flex;
@@ -2004,6 +2006,28 @@ select {
   letter-spacing: 0.01em;
 }
 
+.note-activity-meta {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+.note-activity-meta[data-tone="fresh"],
+.note-activity-meta[data-tone="recent"] {
+  background: rgba(129, 199, 238, 0.18);
+  color: #315569;
+}
+
+.note-activity-meta[data-tone="pinned"] {
+  background: rgba(248, 215, 95, 0.34);
+  color: #6f5210;
+}
+
+.note-activity-meta[data-tone="stale"] {
+  background: rgba(240, 150, 154, 0.22);
+  color: #8d282e;
+}
+
 .note-image-meta {
   background: rgba(129, 199, 238, 0.2);
   color: #315569;
@@ -2021,6 +2045,7 @@ select {
 }
 
 .note-card[data-color="ink"] .note-reading-meta,
+.note-card[data-color="ink"] .note-activity-meta,
 .note-card[data-color="ink"] .note-image-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);

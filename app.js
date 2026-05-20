@@ -59,6 +59,7 @@ import { getNotePinFilterCounts, matchesNotePinFilter, normalizeNotePinFilter } 
 import { getStatsShortcut } from "./stats-shortcuts.mjs";
 import { getTaskCleanupShortcut } from "./task-cleanup-shortcuts.mjs";
 import { getTaskActivityMeta } from "./task-activity-meta.mjs";
+import { getNoteActivityMeta } from "./note-activity-meta.mjs";
 import { getNoteImageMeta } from "./note-image-meta.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1877,6 +1878,12 @@ function renderNote(note) {
   const readingMetaElement = node.querySelector(".note-reading-meta");
   readingMetaElement.textContent = readingMeta.label;
   readingMetaElement.setAttribute("aria-label", readingMeta.ariaLabel);
+  const activityMeta = getNoteActivityMeta(note);
+  const activityMetaElement = node.querySelector(".note-activity-meta");
+  activityMetaElement.hidden = !activityMeta.available;
+  activityMetaElement.textContent = activityMeta.label;
+  activityMetaElement.setAttribute("aria-label", activityMeta.ariaLabel);
+  activityMetaElement.dataset.tone = activityMeta.tone;
   const checklistMeta = getNoteChecklistMeta(noteBody);
   const checklistMetaElement = node.querySelector(".note-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;

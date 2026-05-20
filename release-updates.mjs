@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-note-activity-badges",
+    title: "Note Activity Badges",
+    bullets: [
+      "Note cards now show a compact activity badge beside reading details.",
+      "Fresh, edited, pinned, and stale notes are easier to spot while scanning on mobile.",
+      "Stale unpinned notes get a gentle badge so cleanup decisions are quicker."
+    ]
+  },
+  {
     id: "2026-05-20-note-image-badges",
     title: "Note Image Badges",
     bullets: [
