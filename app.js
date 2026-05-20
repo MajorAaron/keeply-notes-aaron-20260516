@@ -65,6 +65,7 @@ import { getComposerBodyMeta } from "./composer-body-meta.mjs";
 import { getItemLinkMeta } from "./item-link-meta.mjs";
 import { getTaskBlockerMeta } from "./task-blocker-meta.mjs";
 import { getTaskTimeEstimateMeta } from "./task-time-estimate-meta.mjs";
+import { getItemContactMeta } from "./item-contact-meta.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1890,11 +1891,18 @@ function renderNote(note) {
   activityMetaElement.textContent = activityMeta.label;
   activityMetaElement.setAttribute("aria-label", activityMeta.ariaLabel);
   activityMetaElement.dataset.tone = activityMeta.tone;
-  const linkMeta = getItemLinkMeta(`${note.title || ""} ${noteBody}`);
+  const noteSearchText = `${note.title || ""} ${noteBody}`;
+  const linkMeta = getItemLinkMeta(noteSearchText);
   const linkMetaElement = node.querySelector(".note-link-meta");
   linkMetaElement.hidden = !linkMeta.available;
   linkMetaElement.textContent = linkMeta.label;
   linkMetaElement.setAttribute("aria-label", linkMeta.ariaLabel);
+  const contactMeta = getItemContactMeta(noteSearchText);
+  const contactMetaElement = node.querySelector(".note-contact-meta");
+  contactMetaElement.hidden = !contactMeta.available;
+  contactMetaElement.textContent = contactMeta.label;
+  contactMetaElement.setAttribute("aria-label", contactMeta.ariaLabel);
+  contactMetaElement.dataset.tone = contactMeta.tone || "";
   const checklistMeta = getNoteChecklistMeta(noteBody);
   const checklistMetaElement = node.querySelector(".note-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;
@@ -2111,11 +2119,18 @@ function renderTask(task) {
   } else {
     dueTime.removeAttribute("datetime");
   }
-  const linkMeta = getItemLinkMeta(`${task.title || ""} ${task.details || ""}`);
+  const taskSearchText = `${task.title || ""} ${task.details || ""}`;
+  const linkMeta = getItemLinkMeta(taskSearchText);
   const linkMetaElement = node.querySelector(".task-link-meta");
   linkMetaElement.hidden = !linkMeta.available;
   linkMetaElement.textContent = linkMeta.label;
   linkMetaElement.setAttribute("aria-label", linkMeta.ariaLabel);
+  const contactMeta = getItemContactMeta(taskSearchText);
+  const contactMetaElement = node.querySelector(".task-contact-meta");
+  contactMetaElement.hidden = !contactMeta.available;
+  contactMetaElement.textContent = contactMeta.label;
+  contactMetaElement.setAttribute("aria-label", contactMeta.ariaLabel);
+  contactMetaElement.dataset.tone = contactMeta.tone || "";
   const blockerMeta = getTaskBlockerMeta(task);
   const blockerMetaElement = node.querySelector(".task-blocker-meta");
   blockerMetaElement.hidden = !blockerMeta.available;

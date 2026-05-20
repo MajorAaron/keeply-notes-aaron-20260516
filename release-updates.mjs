@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-contact-badges",
+    title: "Contact Badges",
+    bullets: [
+      "Notes and tasks now show a compact contact badge when text includes an email address or phone number.",
+      "Cards summarize multiple contact details so mobile scanning can spot follow-ups faster.",
+      "Screen-reader labels describe whether a card includes email, phone, or mixed contact details."
+    ]
+  },
+  {
     id: "2026-05-20-evening-task-hints",
     title: "Evening Task Hints",
     bullets: [
