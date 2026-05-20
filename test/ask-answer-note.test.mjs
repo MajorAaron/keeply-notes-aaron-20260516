@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildAskAnswerCopyText, buildAskAnswerNote } from "../ask-answer-note.mjs";
+import { buildAskAnswerCopyText, buildAskAnswerNote, getAskFollowUpQuestions } from "../ask-answer-note.mjs";
 
 test("builds a note from an Ask Keeply answer", () => {
   const note = buildAskAnswerNote(
@@ -74,4 +74,43 @@ test("clipboard text falls back to useful answer copy", () => {
   const text = buildAskAnswerCopyText({}, { question: "" });
 
   assert.equal(text, "Keeply answer\n\nAnswer\nNo answer was found in the active Keeply items.");
+});
+
+test("builds concise Ask follow-up questions from answer sources", () => {
+  const followUps = getAskFollowUpQuestions(
+    {
+      nextStep: "Review the pinned note before standup.",
+      sources: [
+        { type: "task", title: "Send check-in recap" },
+        { type: "note", title: "Quarterly check-in" }
+      ]
+    },
+    { question: "What tasks are due today?" }
+  );
+
+  assert.deepEqual(followUps, [
+    "What is the next step for Send check-in recap?",
+    "What task should come from Quarterly check-in?",
+    "What else connects to Send check-in recap?"
+  ]);
+});
+
+test("Ask follow-up questions dedupe and honor a compact limit", () => {
+  const followUps = getAskFollowUpQuestions(
+    {
+      nextStep: "Review it next.",
+      sources: [
+        { type: "note", title: "Quarterly check-in" },
+        { type: "note", title: "Quarterly check-in" }
+      ]
+    },
+    { limit: 4 }
+  );
+
+  assert.deepEqual(followUps, [
+    "What task should come from Quarterly check-in?",
+    "What else connects to Quarterly check-in?",
+    "How should I act on that next step?",
+    "What should I ask Keeply next?"
+  ]);
 });

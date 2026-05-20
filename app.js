@@ -47,7 +47,7 @@ import { getNoteSpotlight } from "./note-spotlight.mjs";
 import { getCleanupSpotlight } from "./cleanup-spotlight.mjs";
 import { getAskSuggestions } from "./ask-suggestions.mjs";
 import { addAskHistoryQuestion, getAskHistoryChips, parseAskHistory, serializeAskHistory } from "./ask-history.mjs";
-import { buildAskAnswerCopyText, buildAskAnswerNote } from "./ask-answer-note.mjs";
+import { buildAskAnswerCopyText, buildAskAnswerNote, getAskFollowUpQuestions } from "./ask-answer-note.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 import { getQuickAddTarget } from "./quick-add-target.mjs";
@@ -1720,7 +1720,20 @@ function renderAskAnswer(answer, question = "") {
     sources.append(badge);
   }
 
-  card.append(title, body, next, actions, sources);
+  const followUps = document.createElement("div");
+  followUps.className = "ask-followups";
+  followUps.setAttribute("aria-label", "Ask Keeply follow-up questions");
+  getAskFollowUpQuestions(answer, { question }).forEach((followUp) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "ask-followup";
+    button.textContent = followUp;
+    button.setAttribute("aria-label", `Ask follow-up: ${followUp}`);
+    button.addEventListener("click", () => useAskSuggestion(followUp));
+    followUps.append(button);
+  });
+
+  card.append(title, body, next, actions, followUps, sources);
   els.askAnswer.replaceChildren(card);
 }
 

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-ask-followup-chips",
+    title: "Ask Follow-Up Chips",
+    bullets: [
+      "Ask Keeply answers now suggest a few follow-up questions under the answer card.",
+      "Follow-ups use the answer sources and next step so the next ask stays relevant.",
+      "Tap a chip to fill the Ask field without resubmitting, making mobile research faster."
+    ]
+  },
+  {
     id: "2026-05-20-copy-ask-answers",
     title: "Copy Ask Answers",
     bullets: [

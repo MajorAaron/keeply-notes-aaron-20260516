@@ -1573,10 +1573,15 @@ select {
 }
 
 .ask-answer-actions,
+.ask-followups,
 .ask-sources {
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
+}
+
+.ask-followups {
+  padding-top: 2px;
 }
 
 .ask-save-note,
@@ -1592,11 +1597,24 @@ select {
   box-shadow: 0 10px 20px rgba(35, 36, 38, 0.16);
 }
 
-.ask-copy-answer {
+.ask-copy-answer,
+.ask-followup {
   border: 1px solid rgba(35, 36, 38, 0.16);
   background: rgba(255, 255, 255, 0.72);
   color: var(--ink);
   box-shadow: none;
+}
+
+.ask-followup {
+  max-width: min(100%, 360px);
+  min-height: 34px;
+  padding: 0 11px;
+  overflow: hidden;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ask-save-note:disabled,

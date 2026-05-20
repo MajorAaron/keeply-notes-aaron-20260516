@@ -50,6 +50,45 @@ export function buildAskAnswerCopyText(answer = {}, options = {}) {
   return sections.join("\n\n");
 }
 
+export function getAskFollowUpQuestions(answer = {}, options = {}) {
+  const question = cleanInlineText(options.question);
+  const sources = normalizeSources(answer.sources);
+  const nextStep = cleanInlineText(answer.nextStep);
+  const candidates = [];
+
+  const taskSource = sources.find((source) => source.type.toLowerCase() === "task");
+  const noteSource = sources.find((source) => source.type.toLowerCase() === "note");
+  const firstSource = sources[0];
+
+  if (taskSource) candidates.push(`What is the next step for ${taskSource.title}?`);
+  if (noteSource) candidates.push(`What task should come from ${noteSource.title}?`);
+  if (firstSource) candidates.push(`What else connects to ${firstSource.title}?`);
+  if (nextStep) candidates.push("How should I act on that next step?");
+  if (question && /\b(task|tasks|todo|due|next|today|tomorrow)\b/i.test(question)) candidates.push("Which task should I do after that?");
+  candidates.push("What should I ask Keeply next?");
+
+  return uniqueQuestions(candidates).slice(0, normalizeLimit(options.limit));
+}
+
+function uniqueQuestions(questions) {
+  const seen = new Set();
+  return questions
+    .map((question) => cleanInlineText(question))
+    .filter((question) => {
+      if (!question) return false;
+      const key = question.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+function normalizeLimit(limit) {
+  const value = Number(limit);
+  if (Number.isFinite(value) && value > 0) return Math.min(4, Math.floor(value));
+  return 3;
+}
+
 function truncateTitle(title) {
   if (title.length <= MAX_TITLE_LENGTH) return title;
   return `${title.slice(0, MAX_TITLE_LENGTH - 1).trimEnd()}…`;
