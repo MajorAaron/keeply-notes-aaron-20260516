@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-link-count-badges",
+    title: "Link Count Badges",
+    bullets: [
+      "Notes and tasks now show a compact link badge when their title or body includes web links.",
+      "Cards count unique links so mobile scanning can spot research, docs, and references faster.",
+      "Screen-reader labels include the first link domain for clearer review context."
+    ]
+  },
+  {
     id: "2026-05-20-task-weekday-due-badges",
     title: "Task Weekday Due Badges",
     bullets: [

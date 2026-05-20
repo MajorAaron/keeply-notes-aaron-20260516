@@ -2004,6 +2004,7 @@ select {
 .note-reading-meta,
 .note-activity-meta,
 .note-image-meta,
+.note-link-meta,
 .note-checklist-meta {
   display: inline-flex;
   align-items: center;
@@ -2061,9 +2062,16 @@ select {
   color: #315d40;
 }
 
+.note-link-meta {
+  background: rgba(129, 199, 238, 0.18);
+  color: #315569;
+  letter-spacing: 0.01em;
+}
+
 .note-card[data-color="ink"] .note-reading-meta,
 .note-card[data-color="ink"] .note-activity-meta,
 .note-card[data-color="ink"] .note-image-meta,
+.note-card[data-color="ink"] .note-link-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.72);
@@ -2155,6 +2163,7 @@ select {
 .task-priority,
 .task-due-badge,
 .task-activity-meta,
+.task-link-meta,
 .task-checklist-meta {
   padding: 4px 8px;
   border-radius: 999px;
@@ -2187,6 +2196,12 @@ select {
 .task-activity-meta[data-tone="done"] {
   background: rgba(130, 215, 162, 0.2);
   color: #315d40;
+}
+
+.task-link-meta {
+  background: rgba(129, 199, 238, 0.18);
+  color: #315569;
+  letter-spacing: 0.01em;
 }
 
 .task-due-badge {

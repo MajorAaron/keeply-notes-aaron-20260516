@@ -62,6 +62,7 @@ import { getTaskActivityMeta } from "./task-activity-meta.mjs";
 import { getNoteActivityMeta } from "./note-activity-meta.mjs";
 import { getNoteImageMeta } from "./note-image-meta.mjs";
 import { getComposerBodyMeta } from "./composer-body-meta.mjs";
+import { getItemLinkMeta } from "./item-link-meta.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1887,6 +1888,11 @@ function renderNote(note) {
   activityMetaElement.textContent = activityMeta.label;
   activityMetaElement.setAttribute("aria-label", activityMeta.ariaLabel);
   activityMetaElement.dataset.tone = activityMeta.tone;
+  const linkMeta = getItemLinkMeta(`${note.title || ""} ${noteBody}`);
+  const linkMetaElement = node.querySelector(".note-link-meta");
+  linkMetaElement.hidden = !linkMeta.available;
+  linkMetaElement.textContent = linkMeta.label;
+  linkMetaElement.setAttribute("aria-label", linkMeta.ariaLabel);
   const checklistMeta = getNoteChecklistMeta(noteBody);
   const checklistMetaElement = node.querySelector(".note-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;
@@ -2103,6 +2109,11 @@ function renderTask(task) {
   } else {
     dueTime.removeAttribute("datetime");
   }
+  const linkMeta = getItemLinkMeta(`${task.title || ""} ${task.details || ""}`);
+  const linkMetaElement = node.querySelector(".task-link-meta");
+  linkMetaElement.hidden = !linkMeta.available;
+  linkMetaElement.textContent = linkMeta.label;
+  linkMetaElement.setAttribute("aria-label", linkMeta.ariaLabel);
   const checklistMeta = getTaskChecklistMeta(task.details);
   const activityMeta = getTaskActivityMeta(task);
   const activityMetaElement = node.querySelector(".task-activity-meta");
