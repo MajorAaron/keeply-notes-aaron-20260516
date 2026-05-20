@@ -1,4 +1,18 @@
 
+## 2026-05-20 11:04:11 MDT
+
+- Added mobile-first Task Weekday Due Badges for clearer task timing at a glance.
+- Task due badges now include weekday names for scheduled dates beyond Today/Tomorrow; overdue and completed badges keep their status while adding weekday context.
+- Updated What's New metadata with latest id `2026-05-20-task-weekday-due-badges`, title `Task Weekday Due Badges`, and 3 user-facing bullets.
+- UI/code areas touched: task due badge formatter in `task-due-badge.mjs`, release metadata, and `test/task-due-badge.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task badge formatting only.
+- Verification: full `npm test` passed with 219 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4192 npm start` served `http://127.0.0.1:4192/` with HTTP 200. Browser verification confirmed the `Task Weekday Due Badges` What's New popup/dismissal persistence, visible weekday due badges such as `Overdue · Tue, May 19` and `Sat, May 23`, no document-level horizontal overflow, and no browser console errors.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-task-weekday-due-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, displayed task badges such as `Done · Thu, May 21`, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of added lines in changed metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `7a738ef` (`Add task weekday due badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0de971913da4248a6c6169` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0de971913da4248a6c6169--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 10:08:22 MDT
 
 - Added mobile-first Composer Draft Stats for faster note/task capture confidence before saving.
