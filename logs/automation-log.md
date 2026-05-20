@@ -1,4 +1,18 @@
 
+## 2026-05-20 13:06:39 MDT
+
+- Added mobile-first Task Blocker Badges for faster stalled-work triage in the Tasks view.
+- Open task cards now show compact `Blocked`, `Stuck`, `Waiting`, or `Depends` badges when the title/details include blocker or dependency language; completed tasks stay quiet.
+- Updated What's New metadata with latest id `2026-05-20-task-blocker-badges`, title `Task Blocker Badges`, and 3 user-facing bullets.
+- UI/code areas touched: task card metadata rendering in `app.js`, task template in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `task-blocker-meta.mjs` plus `test/task-blocker-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task-language detection only.
+- Verification: full `npm test` passed with the new blocker helper test included; `git diff --check` passed; `node scripts/check-release-updates.mjs` passed; focused `node --test test/task-blocker-meta.test.mjs` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4194 npm start` served `http://127.0.0.1:4194/` with HTTP 200. Browser verification confirmed the `Task Blocker Badges` What's New popup/dismissal persistence, a saved task titled `Launch migration blocked by API review` rendering a visible `Blocked` badge with aria label `Task is marked blocked`, no document-level horizontal overflow, and no browser console errors.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-task-blocker-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `task-blocker-meta.mjs` and returned a `Blocked` badge for blocker/waiting copy while hiding a completed blocked task, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of added lines in changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `daa8564` (`Add task blocker badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0e061b2617607e7c79a622` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0e061b2617607e7c79a622--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 12:07:38 MDT
 
 - Added mobile-first Link Count Badges for faster scanning of notes and tasks that contain web references.
