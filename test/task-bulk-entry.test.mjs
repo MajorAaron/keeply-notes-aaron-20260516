@@ -140,6 +140,29 @@ test("bulk task weekday hints override shared due dates per line", () => {
   assert.equal(tasks[1].dueAt, "2026-05-25");
 });
 
+test("same-day capture hints strip evening and EOD scheduling words", () => {
+  assert.deepEqual(parseBulkTaskLine("Send agenda tonight @work", { today: "2026-05-18" }), {
+    title: "Send agenda",
+    dueAt: "2026-05-18",
+    priority: "",
+    label: "work"
+  });
+
+  const tasks = buildBulkTasksFromText("Review launch checklist EOD\nSend notes end of day", {
+    label: "work",
+    priority: "normal",
+    dueAt: "2026-05-21",
+    today: "2026-05-18",
+    now: "2026-05-18T12:00:00.000Z",
+    createId: (index) => `task-${index}`
+  });
+
+  assert.equal(tasks[0].title, "Review launch checklist");
+  assert.equal(tasks[0].dueAt, "2026-05-18");
+  assert.equal(tasks[1].title, "Send notes");
+  assert.equal(tasks[1].dueAt, "2026-05-18");
+});
+
 test("no-date hints strip scheduling words and clear shared due dates", () => {
   assert.deepEqual(parseBulkTaskLine("Refill travel kit someday @home"), {
     title: "Refill travel kit",

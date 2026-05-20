@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-evening-task-hints",
+    title: "Evening Task Hints",
+    bullets: [
+      "Task capture now understands tonight, EOD, and end of day as same-day due hints.",
+      "Single tasks and pasted task lists strip those phrases from saved titles automatically.",
+      "The hint overrides selected due presets so mobile capture can quickly pull work back to today."
+    ]
+  },
+  {
     id: "2026-05-20-task-time-estimates",
     title: "Task Time Estimates",
     bullets: [

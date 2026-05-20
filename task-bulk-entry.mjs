@@ -35,16 +35,19 @@ export function parseBulkTaskLine(line, options = {}) {
 
   let clearsDue = false;
 
-  title = title.replace(/\b(next\s+week|this\s+weekend|weekend|today|tomorrow|this\s+(?:sunday|monday|tuesday|wednesday|thursday|friday|saturday)|sunday|monday|tuesday|wednesday|thursday|friday|saturday|no\s+date|unscheduled|someday)\b/gi, (match) => {
-    const hint = match.toLowerCase().replace(/\s+/g, "-");
-    if (isNoDateHint(hint)) {
-      clearsDue = true;
-      dueAt = "";
-    } else if (!clearsDue) {
-      dueAt = dueAt || getRelativeDate(hint, baseDate);
+  title = title.replace(
+    /\b(next\s+week|this\s+weekend|weekend|today|tonight|eod|end\s+of\s+day|tomorrow|this\s+(?:sunday|monday|tuesday|wednesday|thursday|friday|saturday)|sunday|monday|tuesday|wednesday|thursday|friday|saturday|no\s+date|unscheduled|someday)\b/gi,
+    (match) => {
+      const hint = match.toLowerCase().replace(/\s+/g, "-");
+      if (isNoDateHint(hint)) {
+        clearsDue = true;
+        dueAt = "";
+      } else if (!clearsDue) {
+        dueAt = dueAt || getRelativeDate(hint, baseDate);
+      }
+      return " ";
     }
-    return " ";
-  });
+  );
 
   title = title.replace(/(?:^|\s)(?:!|#)(high|normal|low)\b/gi, (match, value) => {
     priority = priority || value.toLowerCase();
