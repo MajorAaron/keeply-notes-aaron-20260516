@@ -1,4 +1,20 @@
 
+## 2026-05-19 21:04:38 MDT
+
+- Added mobile-first Weekend Note Follow-Ups for turning notes into weekend tasks without opening the task composer.
+- Active note cards now include a `Task weekend` follow-up shortcut alongside today, tomorrow, and next week; the shortcut preserves note title, body, and label on the generated task.
+- Weekend follow-up dates resolve to the upcoming Saturday, or today when already on Saturday/Sunday.
+- Updated What's New metadata with latest id `2026-05-19-weekend-note-followups`, title `Weekend Note Follow-Ups`, and 3 user-facing bullets.
+- UI/code areas touched: note follow-up shortcut helper, note follow-up tests, mobile note follow-up button wrapping CSS, and release metadata. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local note-to-task scheduling behavior only.
+- Verification: full `npm test` passed with 194 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4180 npm start` served `http://127.0.0.1:4180/` with HTTP 200. Browser verification confirmed the `Weekend Note Follow-Ups` What's New popup/bullets, dismissal persistence to `keeply-last-seen-update`, visible `Task weekend` note-card follow-up buttons, dynamic-imported weekend follow-up due date `2026-05-23`, and no browser console errors.
+- Mobile/layout verification: browser checks found the four note follow-up buttons visible/readable and wrapping into two rows without obvious clipping or horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the latest update id `2026-05-19-weekend-note-followups` in the What's New popup, exposed `Task weekend` note follow-up buttons, dismissed to `keeply-last-seen-update`, dynamic-imported weekend follow-up logic returned due date `2026-05-23`, and reported no browser console errors.
+- Secret scan of changed metadata/helper/style/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `c90ae12` (`Add weekend note follow-ups`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d24a197d149afe06ca063` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d24a197d149afe06ca063--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-19 20:06:07 MDT
 
 - Added mobile-first Weekend Scheduling for faster task planning around the upcoming weekend.
