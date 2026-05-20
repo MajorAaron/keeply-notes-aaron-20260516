@@ -1,4 +1,20 @@
 
+## 2026-05-19 23:08:26 MDT
+
+- Added mobile-first Stats Shortcuts so the summary row doubles as quick navigation/filter controls.
+- Notes view now exposes tappable Total and Pinned summary tiles for clearing back to all active notes or isolating pinned notes; the Today note tile remains a disabled summary because there is no exact created-today filter.
+- Tasks view now exposes tappable Tasks, Open, and Due summary tiles; Due jumps to Today + Open when today work exists, Tomorrow + Open when tomorrow work exists, or Open tasks when due-soon work is clear.
+- Updated What's New metadata with latest id `2026-05-19-stats-shortcuts`, title `Stats Shortcuts`, and 3 user-facing bullets.
+- UI/code areas touched: summary row markup and styles, stats shortcut helper/action wiring in `app.js`, release metadata, package test wiring, and new helper/test files `stats-shortcuts.mjs` plus `test/stats-shortcuts.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local filtering/navigation behavior only.
+- Verification: full `npm test` passed with 195 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4182 npm start` served `http://127.0.0.1:4182/` with HTTP 200. Browser verification confirmed the `Stats Shortcuts` What's New popup/bullets, dismissal persistence to `keeply-last-seen-update`, Notes summary shortcut accessibility labels, Tasks summary shortcut labels, the Due stat setting Tasks + Today + Open preferences, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the Summary shortcuts row readable with no obvious clipping, overlap, or horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Stats Shortcuts` What's New popup and bullets, dismissed to `keeply-last-seen-update`, exposed the Summary shortcuts row, set Tasks + Today + Open preferences via the Due stat shortcut, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of added lines in changed app/index/style/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `506d23b` (`Add stats shortcut filters`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d41a151841be4b077da4c` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d41a151841be4b077da4c--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-19 22:07:22 MDT
 
 - Added a mobile-first Today Progress Shortcut so the task progress card can jump directly into the most relevant task queue.
