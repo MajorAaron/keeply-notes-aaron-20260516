@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-task-weekday-due-badges",
+    title: "Task Weekday Due Badges",
+    bullets: [
+      "Task date badges now include weekday names for scheduled dates beyond today and tomorrow.",
+      "Overdue and completed tasks keep their status while showing the missed or finished weekday.",
+      "Screen-reader labels use full weekday dates so mobile review has clearer timing context."
+    ]
+  },
+  {
     id: "2026-05-20-composer-body-meta",
     title: "Composer Draft Stats",
     bullets: [

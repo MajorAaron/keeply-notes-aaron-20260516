@@ -7,10 +7,10 @@ const now = new Date("2026-05-17T15:00:00-06:00");
 
 test("labels overdue tasks with the missed date", () => {
   assert.deepEqual(getTaskDueBadge({ dueAt: "2026-05-16", completed: false }, { now }), {
-    label: "Overdue · May 16",
+    label: "Overdue · Sat, May 16",
     tone: "overdue",
     dateTime: "2026-05-16",
-    ariaLabel: "Due May 16, overdue"
+    ariaLabel: "Due Saturday, May 16, overdue"
   });
 });
 
@@ -32,12 +32,12 @@ test("labels tomorrow's task as due tomorrow", () => {
   });
 });
 
-test("keeps future due dates concise", () => {
+test("adds weekday context to future due dates", () => {
   assert.deepEqual(getTaskDueBadge({ dueAt: "2026-05-21", completed: false }, { now }), {
-    label: "May 21",
+    label: "Thu, May 21",
     tone: "upcoming",
     dateTime: "2026-05-21",
-    ariaLabel: "Due May 21"
+    ariaLabel: "Due Thursday, May 21"
   });
 });
 
@@ -52,9 +52,9 @@ test("marks unscheduled tasks without a dateTime", () => {
 
 test("keeps completed tasks visually quiet", () => {
   assert.deepEqual(getTaskDueBadge({ dueAt: "2026-05-16", completed: true }, { now }), {
-    label: "Done · May 16",
+    label: "Done · Sat, May 16",
     tone: "done",
     dateTime: "2026-05-16",
-    ariaLabel: "Completed task, due May 16"
+    ariaLabel: "Completed task, due Saturday, May 16"
   });
 });

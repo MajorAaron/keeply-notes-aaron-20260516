@@ -14,13 +14,14 @@ export function getTaskDueBadge(task = {}, options = {}) {
   }
 
   const dateLabel = formatShortDate(dueAt);
+  const spokenDateLabel = formatSpokenDate(dueAt);
 
   if (task.completed) {
     return {
       label: `Done · ${dateLabel}`,
       tone: "done",
       dateTime: dueAt,
-      ariaLabel: `Completed task, due ${dateLabel}`
+      ariaLabel: `Completed task, due ${spokenDateLabel}`
     };
   }
 
@@ -32,7 +33,7 @@ export function getTaskDueBadge(task = {}, options = {}) {
       label: `Overdue · ${dateLabel}`,
       tone: "overdue",
       dateTime: dueAt,
-      ariaLabel: `Due ${dateLabel}, overdue`
+      ariaLabel: `Due ${spokenDateLabel}, overdue`
     };
   }
 
@@ -58,14 +59,26 @@ export function getTaskDueBadge(task = {}, options = {}) {
     label: dateLabel,
     tone: "upcoming",
     dateTime: dueAt,
-    ariaLabel: `Due ${dateLabel}`
+    ariaLabel: `Due ${spokenDateLabel}`
   };
 }
 
 function formatShortDate(dateKey) {
-  const [year, month, day] = dateKey.split("-").map(Number);
-  if (!year || !month || !day) return "No date";
-  return new Intl.DateTimeFormat("en", { month: "short", day: "numeric" }).format(new Date(year, month - 1, day));
+  const date = parseDateKey(dateKey);
+  if (!date) return "No date";
+  return new Intl.DateTimeFormat("en", { weekday: "short", month: "short", day: "numeric" }).format(date);
+}
+
+function formatSpokenDate(dateKey) {
+  const date = parseDateKey(dateKey);
+  if (!date) return "No due date";
+  return new Intl.DateTimeFormat("en", { weekday: "long", month: "long", day: "numeric" }).format(date);
+}
+
+function parseDateKey(dateKey) {
+  const [year, month, day] = String(dateKey).split("-").map(Number);
+  if (!year || !month || !day) return null;
+  return new Date(year, month - 1, day);
 }
 
 function startOfLocalDay(date) {
