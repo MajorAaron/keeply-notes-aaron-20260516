@@ -1,4 +1,18 @@
 
+## 2026-05-20 09:05:51 MDT
+
+- Added mobile-first Weekday Task Hints for faster natural-language task capture.
+- Task title parsing now understands weekday names from Sunday through Saturday, including `this Monday`; single tasks and pasted task lists set the matching due date while saving clean titles.
+- Updated What's New metadata with latest id `2026-05-20-weekday-task-hints`, title `Weekday Task Hints`, and 3 user-facing bullets.
+- UI/code areas touched: deterministic task hint parser in `task-bulk-entry.mjs`, single-task capture via existing `task-capture-hints.mjs` integration, release metadata, and parser/capture tests. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task parsing/capture behavior only.
+- Verification: full `npm test` passed with 219 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4190 npm start` served `http://127.0.0.1:4190/` with HTTP 200. Browser verification confirmed the `Weekday Task Hints` What's New popup/dismissal persistence, dynamic-imported local parsing of `Send invoices Friday @work` to title `Send invoices`, Work label, and due date `2026-05-22`, reported no document horizontal overflow, and had no browser console errors.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-weekday-task-hints` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamic-imported production weekday parsing for `Send invoices Friday @work`, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `0045fcf` (`Add weekday task hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0dcdaefa6b0f00a106e874` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0dcdaefa6b0f00a106e874--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 08:08:29 MDT
 
 - Added mobile-first Note Activity Badges for faster note triage.
