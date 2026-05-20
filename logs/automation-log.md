@@ -1,4 +1,18 @@
 
+## 2026-05-20 12:07:38 MDT
+
+- Added mobile-first Link Count Badges for faster scanning of notes and tasks that contain web references.
+- Note and task cards now show compact `1 link` / `N links` pills when titles or bodies include unique `http(s)` URLs, with screen-reader labels that include the first link domain.
+- Updated What's New metadata with latest id `2026-05-20-link-count-badges`, title `Link Count Badges`, and 3 user-facing bullets.
+- UI/code areas touched: card metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `item-link-meta.mjs` plus `test/item-link-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local URL detection only.
+- Verification: full `npm test` passed, including the new link metadata helper test; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4193 npm start` served `http://127.0.0.1:4193/` with HTTP 200. Browser verification confirmed the `Link Count Badges` What's New popup/dismissal persistence, a note badge `2 links`, a task badge `1 link`, no document-level horizontal overflow, and no browser console errors.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-link-count-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-link-meta.mjs` and returned `2 links` for two production URLs, reported no document horizontal overflow, and had no browser console errors. Production sample data did not include visible link cards, so the deployed helper/import path was smoke-tested directly.
+- Secret scan of added lines in changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `d5880cd` (`Add link count badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0df83f85d8ee5207d30354` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0df83f85d8ee5207d30354--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 11:04:11 MDT
 
 - Added mobile-first Task Weekday Due Badges for clearer task timing at a glance.
