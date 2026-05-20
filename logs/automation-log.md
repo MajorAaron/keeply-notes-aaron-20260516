@@ -1,4 +1,18 @@
 
+## 2026-05-20 07:07:13 MDT
+
+- Added mobile-first Note Image Badges for faster scanning of visual notes.
+- Note cards with safe data-image attachments now show a compact `Image`, `AI image`, or `Local image` badge beside reading/checklist metadata, with accessible labels and image-type styling.
+- Updated What's New metadata with latest id `2026-05-20-note-image-badges`, title `Note Image Badges`, and 3 user-facing bullets.
+- UI/code areas touched: note card metadata rendering in `app.js`/`index.html`, note badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `note-image-meta.mjs` plus `test/note-image-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local metadata display for attached/generated note images only.
+- Verification: full `npm test` passed with 211 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4188 npm start` served `http://127.0.0.1:4188/` with HTTP 200. Browser verification confirmed the `Note Image Badges` What's New popup/dismissal persistence, visible image badges on note cards with visual content, no document-level horizontal overflow, and no browser console errors.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-note-image-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamic-imported the production note image metadata helper to confirm local fallback image badge copy, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of added lines in changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `475b5af` (`Add note image badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0db1bd33f32b5d4899304b` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0db1bd33f32b5d4899304b--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 06:06:56 MDT
 
 - Added mobile-first Task Freshness Badges for quicker task review context.
