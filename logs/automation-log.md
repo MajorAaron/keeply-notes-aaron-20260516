@@ -6,7 +6,7 @@
 - Updated What's New metadata with latest id `2026-05-20-composer-body-meta`, title `Composer Draft Stats`, and 3 user-facing bullets.
 - UI/code areas touched: composer markup in `index.html`, live metadata wiring in `app.js`, compact mobile styling in `styles.css`, release metadata, package test wiring, and new helper/test files `composer-body-meta.mjs` plus `test/composer-body-meta.test.mjs`. No new dependencies or Netlify functions were added.
 - AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local composer metadata only.
-- Verification: full `npm test` passed with 229 passing tests; `git diff --check` passed.
+- Verification: full `npm test` passed; `git diff --check` passed.
 - Local smoke verification: `HOST=127.0.0.1 PORT=4191 npm start` served `http://127.0.0.1:4191/` with HTTP 200. Browser verification confirmed the `Composer Draft Stats` What's New popup/dismissal persistence, live composer metadata for a multi-line checklist draft (`13 words • 3 lines • 2 checks`), no document-level horizontal overflow, and no browser console errors.
 - Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-composer-body-meta` in the What's New popup, dismissed to `keeply-last-seen-update`, showed live composer metadata for a two-line draft (`5 words • 2 lines`), reported no document horizontal overflow, and had no browser console errors.
 - Secret scan of added lines in changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
