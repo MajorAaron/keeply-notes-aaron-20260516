@@ -1,4 +1,19 @@
 
+## 2026-05-20 00:05:52 MDT
+
+- Added a mobile-first This Week Task Filter for faster near-term task planning.
+- Tasks view now includes a `This week` date chip between Tomorrow and Upcoming; it counts tasks due today through the next six days and composes with status, priority, label, and search filters.
+- Updated What's New metadata with latest id `2026-05-20-this-week-task-filter`, title `This Week Task Filter`, and 3 user-facing bullets.
+- UI/code areas touched: task date filter markup, date-window helper logic, active-filter labels, view-preference normalization, release metadata, and task/filter/view-preference tests. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task filtering/count behavior only.
+- Verification: full `npm test` passed with 195 passing tests after shortening one release bullet to satisfy the metadata checker; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4183 npm start` served `http://127.0.0.1:4183/` with HTTP 200. Browser verification confirmed the `This Week Task Filter` What's New popup/bullets, dismissal persistence to `keeply-last-seen-update`, visible `This week` task date chip and counts, selecting it persisted `taskWindow: week`, active-filter summary copy, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the task date filter row readable with `This week` selected and no obvious clipping, overlapping controls, or document-level horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed latest update id `2026-05-20-this-week-task-filter` in the What's New popup, dismissed to `keeply-last-seen-update`, selected the `This week` task chip, persisted `taskWindow: week`, showed the active-filter summary, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed app/index/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `d315684` (`Add this week task filter`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d4f1c06b5c21bd32cf834` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d4f1c06b5c21bd32cf834--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-19 23:08:26 MDT
 
 - Added mobile-first Stats Shortcuts so the summary row doubles as quick navigation/filter controls.
