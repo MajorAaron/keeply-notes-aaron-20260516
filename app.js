@@ -55,6 +55,7 @@ import { getSyncStatusView } from "./sync-status.mjs";
 import { getNavigationBadges } from "./navigation-badges.mjs";
 import { getTaskCompletionFilterCounts, matchesTaskCompletionFilter, normalizeTaskCompletionFilter } from "./task-completion-filters.mjs";
 import { getNotePinFilterCounts, matchesNotePinFilter, normalizeNotePinFilter } from "./note-pin-filters.mjs";
+import { getStatsShortcut } from "./stats-shortcuts.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -209,6 +210,7 @@ const els = {
   totalCount: document.querySelector("#totalCount"),
   pinnedCount: document.querySelector("#pinnedCount"),
   todayCount: document.querySelector("#todayCount"),
+  statsButtons: document.querySelectorAll(".stats-button"),
   totalLabel: document.querySelector("#totalLabel"),
   middleLabel: document.querySelector("#middleLabel"),
   rightLabel: document.querySelector("#rightLabel"),
@@ -848,25 +850,74 @@ function captureSearchDraft() {
 }
 
 function renderStats() {
+  const today = toDateInput(new Date());
+  const tomorrow = toDateInput(new Date(Date.now() + dayMs));
+  let shortcutCounts = {};
+
   if (state.view === "tasks") {
     const activeTasks = state.tasks.filter((task) => task.status === "active");
+    const dueSoonTasks = activeTasks.filter((task) => task.dueAt && isDueSoon(task));
+    shortcutCounts = {
+      dueToday: dueSoonTasks.filter((task) => task.dueAt === today).length,
+      dueTomorrow: dueSoonTasks.filter((task) => task.dueAt === tomorrow).length
+    };
     els.totalCount.textContent = activeTasks.length;
     els.pinnedCount.textContent = activeTasks.filter((task) => !task.completed).length;
-    els.todayCount.textContent = activeTasks.filter((task) => task.dueAt && isDueSoon(task)).length;
+    els.todayCount.textContent = dueSoonTasks.length;
     els.totalLabel.textContent = "Tasks";
     els.middleLabel.textContent = "Open";
     els.rightLabel.textContent = "Due";
+    renderStatsShortcuts(shortcutCounts);
     return;
   }
 
   const activeNotes = state.notes.filter((note) => note.status === "active");
-  const today = new Date().toDateString();
+  const todayString = new Date().toDateString();
   els.totalCount.textContent = activeNotes.length;
   els.pinnedCount.textContent = activeNotes.filter((note) => note.pinned).length;
-  els.todayCount.textContent = activeNotes.filter((note) => new Date(note.createdAt).toDateString() === today).length;
+  els.todayCount.textContent = activeNotes.filter((note) => new Date(note.createdAt).toDateString() === todayString).length;
   els.totalLabel.textContent = "Total";
   els.middleLabel.textContent = "Pinned";
   els.rightLabel.textContent = "Today";
+  renderStatsShortcuts(shortcutCounts);
+}
+
+function renderStatsShortcuts(counts = {}) {
+  els.statsButtons.forEach((button) => {
+    const shortcut = getStatsShortcut({ view: state.view, slot: button.dataset.statShortcut, counts });
+    button.disabled = !shortcut.enabled;
+    button.setAttribute("aria-label", shortcut.label);
+    button.title = shortcut.label;
+  });
+}
+
+function applyStatsShortcut(slot) {
+  const today = toDateInput(new Date());
+  const tomorrow = toDateInput(new Date(Date.now() + dayMs));
+  const dueSoonTasks = state.tasks.filter((task) => task.status === "active" && task.dueAt && isDueSoon(task));
+  const shortcut = getStatsShortcut({
+    view: state.view,
+    slot,
+    counts: {
+      dueToday: dueSoonTasks.filter((task) => task.dueAt === today).length,
+      dueTomorrow: dueSoonTasks.filter((task) => task.dueAt === tomorrow).length
+    }
+  });
+
+  if (!shortcut.enabled || !shortcut.filters) return;
+  Object.entries(shortcut.filters).forEach(([key, value]) => {
+    state[key] = value;
+  });
+  els.searchInput.value = state.query;
+  syncNav();
+  saveViewPreferences();
+  render();
+  if (state.view === "tasks") {
+    els.taskList.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    els.pinnedNotes.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  showToast(shortcut.toast);
 }
 
 function renderNoteColorFilters() {
@@ -3131,6 +3182,9 @@ els.cleanupSpotlightButton.addEventListener("click", focusCleanupSpotlight);
 els.nextTaskButton.addEventListener("click", focusNextTaskWindow);
 els.nextTaskCompleteButton.addEventListener("click", completeNextTask);
 els.taskTodayAction.addEventListener("click", focusTodayProgressAction);
+els.statsButtons.forEach((button) => {
+  button.addEventListener("click", () => applyStatsShortcut(button.dataset.statShortcut));
+});
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
 els.taskComposerPresets.addEventListener("click", (event) => {

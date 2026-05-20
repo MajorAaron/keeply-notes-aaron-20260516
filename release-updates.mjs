@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-stats-shortcuts",
+    title: "Stats Shortcuts",
+    bullets: [
+      "The summary row is now tappable for faster mobile filtering.",
+      "In Tasks, tap Tasks, Open, or Due to jump straight to matching task lists.",
+      "In Notes, tap Total or Pinned to clear back to all notes or isolate pinned notes."
+    ]
+  },
+  {
     id: "2026-05-19-today-progress-cta",
     title: "Today Progress Shortcut",
     bullets: [

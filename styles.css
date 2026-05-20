@@ -1366,12 +1366,30 @@ select {
   border-radius: 24px;
 }
 
-.stats-row div {
+.stats-button {
   display: grid;
   min-height: 72px;
   align-content: center;
   padding: 12px;
+  border: 0;
   background: rgba(255, 255, 255, 0.34);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.stats-button:disabled {
+  cursor: default;
+  opacity: 0.68;
+}
+
+.stats-button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.stats-button:focus-visible {
+  outline: 3px solid rgba(35, 36, 38, 0.28);
+  outline-offset: -3px;
 }
 
 .stats-row strong {
