@@ -1,4 +1,18 @@
 
+## 2026-05-20 14:06:30 MDT
+
+- Added mobile-first Task Time Estimate badges for faster task sizing while scanning the Tasks view.
+- Task cards now show compact `25m`, `1h`, or `1h 30m` pills when the title or details include a reasonable time estimate; screen-reader labels expand the time into hours/minutes.
+- Updated What's New metadata with latest id `2026-05-20-task-time-estimates`, title `Task Time Estimates`, and 3 user-facing bullets.
+- UI/code areas touched: task card metadata rendering in `app.js`, task template in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `task-time-estimate-meta.mjs` plus `test/task-time-estimate-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local time-estimate parsing only.
+- Verification: full `npm test` passed with the new task time estimate helper test included; focused `node --test test/task-time-estimate-meta.test.mjs` passed; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4195 npm start` served `http://127.0.0.1:4195/` with HTTP 200. Browser verification confirmed the `Task Time Estimates` What's New popup/dismissal persistence, dynamic-imported `task-time-estimate-meta.mjs` returning a `25m` estimate badge, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-task-time-estimates` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `task-time-estimate-meta.mjs` and returned `1h 15m` with accessible aria copy, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of added lines in changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `5aa6a79` (`Add task time estimate badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0e1427cb1505d15ff7ba02` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0e1427cb1505d15ff7ba02--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 13:06:39 MDT
 
 - Added mobile-first Task Blocker Badges for faster stalled-work triage in the Tasks view.
