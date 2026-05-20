@@ -13,7 +13,7 @@
 - Production verification: deploy permalink loaded, showed the latest update id `2026-05-19-weekend-note-followups` in the What's New popup, exposed `Task weekend` note follow-up buttons, dismissed to `keeply-last-seen-update`, dynamic-imported weekend follow-up logic returned due date `2026-05-23`, and reported no browser console errors.
 - Secret scan of changed metadata/helper/style/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
 - Git status: feature commit `c90ae12` (`Add weekend note follow-ups`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
-- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d24a197d149afe06ca063` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d24a197d149afe06ca063--keeply-notes-aaron-20260516.netlify.app`.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d24a197d149afe06ca063` and final current-tree deploy `6a0d24ecdf08faa728822f19` are live at `https://keeply-notes-aaron-20260516.netlify.app`; final deploy permalink is `https://6a0d24ecdf08faa728822f19--keeply-notes-aaron-20260516.netlify.app`.
 
 ## 2026-05-19 20:06:07 MDT
 
