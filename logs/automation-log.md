@@ -1,4 +1,18 @@
 
+## 2026-05-20 16:05:23 MDT
+
+- Added mobile-first Contact Badges for quicker follow-up scanning across notes and tasks.
+- Note and task cards now show compact `Email`, `Phone`, or `N contacts` pills when titles/details include email addresses or phone numbers; repeated contacts are deduped and mixed contact cards get a combined count.
+- Updated What's New metadata with latest id `2026-05-20-contact-badges`, title `Contact Badges`, and 3 user-facing bullets.
+- UI/code areas touched: card metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `item-contact-meta.mjs` plus `test/item-contact-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local contact detection only.
+- Verification: full `npm test` passed with 230 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4197 npm start` served `http://127.0.0.1:4197/` with HTTP 200. Browser verification confirmed the `Contact Badges` What's New popup/dismissal persistence, dynamic-imported local contact metadata returning `Email`, `Phone`, and `2 contacts`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-contact-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-contact-meta.mjs` and returned a mixed `2 contacts` badge for email plus phone text, reported no document horizontal overflow, and had no browser console errors. Production sample data did not include visible contact cards, so the deployed helper/import path was smoke-tested directly.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; only existing CSS class text containing `task-composer-priority-preset` matched the broad token regex and was reviewed as a false positive.
+- Git status: feature commit `d6022c9` (`Add contact detail badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0e3005d0b12f18e7c933e0` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0e3005d0b12f18e7c933e0--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 15:05:45 MDT
 
 - Added mobile-first Evening Task Hints for faster same-day task capture.
