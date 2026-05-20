@@ -1,4 +1,18 @@
 
+## 2026-05-20 15:05:45 MDT
+
+- Added mobile-first Evening Task Hints for faster same-day task capture.
+- Task capture now understands `tonight`, `EOD`, and `end of day` as today due-date hints; single tasks and pasted task lists strip those phrases from saved titles and override selected future due presets back to today.
+- Updated What's New metadata with latest id `2026-05-20-evening-task-hints`, title `Evening Task Hints`, and 3 user-facing bullets.
+- UI/code areas touched: task hint parsing in `task-bulk-entry.mjs`, single-task capture coverage through `task-capture-hints.mjs`, release metadata, and parser/capture tests in `test/task-bulk-entry.test.mjs` plus `test/task-capture-hints.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task parsing only.
+- Verification: full `npm test` passed with 230 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4196 npm start` served `http://127.0.0.1:4196/` with HTTP 200. Browser verification confirmed the `Evening Task Hints` What's New popup/dismissal persistence, dynamic-imported local parsing for `Send agenda tonight @work`, pasted `EOD`/`end of day` lines resolving to today's date with clean titles, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-evening-task-hints` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `task-bulk-entry.mjs` and parsed `Send agenda EOD @work` to title `Send agenda`, label `work`, and due date `2026-05-20`, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed metadata/parser/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `f1fefbb` (`Add evening task capture hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0e2200f296efd9092ee41c` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0e2200f296efd9092ee41c--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 14:06:30 MDT
 
 - Added mobile-first Task Time Estimate badges for faster task sizing while scanning the Tasks view.
