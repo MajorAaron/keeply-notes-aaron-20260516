@@ -1,4 +1,18 @@
 
+## 2026-05-20 05:07:26 MDT
+
+- Added mobile-first Cleanup Count Shortcuts for faster review from the Tasks cleanup bar.
+- The `overdue` and `done` cleanup counts are now accessible buttons; tapping overdue jumps to open overdue tasks, and tapping done jumps to completed tasks before bulk snooze/archive actions.
+- Updated What's New metadata with latest id `2026-05-20-cleanup-count-shortcuts`, title `Cleanup Count Shortcuts`, and 3 user-facing bullets.
+- UI/code areas touched: task cleanup bar markup and styling, task cleanup shortcut helper/wiring in `app.js`, release metadata, package test wiring, and new helper/test files `task-cleanup-shortcuts.mjs` plus `test/task-cleanup-shortcuts.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task filtering/navigation behavior only.
+- Verification: full `npm test` passed with 204 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4186 npm start` served `http://127.0.0.1:4186/` with HTTP 200. Browser verification confirmed the `Cleanup Count Shortcuts` What's New popup/dismissal persistence, visible cleanup count buttons in Tasks, done-count shortcut setting Done tasks, overdue-count shortcut setting Overdue + Open tasks via JS click after one stale-ref browser click miss, no document-level horizontal overflow, and no browser console errors.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-cleanup-count-shortcuts` in the What's New popup, dismissed to `keeply-last-seen-update`, displayed cleanup count buttons, done-count shortcut filtered to completed tasks, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of added lines in changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `abf2e50` (`Add task cleanup count shortcuts`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d95c78ee30f0081d297dc` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d95c78ee30f0081d297dc--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-20 04:07:13 MDT
 
 - Added mobile-first Ask Follow-Up Chips for faster follow-on questions after an Ask Keeply answer.
