@@ -1,4 +1,18 @@
 
+## 2026-05-20 04:07:13 MDT
+
+- Added mobile-first Ask Follow-Up Chips for faster follow-on questions after an Ask Keeply answer.
+- Ask answer cards now render tested local follow-up chips from the answer's sources and next step; tapping a chip fills the Ask field without auto-submitting.
+- Updated What's New metadata with latest id `2026-05-20-ask-followup-chips`, title `Ask Follow-Up Chips`, and 3 user-facing bullets.
+- UI/code areas touched: Ask answer rendering in `app.js`, follow-up question helper/tests in `ask-answer-note.mjs` and `test/ask-answer-note.test.mjs`, Ask chip styling in `styles.css`, and release metadata. No new dependencies or Netlify functions were added.
+- AI/API behavior: submitted Ask requests still use the existing `/api/ask` Anthropic flow and local fallback; the new follow-up chips are deterministic local UI suggestions based on returned answer metadata.
+- Verification: full `npm test` passed with 204 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4185 npm start` served `http://127.0.0.1:4185/` with HTTP 200. Browser verification confirmed the `Ask Follow-Up Chips` What's New popup/dismissal persistence, an Ask answer rendering follow-up chips, tapping a chip filling the Ask field, no document-level horizontal overflow, and no browser console errors.
+- Production verification: deploy permalink loaded, showed latest update id `2026-05-20-ask-followup-chips` in the What's New popup, dismissed to `keeply-last-seen-update`, rendered Ask follow-up chips after a production Ask answer, reported no horizontal overflow, and had no browser console errors.
+- Secret scan of changed app/style/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `ef54143` (`Add Ask follow-up chips`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d879f6071e1b41ab8f498` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d879f6071e1b41ab8f498--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-20 01:08:40 MDT
 
 - Added No-Date Task Hints for faster mobile task capture when a selected due preset should be cleared.
