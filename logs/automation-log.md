@@ -1,4 +1,20 @@
 
+## 2026-05-20 01:08:40 MDT
+
+- Added No-Date Task Hints for faster mobile task capture when a selected due preset should be cleared.
+- Task title parsing now understands `no date`, `unscheduled`, and `someday`; those words are stripped from saved task titles while label and priority hints still apply.
+- Pasted multi-line task lists can use the same no-date hints to override a shared composer due date on individual lines.
+- Updated What's New metadata with latest id `2026-05-20-no-date-task-hints`, title `No-Date Task Hints`, and 3 user-facing bullets.
+- UI/code areas touched: task hint parser, single-task capture due handling, release metadata, and task capture/bulk parser tests. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task parsing/capture behavior only.
+- Verification: full `npm test` passed; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4184 npm start` served `http://127.0.0.1:4184/` with HTTP 200. Browser verification confirmed the `No-Date Task Hints` What's New popup/bullets, dismissal persistence to `keeply-last-seen-update`, creating `Inventory freezer someday @home` with a selected due date saved title `Inventory freezer`, Home label, and blank due date, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the Tasks composer/filter area readable with no obvious clipping, overlapping controls, or document-level horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-no-date-task-hints` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamic-imported the production parser to confirm `Inventory freezer someday @home` returns `clearsDue: true`, Home label, and no due date, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `7dd3c68` (`Add no-date task hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d5dd2a4b1a333fadfeb04` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d5dd2a4b1a333fadfeb04--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-20 00:05:52 MDT
 
 - Added a mobile-first This Week Task Filter for faster near-term task planning.
