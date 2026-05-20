@@ -24,7 +24,8 @@ export function getTodayTaskProgress(tasks, options = {}) {
     percent,
     title: buildTitle({ total, completed, open, percent }),
     summary: buildSummary({ total, completed, open, highOpen, dueTomorrow }),
-    ariaLabel: buildAriaLabel({ total, completed, open, highOpen, percent })
+    ariaLabel: buildAriaLabel({ total, completed, open, highOpen, percent }),
+    action: buildAction({ total, open, dueTomorrow })
   };
 }
 
@@ -51,6 +52,46 @@ function buildAriaLabel({ total, completed, open, highOpen, percent }) {
   if (total === 0) return "No tasks due today";
   const highText = highOpen > 0 ? `, ${highOpen} high priority open` : "";
   return `${percent} percent complete for today's tasks: ${completed} done, ${open} open${highText}`;
+}
+
+function buildAction({ total, open, dueTomorrow }) {
+  if (open > 0) {
+    return {
+      label: "Show today",
+      ariaLabel: `Show ${open} open ${open === 1 ? "task" : "tasks"} due today`,
+      window: "today",
+      completion: "open",
+      disabled: false
+    };
+  }
+
+  if (total > 0) {
+    return {
+      label: "Review done",
+      ariaLabel: "Review completed tasks due today",
+      window: "today",
+      completion: "done",
+      disabled: false
+    };
+  }
+
+  if (dueTomorrow > 0) {
+    return {
+      label: "Show tomorrow",
+      ariaLabel: `Show ${dueTomorrow} open ${dueTomorrow === 1 ? "task" : "tasks"} due tomorrow`,
+      window: "tomorrow",
+      completion: "open",
+      disabled: false
+    };
+  }
+
+  return {
+    label: "Plan tasks",
+    ariaLabel: "Show open tasks",
+    window: "all",
+    completion: "open",
+    disabled: false
+  };
 }
 
 function toDateInput(date) {

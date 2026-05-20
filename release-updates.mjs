@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-today-progress-cta",
+    title: "Today Progress Shortcut",
+    bullets: [
+      "The Today progress card now includes a one-tap shortcut to the right task list.",
+      "When you have open work due today, the shortcut jumps straight to open Today tasks.",
+      "If today is clear, it pivots to completed Today tasks, tomorrow’s queue, or open task planning."
+    ]
+  },
+  {
     id: "2026-05-19-weekend-note-followups",
     title: "Weekend Note Follow-Ups",
     bullets: [

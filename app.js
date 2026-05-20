@@ -263,6 +263,7 @@ const els = {
   taskTodayPercent: document.querySelector("#taskTodayPercent"),
   taskTodayOpen: document.querySelector("#taskTodayOpen"),
   taskTodayHigh: document.querySelector("#taskTodayHigh"),
+  taskTodayAction: document.querySelector("#taskTodayAction"),
   archiveCompletedButton: document.querySelector("#archiveCompletedButton"),
   archiveCompletedCount: document.querySelector("#archiveCompletedCount"),
   snoozeOverdueButton: document.querySelector("#snoozeOverdueButton"),
@@ -1082,6 +1083,25 @@ function renderTaskTodayProgress() {
   els.taskTodayMeter.setAttribute("aria-valuenow", String(summary.percent));
   els.taskTodayMeter.setAttribute("aria-label", summary.ariaLabel);
   els.taskTodayFill.style.width = `${summary.percent}%`;
+  els.taskTodayAction.textContent = summary.action.label;
+  els.taskTodayAction.disabled = summary.action.disabled;
+  els.taskTodayAction.setAttribute("aria-label", summary.action.ariaLabel);
+}
+
+function focusTodayProgressAction() {
+  const summary = getTodayTaskProgress(state.tasks);
+  state.view = "tasks";
+  state.label = "all";
+  state.query = "";
+  state.taskWindow = summary.action.window;
+  state.taskPriority = "all";
+  state.taskCompletion = summary.action.completion;
+  els.searchInput.value = "";
+  syncNav();
+  saveViewPreferences();
+  render();
+  els.taskList.scrollIntoView({ behavior: "smooth", block: "start" });
+  showToast(summary.action.label);
 }
 
 function renderTaskBulkActions() {
@@ -3110,6 +3130,7 @@ els.noteSpotlightButton.addEventListener("click", focusNoteSpotlight);
 els.cleanupSpotlightButton.addEventListener("click", focusCleanupSpotlight);
 els.nextTaskButton.addEventListener("click", focusNextTaskWindow);
 els.nextTaskCompleteButton.addEventListener("click", completeNextTask);
+els.taskTodayAction.addEventListener("click", focusTodayProgressAction);
 els.archiveCompletedButton.addEventListener("click", archiveCompletedTasksWithUndo);
 els.snoozeOverdueButton.addEventListener("click", snoozeOverdueTasksWithUndo);
 els.taskComposerPresets.addEventListener("click", (event) => {
