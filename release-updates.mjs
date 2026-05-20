@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-focus-brief-open-actions",
+    title: "Focus Brief Open Actions",
+    bullets: [
+      "Focus Brief cards now include one-tap Open task or Open note actions when they match saved items.",
+      "AI and local briefs can jump straight to the source item with the right view and search already set.",
+      "On mobile, each open action expands to a full-width tap target under the brief item."
+    ]
+  },
+  {
     id: "2026-05-20-contact-badges",
     title: "Contact Badges",
     bullets: [

@@ -1698,6 +1698,15 @@ select {
   background: rgba(255, 255, 255, 0.42);
 }
 
+.focus-item:has(.focus-open-button) {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.focus-item-content {
+  min-width: 0;
+}
+
 .sweep-item {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
@@ -1739,7 +1748,8 @@ select {
   overflow-wrap: anywhere;
 }
 
-.sweep-apply {
+.sweep-apply,
+.focus-open-button {
   min-height: 34px;
   padding: 0 12px;
   border: 0;
@@ -1748,6 +1758,13 @@ select {
   color: white;
   font-size: 0.82rem;
   font-weight: 900;
+}
+
+.focus-open-button {
+  border: 1px solid rgba(35, 36, 38, 0.14);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  white-space: nowrap;
 }
 
 .notes-region {
@@ -2853,10 +2870,12 @@ time {
     width: 100%;
   }
 
+  .focus-item:has(.focus-open-button),
   .sweep-item {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
+  .focus-open-button,
   .sweep-apply {
     grid-column: 1 / -1;
     width: 100%;

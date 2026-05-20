@@ -66,6 +66,7 @@ import { getItemLinkMeta } from "./item-link-meta.mjs";
 import { getTaskBlockerMeta } from "./task-blocker-meta.mjs";
 import { getTaskTimeEstimateMeta } from "./task-time-estimate-meta.mjs";
 import { getItemContactMeta } from "./item-contact-meta.mjs";
+import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1282,14 +1283,15 @@ function snoozeOverdueTasksWithUndo() {
   });
 }
 
-function renderFocusBrief(brief) {
-  const items = Array.isArray(brief.items) ? brief.items : [];
-  els.focusTitle.textContent = brief.title || "Focus brief";
-  els.focusSummary.textContent = brief.summary || "Keep the day moving with one clear next step.";
-  els.focusList.replaceChildren(...items.slice(0, 4).map(renderFocusItem));
+function renderFocusBrief(brief, context = getFocusContext()) {
+  const hydratedBrief = hydrateFocusBriefActions(brief, context);
+  const items = Array.isArray(hydratedBrief.items) ? hydratedBrief.items : [];
+  els.focusTitle.textContent = hydratedBrief.title || "Focus brief";
+  els.focusSummary.textContent = hydratedBrief.summary || "Keep the day moving with one clear next step.";
+  els.focusList.replaceChildren(...items.slice(0, 4).map((item) => renderFocusItem(item, context)));
 }
 
-function renderFocusItem(item) {
+function renderFocusItem(item, context = getFocusContext()) {
   const row = document.createElement("article");
   row.className = "focus-item";
   row.dataset.priority = item.priority || "normal";
@@ -1299,6 +1301,7 @@ function renderFocusItem(item) {
   priority.textContent = item.priority || "normal";
 
   const content = document.createElement("div");
+  content.className = "focus-item-content";
   const title = document.createElement("h3");
   title.textContent = item.title || "Next action";
   const action = document.createElement("p");
@@ -1306,6 +1309,18 @@ function renderFocusItem(item) {
 
   content.append(title, action);
   row.append(priority, content);
+
+  const sourceAction = item.sourceAction?.available ? item.sourceAction : getFocusBriefItemAction(item, context);
+  if (sourceAction.available) {
+    const openButton = document.createElement("button");
+    openButton.type = "button";
+    openButton.className = "focus-open-button";
+    openButton.textContent = sourceAction.label;
+    openButton.setAttribute("aria-label", sourceAction.ariaLabel);
+    openButton.addEventListener("click", () => jumpToSource(sourceAction.source));
+    row.append(openButton);
+  }
+
   return row;
 }
 
@@ -1326,10 +1341,10 @@ async function briefFocus() {
     });
     const brief = await response.json();
     if (!response.ok) throw new Error(brief.error || "Brief failed");
-    renderFocusBrief(brief);
+    renderFocusBrief(brief, context);
     showToast("Focus brief ready");
   } catch (error) {
-    renderFocusBrief(buildLocalFocusBrief(context));
+    renderFocusBrief(buildLocalFocusBrief(context), context);
     showToast("Local brief ready");
   } finally {
     setFocusLoading(false);
@@ -1342,6 +1357,8 @@ function getFocusContext() {
     .sort(compareTasks)
     .slice(0, 8)
     .map((task) => ({
+      id: task.id,
+      type: "task",
       title: task.title,
       body: task.details,
       label: task.label,
@@ -1354,6 +1371,8 @@ function getFocusContext() {
     .sort((a, b) => Number(b.pinned) - Number(a.pinned) || new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt))
     .slice(0, 8)
     .map((note) => ({
+      id: note.id,
+      type: "note",
       title: note.title,
       body: note.body,
       label: note.label,
@@ -1374,7 +1393,8 @@ function buildLocalFocusBrief(context) {
     items.push({
       priority: nextTask.priority || "normal",
       title: nextTask.title,
-      action: nextTask.dueAt ? `Move this before ${formatDueDate(nextTask.dueAt).toLowerCase()}.` : "Turn this into the first concrete action."
+      action: nextTask.dueAt ? `Move this before ${formatDueDate(nextTask.dueAt).toLowerCase()}.` : "Turn this into the first concrete action.",
+      source: { id: nextTask.id, type: "task", title: nextTask.title }
     });
   }
 
@@ -1382,7 +1402,8 @@ function buildLocalFocusBrief(context) {
     items.push({
       priority: pinnedNote.pinned ? "high" : "normal",
       title: pinnedNote.title,
-      action: "Review the note and decide whether it needs a task."
+      action: "Review the note and decide whether it needs a task.",
+      source: { id: pinnedNote.id, type: "note", title: pinnedNote.title }
     });
   }
 
