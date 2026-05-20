@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { buildAskAnswerNote } from "../ask-answer-note.mjs";
+import { buildAskAnswerCopyText, buildAskAnswerNote } from "../ask-answer-note.mjs";
 
 test("builds a note from an Ask Keeply answer", () => {
   const note = buildAskAnswerNote(
@@ -48,4 +48,30 @@ test("truncates long question titles for card readability", () => {
   assert.equal(note.title.length, 90);
   assert.ok(note.title.endsWith("…"));
   assert.match(note.body, /Question\nHow should I summarize/);
+});
+
+test("formats Ask Keeply answers for clipboard sharing", () => {
+  const text = buildAskAnswerCopyText(
+    {
+      title: "Best local match",
+      answer: "  Quarterly check-in has the decision notes.\n",
+      nextStep: "Review the pinned note before standup.",
+      sources: [
+        { type: "note", title: "Quarterly check-in" },
+        { type: "task", title: "Prep agenda" }
+      ]
+    },
+    { question: "What did I say about the check-in?" }
+  );
+
+  assert.equal(
+    text,
+    "Best local match\n\nQuestion\nWhat did I say about the check-in?\n\nAnswer\nQuarterly check-in has the decision notes.\n\nNext step\nReview the pinned note before standup.\n\nSources\n- note · Quarterly check-in\n- task · Prep agenda"
+  );
+});
+
+test("clipboard text falls back to useful answer copy", () => {
+  const text = buildAskAnswerCopyText({}, { question: "" });
+
+  assert.equal(text, "Keeply answer\n\nAnswer\nNo answer was found in the active Keeply items.");
 });

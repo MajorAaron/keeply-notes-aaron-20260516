@@ -47,7 +47,7 @@ import { getNoteSpotlight } from "./note-spotlight.mjs";
 import { getCleanupSpotlight } from "./cleanup-spotlight.mjs";
 import { getAskSuggestions } from "./ask-suggestions.mjs";
 import { addAskHistoryQuestion, getAskHistoryChips, parseAskHistory, serializeAskHistory } from "./ask-history.mjs";
-import { buildAskAnswerNote } from "./ask-answer-note.mjs";
+import { buildAskAnswerCopyText, buildAskAnswerNote } from "./ask-answer-note.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 import { getQuickAddTarget } from "./quick-add-target.mjs";
@@ -1701,7 +1701,13 @@ function renderAskAnswer(answer, question = "") {
   saveButton.textContent = "Save as note";
   saveButton.setAttribute("aria-label", "Save this Ask Keeply answer as a note");
   saveButton.addEventListener("click", () => saveAskAnswerAsNote(answer, question, saveButton));
-  actions.append(saveButton);
+  const copyButton = document.createElement("button");
+  copyButton.type = "button";
+  copyButton.className = "ask-copy-answer";
+  copyButton.textContent = "Copy answer";
+  copyButton.setAttribute("aria-label", "Copy this Ask Keeply answer");
+  copyButton.addEventListener("click", () => copyAskAnswer(answer, question, copyButton));
+  actions.append(saveButton, copyButton);
 
   const sources = document.createElement("div");
   sources.className = "ask-sources";
@@ -1745,6 +1751,29 @@ function saveAskAnswerAsNote(answer, question, button) {
     document.querySelector(`[data-id="${CSS.escape(note.id)}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
   });
   showToast("Answer saved as note");
+}
+
+async function copyAskAnswer(answer, question, button) {
+  const copy = buildAskAnswerCopyText(answer, { question });
+  if (!copy) {
+    showToast("Nothing to copy");
+    return;
+  }
+
+  try {
+    await copyText(copy);
+    if (button) {
+      button.textContent = "Copied";
+      button.disabled = true;
+      setTimeout(() => {
+        button.textContent = "Copy answer";
+        button.disabled = false;
+      }, 1800);
+    }
+    showToast("Answer copied");
+  } catch {
+    showToast("Copy unavailable");
+  }
 }
 
 function jumpToSource(source) {

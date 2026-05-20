@@ -1579,7 +1579,8 @@ select {
   gap: 7px;
 }
 
-.ask-save-note {
+.ask-save-note,
+.ask-copy-answer {
   min-height: 36px;
   padding: 0 12px;
   border: 0;
@@ -1591,7 +1592,15 @@ select {
   box-shadow: 0 10px 20px rgba(35, 36, 38, 0.16);
 }
 
-.ask-save-note:disabled {
+.ask-copy-answer {
+  border: 1px solid rgba(35, 36, 38, 0.16);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  box-shadow: none;
+}
+
+.ask-save-note:disabled,
+.ask-copy-answer:disabled {
   cursor: default;
   opacity: 0.62;
 }

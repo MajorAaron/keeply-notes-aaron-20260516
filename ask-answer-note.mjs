@@ -31,6 +31,25 @@ export function buildAskAnswerNote(answer = {}, options = {}) {
   };
 }
 
+export function buildAskAnswerCopyText(answer = {}, options = {}) {
+  const question = cleanInlineText(options.question);
+  const title = cleanInlineText(answer.title) || "Keeply answer";
+  const answerText = cleanBlockText(answer.answer) || "No answer was found in the active Keeply items.";
+  const nextStep = cleanBlockText(answer.nextStep);
+  const sources = normalizeSources(answer.sources);
+  const sections = [];
+
+  sections.push(title);
+  if (question) sections.push(`Question\n${question}`);
+  sections.push(`Answer\n${answerText}`);
+  if (nextStep) sections.push(`Next step\n${nextStep}`);
+  if (sources.length) {
+    sections.push(`Sources\n${sources.map((source) => `- ${source.type} · ${source.title}`).join("\n")}`);
+  }
+
+  return sections.join("\n\n");
+}
+
 function truncateTitle(title) {
   if (title.length <= MAX_TITLE_LENGTH) return title;
   return `${title.slice(0, MAX_TITLE_LENGTH - 1).trimEnd()}…`;

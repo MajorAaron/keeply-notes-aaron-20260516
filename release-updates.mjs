@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-copy-ask-answers",
+    title: "Copy Ask Answers",
+    bullets: [
+      "Ask Keeply answers now include a Copy answer button beside Save as note.",
+      "Copied text keeps the question, answer, next step, and sources together.",
+      "The button confirms when copying succeeds for faster mobile handoff to chats or docs."
+    ]
+  },
+  {
     id: "2026-05-20-ask-answer-notes",
     title: "Ask Answer Notes",
     bullets: [
