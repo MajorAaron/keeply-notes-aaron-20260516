@@ -2094,6 +2094,7 @@ select {
 .task-label,
 .task-priority,
 .task-due-badge,
+.task-activity-meta,
 .task-checklist-meta {
   padding: 4px 8px;
   border-radius: 999px;
@@ -2104,6 +2105,28 @@ select {
   background: rgba(130, 215, 162, 0.24);
   color: #315d40;
   letter-spacing: 0.01em;
+}
+
+.task-activity-meta {
+  background: rgba(255, 255, 255, 0.28);
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+.task-activity-meta[data-tone="fresh"],
+.task-activity-meta[data-tone="recent"] {
+  background: rgba(129, 199, 238, 0.18);
+  color: #315569;
+}
+
+.task-activity-meta[data-tone="stale"] {
+  background: rgba(240, 150, 154, 0.24);
+  color: #8d282e;
+}
+
+.task-activity-meta[data-tone="done"] {
+  background: rgba(130, 215, 162, 0.2);
+  color: #315d40;
 }
 
 .task-due-badge {

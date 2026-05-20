@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-task-freshness-badges",
+    title: "Task Freshness Badges",
+    bullets: [
+      "Task cards now show when each task was last updated.",
+      "Open tasks that have gone untouched for a week are called out as stale.",
+      "Completed tasks show when they were finished so mobile review has more context."
+    ]
+  },
+  {
     id: "2026-05-20-cleanup-count-shortcuts",
     title: "Cleanup Count Shortcuts",
     bullets: [

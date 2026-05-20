@@ -58,6 +58,7 @@ import { getTaskCompletionFilterCounts, matchesTaskCompletionFilter, normalizeTa
 import { getNotePinFilterCounts, matchesNotePinFilter, normalizeNotePinFilter } from "./note-pin-filters.mjs";
 import { getStatsShortcut } from "./stats-shortcuts.mjs";
 import { getTaskCleanupShortcut } from "./task-cleanup-shortcuts.mjs";
+import { getTaskActivityMeta } from "./task-activity-meta.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -2083,6 +2084,12 @@ function renderTask(task) {
     dueTime.removeAttribute("datetime");
   }
   const checklistMeta = getTaskChecklistMeta(task.details);
+  const activityMeta = getTaskActivityMeta(task);
+  const activityMetaElement = node.querySelector(".task-activity-meta");
+  activityMetaElement.hidden = !activityMeta.available;
+  activityMetaElement.textContent = activityMeta.label;
+  activityMetaElement.setAttribute("aria-label", activityMeta.ariaLabel);
+  activityMetaElement.dataset.tone = activityMeta.tone;
   const checklistMetaElement = node.querySelector(".task-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;
   checklistMetaElement.textContent = checklistMeta.label;
