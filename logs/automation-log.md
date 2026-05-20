@@ -1,4 +1,19 @@
 
+## 2026-05-19 18:04:22 MDT
+
+- Added mobile-first Note Pin Filters for faster pinned-note review in the Notes view.
+- Notes now show compact All notes, Pinned, and Others filter chips with live counts; the pin filter composes with label, color, and search filters, appears in the active-filter summary, and persists in `keeply-view-preferences-v1` until Clear filters resets it.
+- Updated What's New metadata with latest id `2026-05-19-note-pin-filters`, title `Note Pin Filters`, and 3 user-facing bullets.
+- UI/code areas touched: note pin filter markup in `index.html`, filtering/render/preference wiring in `app.js`, active/empty-state filter helpers, responsive filter chip CSS, release metadata, package test wiring, and the new `note-pin-filters.mjs` helper plus `test/note-pin-filters.test.mjs`.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local filtering/count behavior only.
+- Verification: full `npm test` passed with 185 passing tests; `git diff --check` passed.
+- Local smoke verification: port 4175 was already in use, so `HOST=127.0.0.1 PORT=4176 npm start` served `http://127.0.0.1:4176/` with HTTP 200. Browser verification confirmed the `Note Pin Filters` What's New popup/dismiss persistence, Pinned filter persistence to `keeply-view-preferences-v1`, pinned-only rendering with Others hidden, active-filter summary copy, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the All notes/Pinned/Others filter chips readable, clearly selected, and free of obvious overlap or horizontal overflow at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed the `Note Pin Filters` What's New popup, persisted dismissal to `keeply-last-seen-update`, filtered to pinned notes only, and reported no browser console errors.
+- Secret scan of added lines in changed app/index/style/package/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `c59ade3` (`Add note pin filters`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0cfa6c7cbbcd4db0086cd9` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0cfa6c7cbbcd4db0086cd9--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-19 04:12:55 MDT
 
 - Added Next Week Scheduling for faster mobile task planning beyond today/tomorrow.
