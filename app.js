@@ -59,6 +59,7 @@ import { getNotePinFilterCounts, matchesNotePinFilter, normalizeNotePinFilter } 
 import { getStatsShortcut } from "./stats-shortcuts.mjs";
 import { getTaskCleanupShortcut } from "./task-cleanup-shortcuts.mjs";
 import { getTaskActivityMeta } from "./task-activity-meta.mjs";
+import { getNoteImageMeta } from "./note-image-meta.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -1884,12 +1885,20 @@ function renderNote(note) {
 
   const image = normalizeNoteImage(note.image);
   const figure = node.querySelector(".note-image");
+  const imageMetaElement = node.querySelector(".note-image-meta");
   if (image) {
     const img = figure.querySelector("img");
     img.src = image.src;
     img.alt = image.alt || image.prompt || note.title || "";
     figure.hidden = false;
     node.classList.add("has-image");
+  }
+  const imageMeta = getNoteImageMeta(image);
+  imageMetaElement.hidden = !imageMeta.available;
+  imageMetaElement.textContent = imageMeta.label;
+  imageMetaElement.setAttribute("aria-label", imageMeta.ariaLabel);
+  if (imageMeta.tone) {
+    imageMetaElement.dataset.tone = imageMeta.tone;
   }
 
   const archiveButton = node.querySelector(".archive-action");

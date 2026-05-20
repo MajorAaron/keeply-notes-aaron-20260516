@@ -1984,6 +1984,7 @@ select {
 }
 
 .note-reading-meta,
+.note-image-meta,
 .note-checklist-meta {
   display: inline-flex;
   align-items: center;
@@ -2003,7 +2004,24 @@ select {
   letter-spacing: 0.01em;
 }
 
+.note-image-meta {
+  background: rgba(129, 199, 238, 0.2);
+  color: #315569;
+  letter-spacing: 0.01em;
+}
+
+.note-image-meta[data-tone="generated"] {
+  background: rgba(248, 215, 95, 0.36);
+  color: #6f5210;
+}
+
+.note-image-meta[data-tone="local"] {
+  background: rgba(156, 224, 182, 0.26);
+  color: #315d40;
+}
+
 .note-card[data-color="ink"] .note-reading-meta,
+.note-card[data-color="ink"] .note-image-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.72);

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-note-image-badges",
+    title: "Note Image Badges",
+    bullets: [
+      "Note cards now show a compact image badge when a note has visual content.",
+      "Badges distinguish attached images, AI images, and local fallback visuals.",
+      "The new badge sits with reading and checklist metadata for faster mobile scanning."
+    ]
+  },
+  {
     id: "2026-05-20-task-freshness-badges",
     title: "Task Freshness Badges",
     bullets: [
