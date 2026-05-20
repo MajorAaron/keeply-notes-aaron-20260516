@@ -27,16 +27,17 @@ test("empty state copy offers filter recovery for task filters", () => {
   assert.equal(hasRecoverableEmptyStateFilters({ view: "tasks", taskCompletion: "open" }), true);
 });
 
-test("empty state copy offers filter recovery for note color and search", () => {
+test("empty state copy offers filter recovery for note color, pin filters, and search", () => {
   assert.deepEqual(
-    getEmptyStateCopy({ view: "active", label: "all", noteColor: "sky", query: "" }),
+    getEmptyStateCopy({ view: "active", label: "all", noteColor: "sky", notePin: "pinned", query: "" }),
     {
       title: "No matching notes",
       message: "Clear filters to get back to everything in this view.",
       action: "Clear filters"
     }
   );
-  assert.equal(hasRecoverableEmptyStateFilters({ view: "active", noteColor: "all", query: " quarterly " }), true);
+  assert.equal(hasRecoverableEmptyStateFilters({ view: "active", noteColor: "all", notePin: "unpinned", query: "" }), true);
+  assert.equal(hasRecoverableEmptyStateFilters({ view: "active", noteColor: "all", notePin: "all", query: " quarterly " }), true);
 });
 
 test("empty state copy distinguishes archive and trash when no filters are active", () => {

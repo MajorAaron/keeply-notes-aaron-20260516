@@ -10,15 +10,16 @@ test("active filter summary stays hidden for default filters", () => {
     taskPriority: "all",
     taskCompletion: "all",
     noteColor: "all",
+    notePin: "all",
     query: ""
   });
 
   assert.equal(summary.active, false);
   assert.deepEqual(summary.chips, []);
-  assert.equal(shouldShowFilterSummary({ label: "all", taskWindow: "all", taskPriority: "all", taskCompletion: "all", noteColor: "all", query: "" }), false);
+  assert.equal(shouldShowFilterSummary({ label: "all", taskWindow: "all", taskPriority: "all", taskCompletion: "all", noteColor: "all", notePin: "all", query: "" }), false);
 });
 
-test("active filter summary includes labels, note colors, and search", () => {
+test("active filter summary includes labels, note color, note pin state, and search", () => {
   assert.deepEqual(
     getActiveFilterSummary({
       view: "active",
@@ -26,6 +27,7 @@ test("active filter summary includes labels, note colors, and search", () => {
       taskWindow: "today",
       taskPriority: "high",
       noteColor: "sky",
+      notePin: "pinned",
       query: "quarterly check-in"
     }),
     {
@@ -33,6 +35,7 @@ test("active filter summary includes labels, note colors, and search", () => {
       chips: [
         { key: "label", label: "Work" },
         { key: "noteColor", label: "Sky notes" },
+        { key: "notePin", label: "Pinned notes" },
         { key: "query", label: "Search: quarterly check-in" }
       ]
     }
@@ -48,6 +51,7 @@ test("active filter summary includes task date windows only in tasks view", () =
       taskPriority: "high",
       taskCompletion: "done",
       noteColor: "rose",
+      notePin: "unpinned",
       query: "a very long search phrase that needs trimming"
     }),
     {

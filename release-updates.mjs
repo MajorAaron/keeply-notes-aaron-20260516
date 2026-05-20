@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-note-pin-filters",
+    title: "Note Pin Filters",
+    bullets: [
+      "Notes view now has compact All notes, Pinned, and Others filter chips with live counts.",
+      "Pin filtering composes with labels, colors, and search so important notes are easier to isolate on mobile.",
+      "Keeply remembers the selected pin filter on this device and includes it in Clear filters."
+    ]
+  },
+  {
     id: "2026-05-19-tomorrow-task-filter",
     title: "Tomorrow Task Filter",
     bullets: [

@@ -5,6 +5,7 @@ const DEFAULT_PREFERENCES = {
   taskPriority: "all",
   taskCompletion: "all",
   noteColor: "all",
+  notePin: "all",
   compact: false,
   theme: "morning"
 };
@@ -15,6 +16,7 @@ const VALID_TASK_WINDOWS = new Set(["all", "overdue", "today", "tomorrow", "upco
 const VALID_TASK_PRIORITIES = new Set(["all", "high", "normal", "low"]);
 const VALID_TASK_COMPLETIONS = new Set(["all", "open", "done"]);
 const VALID_NOTE_COLORS = new Set(["all", "sun", "mint", "sky", "rose", "ink"]);
+const VALID_NOTE_PINS = new Set(["all", "pinned", "unpinned"]);
 const VALID_THEMES = new Set(["morning", "night"]);
 
 export function normalizeViewPreferences(value) {
@@ -26,6 +28,7 @@ export function normalizeViewPreferences(value) {
     taskPriority: VALID_TASK_PRIORITIES.has(source.taskPriority) ? source.taskPriority : DEFAULT_PREFERENCES.taskPriority,
     taskCompletion: VALID_TASK_COMPLETIONS.has(source.taskCompletion) ? source.taskCompletion : DEFAULT_PREFERENCES.taskCompletion,
     noteColor: VALID_NOTE_COLORS.has(source.noteColor) ? source.noteColor : DEFAULT_PREFERENCES.noteColor,
+    notePin: VALID_NOTE_PINS.has(source.notePin) ? source.notePin : DEFAULT_PREFERENCES.notePin,
     compact: source.compact === true,
     theme: VALID_THEMES.has(source.theme) ? source.theme : DEFAULT_PREFERENCES.theme
   };
@@ -48,6 +51,7 @@ export function buildViewPreferences(state) {
     taskPriority: state?.taskPriority,
     taskCompletion: state?.taskCompletion,
     noteColor: state?.noteColor,
+    notePin: state?.notePin,
     compact: state?.compact,
     theme: state?.theme
   });

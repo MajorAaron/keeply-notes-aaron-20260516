@@ -37,6 +37,12 @@ const NOTE_COLORS = {
   ink: "Ink notes"
 };
 
+const NOTE_PINS = {
+  all: "All notes",
+  pinned: "Pinned notes",
+  unpinned: "Other notes"
+};
+
 export function getActiveFilterSummary(filters = {}) {
   const chips = [];
   const label = filters.label || "all";
@@ -44,6 +50,7 @@ export function getActiveFilterSummary(filters = {}) {
   const taskPriority = filters.taskPriority || "all";
   const taskCompletion = filters.taskCompletion || "all";
   const noteColor = filters.noteColor || "all";
+  const notePin = filters.notePin || "all";
   const query = String(filters.query || "").trim();
 
   if (label !== "all") {
@@ -64,6 +71,10 @@ export function getActiveFilterSummary(filters = {}) {
 
   if (filters.view === "active" && noteColor !== "all") {
     chips.push({ key: "noteColor", label: NOTE_COLORS[noteColor] || titleCase(noteColor) });
+  }
+
+  if (filters.view === "active" && notePin !== "all") {
+    chips.push({ key: "notePin", label: NOTE_PINS[notePin] || titleCase(notePin) });
   }
 
   if (query) {

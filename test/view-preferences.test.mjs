@@ -11,6 +11,7 @@ test("view preferences preserve valid workspace choices", () => {
       taskPriority: "high",
       taskCompletion: "done",
       noteColor: "mint",
+      notePin: "pinned",
       compact: true,
       theme: "night"
     }),
@@ -21,6 +22,7 @@ test("view preferences preserve valid workspace choices", () => {
       taskPriority: "high",
       taskCompletion: "done",
       noteColor: "mint",
+      notePin: "pinned",
       compact: true,
       theme: "night"
     }
@@ -36,6 +38,7 @@ test("view preferences fall back from unknown values", () => {
       taskPriority: "urgent",
       taskCompletion: "finished",
       noteColor: "purple",
+      notePin: "starred",
       compact: "yes",
       theme: "blue"
     }),
@@ -46,6 +49,7 @@ test("view preferences fall back from unknown values", () => {
       taskPriority: "all",
       taskCompletion: "all",
       noteColor: "all",
+      notePin: "all",
       compact: false,
       theme: "morning"
     }
@@ -60,6 +64,7 @@ test("view preferences parse malformed storage safely", () => {
     taskPriority: "all",
     taskCompletion: "all",
     noteColor: "all",
+    notePin: "all",
     compact: false,
     theme: "morning"
   });
@@ -74,6 +79,7 @@ test("view preferences build from app state", () => {
       taskPriority: "low",
       taskCompletion: "open",
       noteColor: "rose",
+      notePin: "unpinned",
       compact: true,
       theme: "night"
     }),
@@ -84,6 +90,7 @@ test("view preferences build from app state", () => {
       taskPriority: "low",
       taskCompletion: "open",
       noteColor: "rose",
+      notePin: "unpinned",
       compact: true,
       theme: "night"
     }

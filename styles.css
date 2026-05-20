@@ -394,6 +394,7 @@ h1 {
   background: rgba(255, 255, 255, 0.18);
 }
 
+.note-pin-filters,
 .note-color-filters,
 .task-filters,
 .task-priority-filters,
@@ -406,6 +407,7 @@ h1 {
   scrollbar-width: none;
 }
 
+.note-pin-filters::-webkit-scrollbar,
 .note-color-filters::-webkit-scrollbar,
 .task-filters::-webkit-scrollbar,
 .task-priority-filters::-webkit-scrollbar,
@@ -413,6 +415,7 @@ h1 {
   display: none;
 }
 
+.note-pin-filter,
 .note-color-filter,
 .task-filter,
 .task-priority-filter,
@@ -431,6 +434,7 @@ h1 {
   font-weight: 900;
 }
 
+.note-pin-filter.active,
 .note-color-filter.active,
 .task-filter.active,
 .task-priority-filter.active,
@@ -451,6 +455,7 @@ h1 {
   font-size: 0.76rem;
 }
 
+.note-pin-filter.active .task-filter-count,
 .note-color-filter.active .task-filter-count,
 .task-filter.active .task-filter-count,
 .task-priority-filter.active .task-filter-count,
@@ -2463,6 +2468,7 @@ time {
     padding-left: 14px;
   }
 
+  .note-pin-filters,
   .task-filters,
   .task-priority-filters,
   .task-completion-filters {
