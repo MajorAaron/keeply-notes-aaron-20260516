@@ -61,6 +61,7 @@ import { getTaskCleanupShortcut } from "./task-cleanup-shortcuts.mjs";
 import { getTaskActivityMeta } from "./task-activity-meta.mjs";
 import { getNoteActivityMeta } from "./note-activity-meta.mjs";
 import { getNoteImageMeta } from "./note-image-meta.mjs";
+import { getComposerBodyMeta } from "./composer-body-meta.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -171,6 +172,7 @@ const els = {
   searchClearButton: document.querySelector("#searchClearButton"),
   titleInput: document.querySelector("#titleInput"),
   bodyInput: document.querySelector("#bodyInput"),
+  composerBodyMeta: document.querySelector("#composerBodyMeta"),
   imageInput: document.querySelector("#imageInput"),
   imagePreview: document.querySelector("#imagePreview"),
   imagePreviewTitle: document.querySelector("#imagePreviewTitle"),
@@ -619,6 +621,7 @@ function addTask() {
 function clearComposer() {
   els.titleInput.value = "";
   els.bodyInput.value = "";
+  updateComposerBodyMeta();
   clearDraftImage();
   els.dueInput.value = "";
   els.priorityInput.value = "normal";
@@ -2041,6 +2044,7 @@ function startNoteEdit(note) {
   setComposerMode("note", { saveDraft: false });
   els.titleInput.value = note.title || "";
   els.bodyInput.value = note.body || "";
+  updateComposerBodyMeta();
   els.labelInput.value = ["ideas", "work", "home", "personal"].includes(note.label) ? note.label : "ideas";
   setComposerColor(["sun", "mint", "sky", "rose", "ink"].includes(note.color) ? note.color : "sun");
   state.draftImage = normalizeNoteImage(note.image);
@@ -2270,6 +2274,7 @@ function startTaskEdit(task) {
   setComposerMode("task", { saveDraft: false });
   els.titleInput.value = task.title || "";
   els.bodyInput.value = task.details || "";
+  updateComposerBodyMeta();
   els.labelInput.value = ["ideas", "work", "home", "personal"].includes(task.label) ? task.label : "ideas";
   els.priorityInput.value = ["low", "normal", "high"].includes(task.priority) ? task.priority : "normal";
   els.dueInput.value = task.dueAt || "";
@@ -2874,6 +2879,7 @@ function setComposerMode(mode, options = {}) {
   els.generateImageButton.hidden = mode === "task";
   els.imagePreview.hidden = mode === "task" || !state.draftImage;
   els.bodyInput.placeholder = mode === "task" ? "Task details or paste a list..." : "Take a note...";
+  updateComposerBodyMeta();
   els.labelInput.setAttribute("aria-label", mode === "task" ? "Task label" : "Note label");
   updateComposerEditingState();
   document.querySelectorAll(".mode-button").forEach((button) => {
@@ -2883,6 +2889,19 @@ function setComposerMode(mode, options = {}) {
   });
   renderTaskComposerPresets();
   if (options.saveDraft !== false) saveComposerDraft();
+}
+
+function updateComposerBodyMeta() {
+  const meta = getComposerBodyMeta(els.bodyInput.value, { mode: state.composerMode });
+  els.composerBodyMeta.hidden = !meta.visible;
+  els.composerBodyMeta.textContent = meta.visible ? meta.label : "";
+  els.composerBodyMeta.title = meta.title;
+  els.composerBodyMeta.setAttribute("aria-label", meta.title);
+}
+
+function handleComposerBodyInput() {
+  updateComposerBodyMeta();
+  saveComposerDraft();
 }
 
 function updateComposerEditingState() {
@@ -2976,6 +2995,7 @@ function insertChecklistInComposer() {
     els.bodyInput.selectionEnd
   );
   els.bodyInput.value = value;
+  updateComposerBodyMeta();
   els.bodyInput.focus();
   els.bodyInput.setSelectionRange(selectionStart, selectionEnd);
   saveComposerDraft();
@@ -2996,6 +3016,7 @@ function restoreComposerDraft() {
     setComposerMode(draft.mode);
     els.titleInput.value = draft.title;
     els.bodyInput.value = draft.body;
+    updateComposerBodyMeta();
     els.labelInput.value = draft.label;
     els.dueInput.value = draft.dueAt;
     els.priorityInput.value = draft.priority;
@@ -3351,7 +3372,7 @@ els.dueInput.addEventListener("input", renderTaskComposerPresets);
 els.priorityInput.addEventListener("change", renderTaskComposerPresets);
 els.labelInput.addEventListener("change", renderTaskComposerPresets);
 els.titleInput.addEventListener("input", saveComposerDraft);
-els.bodyInput.addEventListener("input", saveComposerDraft);
+els.bodyInput.addEventListener("input", handleComposerBodyInput);
 els.labelInput.addEventListener("change", saveComposerDraft);
 els.dueInput.addEventListener("input", saveComposerDraft);
 els.priorityInput.addEventListener("change", saveComposerDraft);

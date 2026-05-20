@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-composer-body-meta",
+    title: "Composer Draft Stats",
+    bullets: [
+      "The composer now shows live word, line, and checklist counts while you type.",
+      "Longer note drafts include a quick reading-time estimate before you save.",
+      "Task details use the same lightweight summary so mobile capture is easier to scan."
+    ]
+  },
+  {
     id: "2026-05-20-weekday-task-hints",
     title: "Weekday Task Hints",
     bullets: [
