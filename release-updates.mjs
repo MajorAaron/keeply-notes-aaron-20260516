@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-task-time-estimates",
+    title: "Task Time Estimates",
+    bullets: [
+      "Task cards now show compact estimate badges when titles or details include time like 25m or 1h 30m.",
+      "Mobile task scanning can spot quick wins and deeper work without opening details.",
+      "Screen-reader labels expand estimates into hours and minutes for clearer review."
+    ]
+  },
+  {
     id: "2026-05-20-task-blocker-badges",
     title: "Task Blocker Badges",
     bullets: [

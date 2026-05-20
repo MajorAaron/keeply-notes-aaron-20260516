@@ -64,6 +64,7 @@ import { getNoteImageMeta } from "./note-image-meta.mjs";
 import { getComposerBodyMeta } from "./composer-body-meta.mjs";
 import { getItemLinkMeta } from "./item-link-meta.mjs";
 import { getTaskBlockerMeta } from "./task-blocker-meta.mjs";
+import { getTaskTimeEstimateMeta } from "./task-time-estimate-meta.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
 const LEGACY_NOTES_KEY = "keeply-notes-v1";
@@ -2121,6 +2122,11 @@ function renderTask(task) {
   blockerMetaElement.textContent = blockerMeta.label;
   blockerMetaElement.setAttribute("aria-label", blockerMeta.ariaLabel);
   blockerMetaElement.dataset.tone = blockerMeta.tone;
+  const timeEstimateMeta = getTaskTimeEstimateMeta(task);
+  const timeEstimateMetaElement = node.querySelector(".task-time-estimate-meta");
+  timeEstimateMetaElement.hidden = !timeEstimateMeta.available;
+  timeEstimateMetaElement.textContent = timeEstimateMeta.label;
+  timeEstimateMetaElement.setAttribute("aria-label", timeEstimateMeta.ariaLabel);
   const checklistMeta = getTaskChecklistMeta(task.details);
   const activityMeta = getTaskActivityMeta(task);
   const activityMetaElement = node.querySelector(".task-activity-meta");

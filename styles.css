@@ -2165,6 +2165,7 @@ select {
 .task-activity-meta,
 .task-link-meta,
 .task-blocker-meta,
+.task-time-estimate-meta,
 .task-checklist-meta {
   padding: 4px 8px;
   border-radius: 999px;
@@ -2214,6 +2215,12 @@ select {
 .task-blocker-meta[data-tone="waiting"] {
   background: rgba(248, 215, 95, 0.42);
   color: #6f5210;
+}
+
+.task-time-estimate-meta {
+  background: rgba(129, 199, 238, 0.18);
+  color: #315569;
+  letter-spacing: 0.01em;
 }
 
 .task-due-badge {
