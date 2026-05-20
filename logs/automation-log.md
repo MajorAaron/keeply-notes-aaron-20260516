@@ -1,4 +1,18 @@
 
+## 2026-05-20 06:06:56 MDT
+
+- Added mobile-first Task Freshness Badges for quicker task review context.
+- Task cards now show a compact activity pill such as `Updated today`, `Updated 2d ago`, `Stale 10d`, or `Done yesterday`, with screen-reader labels and stale/open-task coloring.
+- Updated What's New metadata with latest id `2026-05-20-task-freshness-badges`, title `Task Freshness Badges`, and 3 user-facing bullets.
+- UI/code areas touched: task card metadata rendering in `app.js`/`index.html`, activity pill styling in `styles.css`, release metadata, package test wiring, and new helper/test files `task-activity-meta.mjs` plus `test/task-activity-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task metadata display only.
+- Verification: full `npm test` passed after wiring the new helper checks/tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4187 npm start` served `http://127.0.0.1:4187/` with HTTP 200. Browser verification confirmed the `Task Freshness Badges` What's New popup/dismissal persistence, visible task activity badges in the Tasks view, no document-level horizontal overflow, and no browser console errors.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-task-freshness-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, displayed task activity badges including `Updated today` and `Done yesterday`, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of added lines in changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `406e95d` (`Add task freshness badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0da3c44c0d0429ae7b7f3a` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0da3c44c0d0429ae7b7f3a--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 05:07:26 MDT
 
 - Added mobile-first Cleanup Count Shortcuts for faster review from the Tasks cleanup bar.
