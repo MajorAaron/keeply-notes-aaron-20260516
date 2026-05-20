@@ -1,4 +1,4 @@
-export const TASK_WINDOWS = ["all", "overdue", "today", "tomorrow", "upcoming", "unscheduled"];
+export const TASK_WINDOWS = ["all", "overdue", "today", "tomorrow", "week", "upcoming", "unscheduled"];
 
 export function matchesTaskWindow(task, windowName, baseDate = new Date()) {
   if (!TASK_WINDOWS.includes(windowName) || windowName === "all") return true;
@@ -11,6 +11,7 @@ export function matchesTaskWindow(task, windowName, baseDate = new Date()) {
   if (windowName === "overdue") return !task.completed && dueAt < today;
   if (windowName === "today") return dueAt === today;
   if (windowName === "tomorrow") return dueAt === offsetDateInput(baseDate, 1);
+  if (windowName === "week") return dueAt >= today && dueAt <= offsetDateInput(baseDate, 6);
   if (windowName === "upcoming") return dueAt > today;
 
   return true;

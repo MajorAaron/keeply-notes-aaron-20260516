@@ -47,7 +47,7 @@ test("active filter summary includes task date windows only in tasks view", () =
     getActiveFilterSummary({
       view: "tasks",
       label: "home",
-      taskWindow: "tomorrow",
+      taskWindow: "week",
       taskPriority: "high",
       taskCompletion: "done",
       noteColor: "rose",
@@ -58,7 +58,7 @@ test("active filter summary includes task date windows only in tasks view", () =
       active: true,
       chips: [
         { key: "label", label: "Home" },
-        { key: "taskWindow", label: "Tomorrow" },
+        { key: "taskWindow", label: "This week" },
         { key: "taskPriority", label: "High priority" },
         { key: "taskCompletion", label: "Done tasks" },
         { key: "query", label: "Search: a very long search ph..." }

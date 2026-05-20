@@ -7,7 +7,7 @@ test("view preferences preserve valid workspace choices", () => {
     normalizeViewPreferences({
       view: "tasks",
       label: "work",
-      taskWindow: "tomorrow",
+      taskWindow: "week",
       taskPriority: "high",
       taskCompletion: "done",
       noteColor: "mint",
@@ -18,7 +18,7 @@ test("view preferences preserve valid workspace choices", () => {
     {
       view: "tasks",
       label: "work",
-      taskWindow: "tomorrow",
+      taskWindow: "week",
       taskPriority: "high",
       taskCompletion: "done",
       noteColor: "mint",

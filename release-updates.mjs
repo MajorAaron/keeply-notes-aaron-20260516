@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-this-week-task-filter",
+    title: "This Week Task Filter",
+    bullets: [
+      "Tasks view now has a This week date chip for quick near-term planning.",
+      "The new chip counts tasks due today through the next six days.",
+      "Keeply remembers This week on this device so mobile task review can reopen to your weekly queue."
+    ]
+  },
+  {
     id: "2026-05-19-stats-shortcuts",
     title: "Stats Shortcuts",
     bullets: [
