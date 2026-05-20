@@ -107,3 +107,27 @@ test("parseBulkTaskLine extracts weekend scheduling hints", () => {
     label: ""
   });
 });
+
+test("no-date hints strip scheduling words and clear shared due dates", () => {
+  assert.deepEqual(parseBulkTaskLine("Refill travel kit someday @home"), {
+    title: "Refill travel kit",
+    dueAt: "",
+    priority: "",
+    label: "home",
+    clearsDue: true
+  });
+
+  const tasks = buildBulkTasksFromText("Buy batteries no date\nCall vet tomorrow", {
+    label: "home",
+    priority: "normal",
+    dueAt: "2026-05-21",
+    today: "2026-05-18",
+    now: "2026-05-18T12:00:00.000Z",
+    createId: (index) => `task-${index}`
+  });
+
+  assert.equal(tasks[0].title, "Buy batteries");
+  assert.equal(tasks[0].dueAt, "");
+  assert.equal(tasks[1].title, "Call vet");
+  assert.equal(tasks[1].dueAt, "2026-05-19");
+});

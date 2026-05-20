@@ -23,7 +23,7 @@ export function buildTaskCaptureFields(input = {}, options = {}) {
   const parsed = parseBulkTaskLine(fallbackTitle, options);
   const label = validLabels.has(parsed.label) ? parsed.label : normalizeLabel(input.label);
   const priority = validPriorities.has(parsed.priority) ? parsed.priority : normalizePriority(input.priority);
-  const dueAt = parsed.dueAt || normalizeDueAt(input.dueAt);
+  const dueAt = parsed.clearsDue ? "" : parsed.dueAt || normalizeDueAt(input.dueAt);
   const title = parsed.title || fallbackTitle;
 
   return {
@@ -32,7 +32,7 @@ export function buildTaskCaptureFields(input = {}, options = {}) {
     label,
     priority,
     dueAt,
-    usedHints: title !== fallbackTitle || Boolean(parsed.label || parsed.priority || parsed.dueAt)
+    usedHints: title !== fallbackTitle || Boolean(parsed.label || parsed.priority || parsed.dueAt || parsed.clearsDue)
   };
 }
 

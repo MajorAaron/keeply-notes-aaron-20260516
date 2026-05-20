@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-no-date-task-hints",
+    title: "No-Date Task Hints",
+    bullets: [
+      "Task capture now understands no date, unscheduled, and someday hints.",
+      "Those hints strip out of saved titles while keeping label and priority hints intact.",
+      "Typed tasks and pasted task lists can override a selected due preset back to No date."
+    ]
+  },
+  {
     id: "2026-05-20-this-week-task-filter",
     title: "This Week Task Filter",
     bullets: [

@@ -24,8 +24,16 @@ export function parseBulkTaskLine(line, options = {}) {
   let label = "";
   const baseDate = getBaseDate(options);
 
-  title = title.replace(/\b(next\s+week|this\s+weekend|weekend|today|tomorrow)\b/gi, (match) => {
-    dueAt = dueAt || getRelativeDate(match.toLowerCase().replace(/\s+/g, "-"), baseDate);
+  let clearsDue = false;
+
+  title = title.replace(/\b(next\s+week|this\s+weekend|weekend|today|tomorrow|no\s+date|unscheduled|someday)\b/gi, (match) => {
+    const hint = match.toLowerCase().replace(/\s+/g, "-");
+    if (isNoDateHint(hint)) {
+      clearsDue = true;
+      dueAt = "";
+    } else if (!clearsDue) {
+      dueAt = dueAt || getRelativeDate(hint, baseDate);
+    }
     return " ";
   });
 
@@ -54,7 +62,8 @@ export function parseBulkTaskLine(line, options = {}) {
     title: normalizedTitle,
     dueAt,
     priority,
-    label
+    label,
+    ...(clearsDue ? { clearsDue: true } : {})
   };
 }
 
@@ -72,7 +81,7 @@ export function buildBulkTasksFromText(text, options = {}) {
       details: "",
       label: validLabels.has(parsed.label) ? parsed.label : options.label || "ideas",
       priority: validPriorities.has(parsed.priority) ? parsed.priority : options.priority || "normal",
-      dueAt: parsed.dueAt || options.dueAt || "",
+      dueAt: parsed.clearsDue ? "" : parsed.dueAt || options.dueAt || "",
       completed: false,
       status: "active",
       createdAt: now,
@@ -105,6 +114,10 @@ function getBaseDate(options) {
 
   const date = raw ? new Date(raw) : new Date();
   return Number.isNaN(date.getTime()) ? new Date() : date;
+}
+
+function isNoDateHint(value) {
+  return value === "no-date" || value === "unscheduled" || value === "someday";
 }
 
 function getRelativeDate(value, baseDate) {
