@@ -1,4 +1,19 @@
 
+## 2026-05-19 22:07:22 MDT
+
+- Added a mobile-first Today Progress Shortcut so the task progress card can jump directly into the most relevant task queue.
+- The Today progress card now renders a tested action button: open work due today goes to Today + Open, completed days go to Today + Done, clear days with tomorrow work go to Tomorrow + Open, and fully clear days go to open task planning.
+- Updated What's New metadata with latest id `2026-05-19-today-progress-cta`, title `Today Progress Shortcut`, and 3 user-facing bullets.
+- UI/code areas touched: Today progress summary helper/action metadata, Today progress card markup and styling, task filter wiring in `app.js`, release metadata, and Today progress tests. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task navigation/filtering behavior only.
+- Verification: full `npm test` passed with 195 passing tests; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4181 npm start` served `http://127.0.0.1:4181/` with HTTP 200. Browser verification confirmed the `Today Progress Shortcut` What's New popup/bullets, dismissal persistence to `keeply-last-seen-update`, the visible `Show today` progress-card action, action-driven Today + Open preference state, and no browser console errors.
+- Mobile/layout verification: browser screenshot review found the Today progress card's `Show today` button visible/readable with no obvious horizontal overflow, clipping, or overlap at the available responsive viewport; exact narrow-phone viewport resizing was not available in the browser tool.
+- Production verification: deploy permalink loaded, showed latest update id `2026-05-19-today-progress-cta` in the What's New popup, dismissed to `keeply-last-seen-update`, exposed the Today progress action, clicked it into Today + Open task filters, and reported no browser console errors.
+- Secret scan of added lines in changed app/index/style/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `1499e5d` (`Add today progress shortcut`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0d334d69671dce4467f0ef` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink is `https://6a0d334d69671dce4467f0ef--keeply-notes-aaron-20260516.netlify.app`.
+
 ## 2026-05-19 21:04:38 MDT
 
 - Added mobile-first Weekend Note Follow-Ups for turning notes into weekend tasks without opening the task composer.
