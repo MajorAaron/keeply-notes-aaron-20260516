@@ -3071,8 +3071,12 @@ async function shareItem(payload, fallbackMessage) {
 
 async function copyText(text) {
   if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(text);
-    return;
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // Fall back to the legacy selection path when clipboard permission is blocked.
+    }
   }
 
   const field = document.createElement("textarea");
