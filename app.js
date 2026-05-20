@@ -46,6 +46,7 @@ import { getNextTaskHighlight } from "./next-task.mjs";
 import { getNoteSpotlight } from "./note-spotlight.mjs";
 import { getCleanupSpotlight } from "./cleanup-spotlight.mjs";
 import { getAskSuggestions } from "./ask-suggestions.mjs";
+import { addAskHistoryQuestion, getAskHistoryChips, parseAskHistory, serializeAskHistory } from "./ask-history.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
 import { getQuickAddTarget } from "./quick-add-target.mjs";
@@ -60,6 +61,7 @@ const LEGACY_NOTES_KEY = "keeply-notes-v1";
 const UPDATE_SEEN_KEY = "keeply-last-seen-update";
 const COMPOSER_DRAFT_KEY = "keeply-composer-draft-v1";
 const VIEW_PREFERENCES_KEY = "keeply-view-preferences-v1";
+const ASK_HISTORY_KEY = "keeply-ask-history-v1";
 const API_URL = "/api/items";
 const dayMs = 86400000;
 
@@ -1093,8 +1095,18 @@ function renderTaskBulkActions() {
 }
 
 function renderAskSuggestions() {
+  const historyChips = getAskHistoryChips(parseAskHistory(localStorage.getItem(ASK_HISTORY_KEY)));
   const suggestions = getAskSuggestions(getAskContext().items, { now: new Date() });
   els.askSuggestions.replaceChildren(
+    ...historyChips.map((chip) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "ask-suggestion ask-history-chip";
+      button.textContent = chip.label;
+      button.setAttribute("aria-label", chip.ariaLabel);
+      button.addEventListener("click", () => useAskSuggestion(chip.question));
+      return button;
+    }),
     ...suggestions.map((suggestion) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -1501,14 +1513,23 @@ async function askKeeply(event) {
     });
     const answer = await response.json();
     if (!response.ok) throw new Error(answer.error || "Ask failed");
+    rememberAskQuestion(question);
     renderAskAnswer(answer);
+    renderAskSuggestions();
     showToast("Answer ready");
   } catch (error) {
+    rememberAskQuestion(question);
     renderAskAnswer(buildLocalAskAnswer(question, context.items));
+    renderAskSuggestions();
     showToast("Local answer ready");
   } finally {
     setAskLoading(false);
   }
+}
+
+function rememberAskQuestion(question) {
+  const history = addAskHistoryQuestion(parseAskHistory(localStorage.getItem(ASK_HISTORY_KEY)), question);
+  localStorage.setItem(ASK_HISTORY_KEY, serializeAskHistory(history));
 }
 
 function getAskContext() {

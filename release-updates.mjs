@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-19-ask-history-chips",
+    title: "Ask History Chips",
+    bullets: [
+      "Ask Keeply now remembers your recent questions on this device.",
+      "Recent question chips appear beside suggested prompts for quick mobile follow-up asks.",
+      "Repeated questions move to the front instead of cluttering the chip row."
+    ]
+  },
+  {
     id: "2026-05-19-note-pin-filters",
     title: "Note Pin Filters",
     bullets: [

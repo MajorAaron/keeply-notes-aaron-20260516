@@ -1496,6 +1496,11 @@ select {
   box-shadow: 0 8px 18px rgba(31, 32, 35, 0.06);
 }
 
+.ask-history-chip {
+  border-color: rgba(38, 31, 15, 0.18);
+  background: linear-gradient(135deg, rgba(248, 215, 95, 0.52), rgba(255, 255, 255, 0.7));
+}
+
 .ask-suggestion:focus-visible {
   outline: 3px solid rgba(248, 215, 95, 0.85);
   outline-offset: 2px;
