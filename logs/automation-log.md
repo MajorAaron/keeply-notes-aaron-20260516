@@ -1,4 +1,18 @@
 
+## 2026-05-21 16:06:00 MDT
+
+- Added mobile-first Meeting Badges for faster review of calendar-adjacent notes and tasks.
+- Notes and tasks now show compact `Zoom`, `Meet`, `Teams`, `Webex`, `Call`, `In person`, or `Meeting` badges when titles or bodies/details include meeting cues.
+- Updated What's New metadata with latest id `2026-05-21-meeting-badges`, title `Meeting Badges`, and 3 user-facing bullets.
+- UI/code areas touched: note/task card metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `item-meeting-meta.mjs` plus `test/item-meeting-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local meeting-cue detection only.
+- Verification: full `npm test` passed with 235 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4199 npm start` served `http://127.0.0.1:4199/` with HTTP 200. Browser verification confirmed the `Meeting Badges` What's New popup/dismissal persistence, visible meeting badges on seeded check-in notes/tasks, dynamic-imported local meeting metadata returning `Zoom`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-21-meeting-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, displayed a visible `Meeting` badge on seed data, dynamically imported `item-meeting-meta.mjs` and returned `Teams` for Teams sync copy, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing text matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives from broad token regexes.
+- Git status: feature commit `73c262f` (`Add meeting context badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0f81976436885b19164d6c` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0f81976436885b19164d6c--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 18:34:17 MDT
 
 - Added mobile-first Task Scheduled Time Badges for faster scanning of timed work in the Tasks view.
