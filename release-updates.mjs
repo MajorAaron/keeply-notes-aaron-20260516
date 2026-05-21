@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-21-meeting-badges",
+    title: "Meeting Badges",
+    bullets: [
+      "Notes and tasks now show compact badges for Zoom, Meet, Teams, calls, in-person plans, and meeting language.",
+      "Mobile scanning can spot calendar-adjacent items without opening every card.",
+      "Screen-reader labels describe the meeting cue behind each badge."
+    ]
+  },
+  {
     id: "2026-05-20-task-scheduled-time-badges",
     title: "Task Scheduled Time Badges",
     bullets: [

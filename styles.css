@@ -2023,6 +2023,7 @@ select {
 .note-image-meta,
 .note-link-meta,
 .note-contact-meta,
+.note-meeting-meta,
 .note-checklist-meta {
   display: inline-flex;
   align-items: center;
@@ -2102,11 +2103,28 @@ select {
   color: #8d282e;
 }
 
+.note-meeting-meta {
+  background: rgba(129, 199, 238, 0.2);
+  color: #315569;
+  letter-spacing: 0.01em;
+}
+
+.note-meeting-meta[data-tone="call"] {
+  background: rgba(130, 215, 162, 0.24);
+  color: #315d40;
+}
+
+.note-meeting-meta[data-tone="in-person"] {
+  background: rgba(248, 215, 95, 0.34);
+  color: #6f5210;
+}
+
 .note-card[data-color="ink"] .note-reading-meta,
 .note-card[data-color="ink"] .note-activity-meta,
 .note-card[data-color="ink"] .note-image-meta,
 .note-card[data-color="ink"] .note-link-meta,
 .note-card[data-color="ink"] .note-contact-meta,
+.note-card[data-color="ink"] .note-meeting-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.72);
@@ -2200,6 +2218,7 @@ select {
 .task-activity-meta,
 .task-link-meta,
 .task-contact-meta,
+.task-meeting-meta,
 .task-blocker-meta,
 .task-time-estimate-meta,
 .task-scheduled-time-meta,
@@ -2257,6 +2276,22 @@ select {
 .task-contact-meta[data-tone="mixed"] {
   background: rgba(240, 150, 154, 0.2);
   color: #8d282e;
+}
+
+.task-meeting-meta {
+  background: rgba(129, 199, 238, 0.2);
+  color: #315569;
+  letter-spacing: 0.01em;
+}
+
+.task-meeting-meta[data-tone="call"] {
+  background: rgba(130, 215, 162, 0.24);
+  color: #315d40;
+}
+
+.task-meeting-meta[data-tone="in-person"] {
+  background: rgba(248, 215, 95, 0.34);
+  color: #6f5210;
 }
 
 .task-blocker-meta {

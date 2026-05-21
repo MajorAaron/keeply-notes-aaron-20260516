@@ -67,6 +67,7 @@ import { getTaskBlockerMeta } from "./task-blocker-meta.mjs";
 import { getTaskTimeEstimateMeta } from "./task-time-estimate-meta.mjs";
 import { getTaskScheduledTimeMeta } from "./task-scheduled-time-meta.mjs";
 import { getItemContactMeta } from "./item-contact-meta.mjs";
+import { getItemMeetingMeta } from "./item-meeting-meta.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1925,6 +1926,12 @@ function renderNote(note) {
   contactMetaElement.textContent = contactMeta.label;
   contactMetaElement.setAttribute("aria-label", contactMeta.ariaLabel);
   contactMetaElement.dataset.tone = contactMeta.tone || "";
+  const meetingMeta = getItemMeetingMeta(noteSearchText);
+  const meetingMetaElement = node.querySelector(".note-meeting-meta");
+  meetingMetaElement.hidden = !meetingMeta.available;
+  meetingMetaElement.textContent = meetingMeta.label;
+  meetingMetaElement.setAttribute("aria-label", meetingMeta.ariaLabel);
+  meetingMetaElement.dataset.tone = meetingMeta.tone || "";
   const checklistMeta = getNoteChecklistMeta(noteBody);
   const checklistMetaElement = node.querySelector(".note-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;
@@ -2153,6 +2160,12 @@ function renderTask(task) {
   contactMetaElement.textContent = contactMeta.label;
   contactMetaElement.setAttribute("aria-label", contactMeta.ariaLabel);
   contactMetaElement.dataset.tone = contactMeta.tone || "";
+  const meetingMeta = getItemMeetingMeta(taskSearchText);
+  const meetingMetaElement = node.querySelector(".task-meeting-meta");
+  meetingMetaElement.hidden = !meetingMeta.available;
+  meetingMetaElement.textContent = meetingMeta.label;
+  meetingMetaElement.setAttribute("aria-label", meetingMeta.ariaLabel);
+  meetingMetaElement.dataset.tone = meetingMeta.tone || "";
   const blockerMeta = getTaskBlockerMeta(task);
   const blockerMetaElement = node.querySelector(".task-blocker-meta");
   blockerMetaElement.hidden = !blockerMeta.available;
