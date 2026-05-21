@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-21-location-badges",
+    title: "Location Badges",
+    bullets: [
+      "Notes and tasks now show compact location badges for map links, street addresses, and room cues.",
+      "Mobile scanning can spot where an item happens without opening every card.",
+      "Screen-reader labels describe whether the cue is a map, address, or room."
+    ]
+  },
+  {
     id: "2026-05-21-meeting-badges",
     title: "Meeting Badges",
     bullets: [

@@ -68,6 +68,7 @@ import { getTaskTimeEstimateMeta } from "./task-time-estimate-meta.mjs";
 import { getTaskScheduledTimeMeta } from "./task-scheduled-time-meta.mjs";
 import { getItemContactMeta } from "./item-contact-meta.mjs";
 import { getItemMeetingMeta } from "./item-meeting-meta.mjs";
+import { getItemLocationMeta } from "./item-location-meta.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1932,6 +1933,12 @@ function renderNote(note) {
   meetingMetaElement.textContent = meetingMeta.label;
   meetingMetaElement.setAttribute("aria-label", meetingMeta.ariaLabel);
   meetingMetaElement.dataset.tone = meetingMeta.tone || "";
+  const locationMeta = getItemLocationMeta(noteSearchText);
+  const locationMetaElement = node.querySelector(".note-location-meta");
+  locationMetaElement.hidden = !locationMeta.available;
+  locationMetaElement.textContent = locationMeta.label;
+  locationMetaElement.setAttribute("aria-label", locationMeta.ariaLabel);
+  locationMetaElement.dataset.tone = locationMeta.tone || "";
   const checklistMeta = getNoteChecklistMeta(noteBody);
   const checklistMetaElement = node.querySelector(".note-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;
@@ -2166,6 +2173,12 @@ function renderTask(task) {
   meetingMetaElement.textContent = meetingMeta.label;
   meetingMetaElement.setAttribute("aria-label", meetingMeta.ariaLabel);
   meetingMetaElement.dataset.tone = meetingMeta.tone || "";
+  const locationMeta = getItemLocationMeta(taskSearchText);
+  const locationMetaElement = node.querySelector(".task-location-meta");
+  locationMetaElement.hidden = !locationMeta.available;
+  locationMetaElement.textContent = locationMeta.label;
+  locationMetaElement.setAttribute("aria-label", locationMeta.ariaLabel);
+  locationMetaElement.dataset.tone = locationMeta.tone || "";
   const blockerMeta = getTaskBlockerMeta(task);
   const blockerMetaElement = node.querySelector(".task-blocker-meta");
   blockerMetaElement.hidden = !blockerMeta.available;
