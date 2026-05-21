@@ -1,4 +1,18 @@
 
+## 2026-05-20 18:34:17 MDT
+
+- Added mobile-first Task Scheduled Time Badges for faster scanning of timed work in the Tasks view.
+- Task cards now show compact schedule badges for explicit times such as `3pm`, `14:30`, `noon`, and `midnight`, while ignoring bare small numbers and duration estimates.
+- Updated What's New metadata with latest id `2026-05-20-task-scheduled-time-badges`, title `Task Scheduled Time Badges`, and 3 user-facing bullets.
+- UI/code areas touched: task card metadata rendering in `app.js`, task template in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `task-scheduled-time-meta.mjs` plus `test/task-scheduled-time-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local schedule-time parsing only.
+- Verification: full `npm test` passed with 235 passing tests; focused `node --test test/task-scheduled-time-meta.test.mjs` passed; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4198 npm start` served `http://127.0.0.1:4198/` with HTTP 200. Browser verification confirmed the `Task Scheduled Time Badges` What's New popup/dismissal persistence, dynamic-imported local scheduled-time metadata returning `3:30 PM`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-20-task-scheduled-time-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `task-scheduled-time-meta.mjs` and returned `2:30 PM` for `14:30`, reported no document horizontal overflow, and had no browser console errors. Production sample data did not include visible timed tasks, so the deployed helper/import path was smoke-tested directly.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `25f9dab` (`Add task scheduled time badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0e52e58caef76c7681e879` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0e52e58caef76c7681e879--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-20 16:05:23 MDT
 
 - Added mobile-first Contact Badges for quicker follow-up scanning across notes and tasks.
