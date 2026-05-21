@@ -1,4 +1,18 @@
 
+## 2026-05-21 17:06:24 MDT
+
+- Added mobile-first Location Badges for faster place-aware scanning across notes and tasks.
+- Notes and tasks now show compact `Maps`, `Address`, or `Room` badges when titles/bodies/details include map links, street addresses, conference rooms, suites, floors, or building cues.
+- Updated What's New metadata with latest id `2026-05-21-location-badges`, title `Location Badges`, and 3 user-facing bullets.
+- UI/code areas touched: note/task card metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `item-location-meta.mjs` plus `test/item-location-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local location-cue detection only.
+- Verification: full `npm test` passed with 235 passing tests; focused `node --test test/item-location-meta.test.mjs` passed; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4200 npm start` served `http://127.0.0.1:4200/` with HTTP 200. Browser verification confirmed the `Location Badges` What's New popup/dismissal persistence, dynamic-imported local location metadata returning `Maps`, visible existing `Room` location badges, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification. A manual add-button smoke attempt was inconclusive because the draft remained in the composer while a search filter was active, so dynamic import plus existing-card rendering were used for UI verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-21-location-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-location-meta.mjs` and returned `Maps` for an Apple Maps URL, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible map/address cards, so the deployed helper/import path was smoke-tested directly.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing text matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives from broad token regexes.
+- Git status: feature commit `8c20da2` (`Add location context badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0f8fd588e4c22902a60b74` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0f8fd588e4c22902a60b74--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-21 16:06:00 MDT
 
 - Added mobile-first Meeting Badges for faster review of calendar-adjacent notes and tasks.
