@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-20-task-scheduled-time-badges",
+    title: "Task Scheduled Time Badges",
+    bullets: [
+      "Task cards now show compact time badges when titles or details mention times like 3pm, 14:30, or noon.",
+      "Mobile task scanning can spot timed calls, meetings, and deadlines without opening details.",
+      "Screen-reader labels announce the scheduled time in a clear 12-hour format."
+    ]
+  },
+  {
     id: "2026-05-20-focus-brief-open-actions",
     title: "Focus Brief Open Actions",
     bullets: [

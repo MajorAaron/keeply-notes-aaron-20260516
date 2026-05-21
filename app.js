@@ -65,6 +65,7 @@ import { getComposerBodyMeta } from "./composer-body-meta.mjs";
 import { getItemLinkMeta } from "./item-link-meta.mjs";
 import { getTaskBlockerMeta } from "./task-blocker-meta.mjs";
 import { getTaskTimeEstimateMeta } from "./task-time-estimate-meta.mjs";
+import { getTaskScheduledTimeMeta } from "./task-scheduled-time-meta.mjs";
 import { getItemContactMeta } from "./item-contact-meta.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
@@ -2163,6 +2164,11 @@ function renderTask(task) {
   timeEstimateMetaElement.hidden = !timeEstimateMeta.available;
   timeEstimateMetaElement.textContent = timeEstimateMeta.label;
   timeEstimateMetaElement.setAttribute("aria-label", timeEstimateMeta.ariaLabel);
+  const scheduledTimeMeta = getTaskScheduledTimeMeta(task);
+  const scheduledTimeMetaElement = node.querySelector(".task-scheduled-time-meta");
+  scheduledTimeMetaElement.hidden = !scheduledTimeMeta.available;
+  scheduledTimeMetaElement.textContent = scheduledTimeMeta.label;
+  scheduledTimeMetaElement.setAttribute("aria-label", scheduledTimeMeta.ariaLabel);
   const checklistMeta = getTaskChecklistMeta(task.details);
   const activityMeta = getTaskActivityMeta(task);
   const activityMetaElement = node.querySelector(".task-activity-meta");
