@@ -12,6 +12,7 @@ test("detects symbol currency amounts and compacts labels", () => {
   });
 
   assert.equal(getItemAmountMeta("Venue deposit is €1,250.50").label, "€1.3k");
+  assert.equal(getItemAmountMeta("Reimburse $12.50 for snacks").label, "$12.50");
   assert.equal(getItemAmountMeta("Budget hold £1200").tone, "large");
 });
 
