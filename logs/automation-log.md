@@ -1,4 +1,18 @@
 
+## 2026-05-22 15:05:28 MDT
+
+- Added mobile-first Deadline Badges for faster scanning of cutoff dates, RSVP-by reminders, submissions, and expiring offers across notes and tasks.
+- Notes and tasks now show compact `Deadline`, `Submit`, `RSVP`, `Expires`, or combined deadline-count pills when text includes explicit time-bound follow-up cues; common technical submit/expiration phrases stay quiet.
+- Updated What's New metadata with latest id `2026-05-22-deadline-badges`, title `Deadline Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared deterministic deadline detector in `item-deadline-meta.mjs`, note/task metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-deadline-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local deadline-cue detection only.
+- Verification: focused `node --check item-deadline-meta.mjs && node --test test/item-deadline-meta.test.mjs && node scripts/check-release-updates.mjs` passed with 6 deadline tests; full `npm test` passed with 248 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran successfully and as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4221 npm start` served `http://127.0.0.1:4221/` with HTTP 200. Dynamic-import smoke verification confirmed latest update id `2026-05-22-deadline-badges`, note/task deadline template hooks, deadline CSS, `4 deadlines` for mixed submit/RSVP/deadline/expiration text, and false-positive suppression for deadline-scheduler/submit-button/cache-expires text. The local server was stopped after verification. Browser visual verification was not run in this cron environment; the markup/CSS smoke check covered obvious mobile badge hooks.
+- Production verification: deploy permalink loaded with HTTP 200, exposed latest update id `2026-05-22-deadline-badges`, included note/task deadline hooks and CSS, dynamically imported `item-deadline-meta.mjs`, returned `4 deadlines` for mixed deadline cues, and suppressed the technical submit/expiration false positive. Production seed data did not include visible deadline cards, so the deployed helper/import path was smoke-tested directly without mutating remote data.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `e74a712` (`Add deadline context badges`) was pushed to `origin main`; unrelated untracked `.DS_Store` and `backups/` were left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a10c4f901d302a15b1d5ef9` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a10c4f901d302a15b1d5ef9--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 14:06:32 MDT
 
 - Added mobile-first Billing Badges for faster scanning of invoices, renewals, payment-due items, receipts, and refunds across notes and tasks.
