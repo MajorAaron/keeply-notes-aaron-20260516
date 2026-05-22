@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-deadline-badges",
+    title: "Deadline Badges",
+    bullets: [
+      "Notes and tasks now show compact Deadline, Submit, RSVP, or Expires badges for time-bound follow-ups.",
+      "Mobile review can spot cutoff dates, reply-by items, submissions, and expiring offers without opening every card.",
+      "Common technical expiration and submit-button phrases stay quiet so deadline badges remain focused."
+    ]
+  },
+  {
     id: "2026-05-22-billing-badges",
     title: "Billing Badges",
     bullets: [

@@ -2097,6 +2097,7 @@ select {
 .note-travel-meta,
 .note-food-meta,
 .note-billing-meta,
+.note-deadline-meta,
 .note-decision-meta,
 .note-checklist-meta {
   display: inline-flex;
@@ -2264,6 +2265,7 @@ select {
 .note-card[data-color="ink"] .note-travel-meta,
 .note-card[data-color="ink"] .note-food-meta,
 .note-card[data-color="ink"] .note-billing-meta,
+.note-card[data-color="ink"] .note-deadline-meta,
 .note-card[data-color="ink"] .note-decision-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
@@ -2371,6 +2373,7 @@ select {
 .task-urgency-meta,
 .task-travel-meta,
 .task-food-meta,
+.task-deadline-meta,
 .task-decision-meta,
 .task-blocker-meta,
 .task-time-estimate-meta,
@@ -2649,6 +2652,31 @@ select {
 .task-billing-meta[data-tone="multiple"] {
   background: rgba(240, 150, 154, 0.18);
   color: #8d282e;
+}
+
+.note-deadline-meta,
+.task-deadline-meta {
+  background: rgba(240, 150, 154, 0.22);
+  color: #8d282e;
+  letter-spacing: 0.01em;
+}
+
+.note-deadline-meta[data-tone="rsvp"],
+.task-deadline-meta[data-tone="rsvp"] {
+  background: rgba(129, 199, 238, 0.2);
+  color: #315569;
+}
+
+.note-deadline-meta[data-tone="expires"],
+.task-deadline-meta[data-tone="expires"] {
+  background: rgba(248, 215, 95, 0.36);
+  color: #6f5210;
+}
+
+.note-deadline-meta[data-tone="multiple"],
+.task-deadline-meta[data-tone="multiple"] {
+  background: rgba(156, 224, 182, 0.26);
+  color: #315d40;
 }
 
 .note-decision-meta,

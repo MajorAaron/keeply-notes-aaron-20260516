@@ -84,6 +84,7 @@ import { getItemUrgencyMeta } from "./item-urgency-meta.mjs";
 import { getItemTravelMeta } from "./item-travel-meta.mjs";
 import { getItemFoodMeta } from "./item-food-meta.mjs";
 import { getItemBillingMeta } from "./item-billing-meta.mjs";
+import { getItemDeadlineMeta } from "./item-deadline-meta.mjs";
 import { getOverdueTaskNudge } from "./overdue-task-actions.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
@@ -2088,6 +2089,12 @@ function renderNote(note) {
   billingMetaElement.textContent = billingMeta.label;
   billingMetaElement.setAttribute("aria-label", billingMeta.ariaLabel);
   billingMetaElement.dataset.tone = billingMeta.tone || "";
+  const deadlineMeta = getItemDeadlineMeta(noteSearchText);
+  const deadlineMetaElement = node.querySelector(".note-deadline-meta");
+  deadlineMetaElement.hidden = !deadlineMeta.available;
+  deadlineMetaElement.textContent = deadlineMeta.label;
+  deadlineMetaElement.setAttribute("aria-label", deadlineMeta.ariaLabel);
+  deadlineMetaElement.dataset.tone = deadlineMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(noteSearchText);
   const decisionMetaElement = node.querySelector(".note-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
@@ -2406,6 +2413,12 @@ function renderTask(task) {
   billingMetaElement.textContent = billingMeta.label;
   billingMetaElement.setAttribute("aria-label", billingMeta.ariaLabel);
   billingMetaElement.dataset.tone = billingMeta.tone || "";
+  const deadlineMeta = getItemDeadlineMeta(taskSearchText);
+  const deadlineMetaElement = node.querySelector(".task-deadline-meta");
+  deadlineMetaElement.hidden = !deadlineMeta.available;
+  deadlineMetaElement.textContent = deadlineMeta.label;
+  deadlineMetaElement.setAttribute("aria-label", deadlineMeta.ariaLabel);
+  deadlineMetaElement.dataset.tone = deadlineMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(taskSearchText);
   const decisionMetaElement = node.querySelector(".task-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
