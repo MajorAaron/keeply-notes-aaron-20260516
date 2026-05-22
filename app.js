@@ -83,6 +83,7 @@ import { getItemQuoteMeta } from "./item-quote-meta.mjs";
 import { getItemUrgencyMeta } from "./item-urgency-meta.mjs";
 import { getItemTravelMeta } from "./item-travel-meta.mjs";
 import { getItemFoodMeta } from "./item-food-meta.mjs";
+import { getItemBillingMeta } from "./item-billing-meta.mjs";
 import { getOverdueTaskNudge } from "./overdue-task-actions.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
@@ -2081,6 +2082,12 @@ function renderNote(note) {
   foodMetaElement.textContent = foodMeta.label;
   foodMetaElement.setAttribute("aria-label", foodMeta.ariaLabel);
   foodMetaElement.dataset.tone = foodMeta.tone || "";
+  const billingMeta = getItemBillingMeta(noteSearchText);
+  const billingMetaElement = node.querySelector(".note-billing-meta");
+  billingMetaElement.hidden = !billingMeta.available;
+  billingMetaElement.textContent = billingMeta.label;
+  billingMetaElement.setAttribute("aria-label", billingMeta.ariaLabel);
+  billingMetaElement.dataset.tone = billingMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(noteSearchText);
   const decisionMetaElement = node.querySelector(".note-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
@@ -2393,6 +2400,12 @@ function renderTask(task) {
   foodMetaElement.textContent = foodMeta.label;
   foodMetaElement.setAttribute("aria-label", foodMeta.ariaLabel);
   foodMetaElement.dataset.tone = foodMeta.tone || "";
+  const billingMeta = getItemBillingMeta(taskSearchText);
+  const billingMetaElement = node.querySelector(".task-billing-meta");
+  billingMetaElement.hidden = !billingMeta.available;
+  billingMetaElement.textContent = billingMeta.label;
+  billingMetaElement.setAttribute("aria-label", billingMeta.ariaLabel);
+  billingMetaElement.dataset.tone = billingMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(taskSearchText);
   const decisionMetaElement = node.querySelector(".task-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-billing-badges",
+    title: "Billing Badges",
+    bullets: [
+      "Notes and tasks now show compact Invoice, Payment, Subscription, or Refund badges for money follow-ups.",
+      "Mobile review can spot renewals, receipts, reimbursements, and payment-due items without opening every card.",
+      "Common engineering/product phrases stay quiet so billing badges stay focused."
+    ]
+  },
+  {
     id: "2026-05-22-food-badges",
     title: "Food Badges",
     bullets: [
