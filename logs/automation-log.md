@@ -1,4 +1,18 @@
 
+## 2026-05-22 02:06:30 MDT
+
+- Added mobile-first Code Cue Badges for faster scanning of developer-oriented notes and tasks.
+- Notes and tasks now show compact `Code`, `Cmd`, or `2 code cues` pills when titles/bodies/details mention code snippets, source files, or CLI commands.
+- Updated What's New metadata with latest id `2026-05-22-code-cue-badges`, title `Code Cue Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared deterministic detector in `item-code-meta.mjs`, note/task card metadata rendering in `app.js`, card templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-code-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local code/command cue detection only.
+- Verification: full `npm test` passed with 236 passing tests; focused `node --test test/item-code-meta.test.mjs` passed; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4208 npm start` served `http://127.0.0.1:4208/` with HTTP 200. Browser verification confirmed the `Code Cue Badges` What's New popup/dismissal persistence, dynamic-imported local code metadata returning `2 code cues` for mixed file/command text, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-code-cue-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-code-meta.mjs` and returned `2 code cues`, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible code cards, so the deployed helper/import path was smoke-tested directly.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `902bf84` (`Add code cue badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a100e632f0e27aedb42a1b4` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a100e632f0e27aedb42a1b4--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 01:07:28 MDT
 
 - Added mobile-first Removable Filter Chips for faster filter cleanup without resetting the whole Keeply view.
