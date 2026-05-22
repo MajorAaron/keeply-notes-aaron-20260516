@@ -2028,6 +2028,7 @@ select {
 .note-amount-meta,
 .note-tag-meta,
 .note-question-meta,
+.note-attachment-meta,
 .note-decision-meta,
 .note-checklist-meta {
   display: inline-flex;
@@ -2186,6 +2187,7 @@ select {
 .note-card[data-color="ink"] .note-amount-meta,
 .note-card[data-color="ink"] .note-tag-meta,
 .note-card[data-color="ink"] .note-question-meta,
+.note-card[data-color="ink"] .note-attachment-meta,
 .note-card[data-color="ink"] .note-decision-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
@@ -2285,6 +2287,7 @@ select {
 .task-amount-meta,
 .task-tag-meta,
 .task-question-meta,
+.task-attachment-meta,
 .task-decision-meta,
 .task-blocker-meta,
 .task-time-estimate-meta,
@@ -2398,6 +2401,25 @@ select {
 .task-location-meta[data-tone="room"] {
   background: rgba(240, 150, 154, 0.2);
   color: #8d282e;
+}
+
+.note-attachment-meta,
+.task-attachment-meta {
+  background: rgba(129, 199, 238, 0.2);
+  color: #315569;
+  letter-spacing: 0.01em;
+}
+
+.note-attachment-meta[data-tone="multiple"],
+.task-attachment-meta[data-tone="multiple"] {
+  background: rgba(248, 215, 95, 0.34);
+  color: #6f5210;
+}
+
+.note-attachment-meta[data-tone="image"],
+.task-attachment-meta[data-tone="image"] {
+  background: rgba(156, 224, 182, 0.26);
+  color: #315d40;
 }
 
 .note-decision-meta,

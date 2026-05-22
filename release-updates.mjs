@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-attachment-badges",
+    title: "Attachment Badges",
+    bullets: [
+      "Notes and tasks now show compact PDF, Doc, Sheet, Deck, Image, or File badges for attachment references.",
+      "Mobile scanning can spot files and handoffs without opening every card.",
+      "Multiple attachment types summarize as a files badge with accessible labels."
+    ]
+  },
+  {
     id: "2026-05-21-decision-badges",
     title: "Decision Badges",
     bullets: [
