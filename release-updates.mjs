@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-quote-badges",
+    title: "Quote Badges",
+    bullets: [
+      "Notes and tasks now show compact Quote badges when text includes a quoted excerpt.",
+      "Markdown blockquotes and smart or straight quotes are detected for faster mobile review.",
+      "Multiple unique excerpts summarize as a quotes count with accessible labels."
+    ]
+  },
+  {
     id: "2026-05-22-mention-badges",
     title: "Mention Badges",
     bullets: [

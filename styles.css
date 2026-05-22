@@ -2092,6 +2092,7 @@ select {
 .note-attachment-meta,
 .note-code-meta,
 .note-section-meta,
+.note-quote-meta,
 .note-decision-meta,
 .note-checklist-meta {
   display: inline-flex;
@@ -2254,6 +2255,7 @@ select {
 .note-card[data-color="ink"] .note-attachment-meta,
 .note-card[data-color="ink"] .note-code-meta,
 .note-card[data-color="ink"] .note-section-meta,
+.note-card[data-color="ink"] .note-quote-meta,
 .note-card[data-color="ink"] .note-decision-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
@@ -2357,6 +2359,7 @@ select {
 .task-attachment-meta,
 .task-code-meta,
 .task-section-meta,
+.task-quote-meta,
 .task-decision-meta,
 .task-blocker-meta,
 .task-time-estimate-meta,
@@ -2535,6 +2538,19 @@ select {
 .task-section-meta[data-tone="multiple"] {
   background: rgba(129, 199, 238, 0.2);
   color: #315569;
+}
+
+.note-quote-meta,
+.task-quote-meta {
+  background: rgba(248, 215, 95, 0.34);
+  color: #6f5210;
+  letter-spacing: 0.01em;
+}
+
+.note-quote-meta[data-tone="multiple"],
+.task-quote-meta[data-tone="multiple"] {
+  background: rgba(240, 150, 154, 0.18);
+  color: #8d282e;
 }
 
 .note-decision-meta,

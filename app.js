@@ -79,6 +79,7 @@ import { getItemDecisionMeta } from "./item-decision-meta.mjs";
 import { getItemAttachmentMeta } from "./item-attachment-meta.mjs";
 import { getItemCodeMeta } from "./item-code-meta.mjs";
 import { getItemSectionMeta } from "./item-section-meta.mjs";
+import { getItemQuoteMeta } from "./item-quote-meta.mjs";
 import { getOverdueTaskNudge } from "./overdue-task-actions.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
@@ -2053,6 +2054,12 @@ function renderNote(note) {
   sectionMetaElement.textContent = sectionMeta.label;
   sectionMetaElement.setAttribute("aria-label", sectionMeta.ariaLabel);
   sectionMetaElement.dataset.tone = sectionMeta.tone || "";
+  const quoteMeta = getItemQuoteMeta(noteSearchText);
+  const quoteMetaElement = node.querySelector(".note-quote-meta");
+  quoteMetaElement.hidden = !quoteMeta.available;
+  quoteMetaElement.textContent = quoteMeta.label;
+  quoteMetaElement.setAttribute("aria-label", quoteMeta.ariaLabel);
+  quoteMetaElement.dataset.tone = quoteMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(noteSearchText);
   const decisionMetaElement = node.querySelector(".note-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
@@ -2341,6 +2348,12 @@ function renderTask(task) {
   sectionMetaElement.textContent = sectionMeta.label;
   sectionMetaElement.setAttribute("aria-label", sectionMeta.ariaLabel);
   sectionMetaElement.dataset.tone = sectionMeta.tone || "";
+  const quoteMeta = getItemQuoteMeta(taskSearchText);
+  const quoteMetaElement = node.querySelector(".task-quote-meta");
+  quoteMetaElement.hidden = !quoteMeta.available;
+  quoteMetaElement.textContent = quoteMeta.label;
+  quoteMetaElement.setAttribute("aria-label", quoteMeta.ariaLabel);
+  quoteMetaElement.dataset.tone = quoteMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(taskSearchText);
   const decisionMetaElement = node.querySelector(".task-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
