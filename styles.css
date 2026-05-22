@@ -2028,6 +2028,7 @@ select {
 .note-amount-meta,
 .note-tag-meta,
 .note-question-meta,
+.note-decision-meta,
 .note-checklist-meta {
   display: inline-flex;
   align-items: center;
@@ -2185,6 +2186,7 @@ select {
 .note-card[data-color="ink"] .note-amount-meta,
 .note-card[data-color="ink"] .note-tag-meta,
 .note-card[data-color="ink"] .note-question-meta,
+.note-card[data-color="ink"] .note-decision-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.72);
@@ -2283,6 +2285,7 @@ select {
 .task-amount-meta,
 .task-tag-meta,
 .task-question-meta,
+.task-decision-meta,
 .task-blocker-meta,
 .task-time-estimate-meta,
 .task-scheduled-time-meta,
@@ -2394,6 +2397,25 @@ select {
 
 .task-location-meta[data-tone="room"] {
   background: rgba(240, 150, 154, 0.2);
+  color: #8d282e;
+}
+
+.note-decision-meta,
+.task-decision-meta {
+  background: rgba(130, 215, 162, 0.24);
+  color: #315d40;
+  letter-spacing: 0.01em;
+}
+
+.note-decision-meta[data-tone="approved"],
+.task-decision-meta[data-tone="approved"] {
+  background: rgba(156, 224, 182, 0.3);
+  color: #315d40;
+}
+
+.note-decision-meta[data-tone="rejected"],
+.task-decision-meta[data-tone="rejected"] {
+  background: rgba(240, 150, 154, 0.22);
   color: #8d282e;
 }
 

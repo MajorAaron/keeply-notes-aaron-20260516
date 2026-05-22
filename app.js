@@ -72,6 +72,7 @@ import { getItemLocationMeta } from "./item-location-meta.mjs";
 import { getItemAmountMeta } from "./item-amount-meta.mjs";
 import { getItemTagMeta } from "./item-tag-meta.mjs";
 import { getItemQuestionMeta } from "./item-question-meta.mjs";
+import { getItemDecisionMeta } from "./item-decision-meta.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1960,6 +1961,12 @@ function renderNote(note) {
   questionMetaElement.textContent = questionMeta.label;
   questionMetaElement.setAttribute("aria-label", questionMeta.ariaLabel);
   questionMetaElement.dataset.tone = questionMeta.tone || "";
+  const decisionMeta = getItemDecisionMeta(noteSearchText);
+  const decisionMetaElement = node.querySelector(".note-decision-meta");
+  decisionMetaElement.hidden = !decisionMeta.available;
+  decisionMetaElement.textContent = decisionMeta.label;
+  decisionMetaElement.setAttribute("aria-label", decisionMeta.ariaLabel);
+  decisionMetaElement.dataset.tone = decisionMeta.tone || "";
   const checklistMeta = getNoteChecklistMeta(noteBody);
   const checklistMetaElement = node.querySelector(".note-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;
@@ -2218,6 +2225,12 @@ function renderTask(task) {
   questionMetaElement.textContent = questionMeta.label;
   questionMetaElement.setAttribute("aria-label", questionMeta.ariaLabel);
   questionMetaElement.dataset.tone = questionMeta.tone || "";
+  const decisionMeta = getItemDecisionMeta(taskSearchText);
+  const decisionMetaElement = node.querySelector(".task-decision-meta");
+  decisionMetaElement.hidden = !decisionMeta.available;
+  decisionMetaElement.textContent = decisionMeta.label;
+  decisionMetaElement.setAttribute("aria-label", decisionMeta.ariaLabel);
+  decisionMetaElement.dataset.tone = decisionMeta.tone || "";
   const blockerMeta = getTaskBlockerMeta(task);
   const blockerMetaElement = node.querySelector(".task-blocker-meta");
   blockerMetaElement.hidden = !blockerMeta.available;

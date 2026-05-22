@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-21-decision-badges",
+    title: "Decision Badges",
+    bullets: [
+      "Notes and tasks now show compact Decision, Approved, or Rejected badges when text includes decision language.",
+      "Mobile review can spot outcomes and sign-offs without opening every card.",
+      "Accessible labels describe the type of decision cue behind each badge."
+    ]
+  },
+  {
     id: "2026-05-21-question-badges",
     title: "Question Badges",
     bullets: [
