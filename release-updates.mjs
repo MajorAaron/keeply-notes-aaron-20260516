@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-ask-draft-resume",
+    title: "Ask Draft Resume",
+    bullets: [
+      "Ask Keeply now saves your in-progress question locally while you type.",
+      "Reloading the app restores the unfinished question so mobile context switches are safer.",
+      "A compact saved-draft row lets you clear the question before asking."
+    ]
+  },
+  {
     id: "2026-05-22-section-badges",
     title: "Section Badges",
     bullets: [

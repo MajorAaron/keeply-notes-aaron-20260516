@@ -47,6 +47,7 @@ import { getNoteSpotlight } from "./note-spotlight.mjs";
 import { getCleanupSpotlight } from "./cleanup-spotlight.mjs";
 import { getAskSuggestions } from "./ask-suggestions.mjs";
 import { addAskHistoryQuestion, getAskHistoryChips, parseAskHistory, serializeAskHistory } from "./ask-history.mjs";
+import { getAskDraftStatus, normalizeAskDraft, parseAskDraft, serializeAskDraft } from "./ask-draft.mjs";
 import { buildAskAnswerCopyText, buildAskAnswerNote, getAskFollowUpQuestions } from "./ask-answer-note.mjs";
 import { getEmptyStateCopy } from "./empty-state.mjs";
 import { getSearchCaptureDraft } from "./search-capture.mjs";
@@ -85,6 +86,7 @@ const UPDATE_SEEN_KEY = "keeply-last-seen-update";
 const COMPOSER_DRAFT_KEY = "keeply-composer-draft-v1";
 const VIEW_PREFERENCES_KEY = "keeply-view-preferences-v1";
 const ASK_HISTORY_KEY = "keeply-ask-history-v1";
+const ASK_DRAFT_KEY = "keeply-ask-draft-v1";
 const API_URL = "/api/items";
 const dayMs = 86400000;
 
@@ -251,6 +253,9 @@ const els = {
   askForm: document.querySelector("#askForm"),
   askInput: document.querySelector("#askInput"),
   askButton: document.querySelector("#askButton"),
+  askDraftStatus: document.querySelector("#askDraftStatus"),
+  askDraftStatusText: document.querySelector("#askDraftStatusText"),
+  askDraftClear: document.querySelector("#askDraftClear"),
   askSuggestions: document.querySelector("#askSuggestions"),
   askTitle: document.querySelector("#askTitle"),
   askSummary: document.querySelector("#askSummary"),
@@ -1271,8 +1276,40 @@ function renderAskSuggestions() {
 
 function useAskSuggestion(question) {
   els.askInput.value = question;
+  saveAskDraft();
   els.askInput.focus();
   showToast("Question ready");
+}
+
+function restoreAskDraft() {
+  const draft = parseAskDraft(localStorage.getItem(ASK_DRAFT_KEY));
+  if (draft && !els.askInput.value.trim()) {
+    els.askInput.value = draft.question;
+  }
+  renderAskDraftStatus(draft || normalizeAskDraft(els.askInput.value));
+}
+
+function saveAskDraft() {
+  const draft = normalizeAskDraft(els.askInput.value);
+  if (!draft) {
+    clearAskDraft({ silent: true });
+    return;
+  }
+  localStorage.setItem(ASK_DRAFT_KEY, serializeAskDraft(draft));
+  renderAskDraftStatus(draft);
+}
+
+function clearAskDraft({ silent = false } = {}) {
+  localStorage.removeItem(ASK_DRAFT_KEY);
+  renderAskDraftStatus(null);
+  if (!silent) showToast("Question draft cleared");
+}
+
+function renderAskDraftStatus(draft = parseAskDraft(localStorage.getItem(ASK_DRAFT_KEY))) {
+  const status = getAskDraftStatus(draft);
+  els.askDraftStatus.hidden = !status.visible;
+  els.askDraftStatusText.textContent = status.text;
+  els.askDraftClear.setAttribute("aria-label", status.clearLabel);
 }
 
 function archiveCompletedTasksWithUndo() {
@@ -1684,11 +1721,13 @@ async function askKeeply(event) {
     const answer = await response.json();
     if (!response.ok) throw new Error(answer.error || "Ask failed");
     rememberAskQuestion(question);
+    clearAskDraft({ silent: true });
     renderAskAnswer(answer, question);
     renderAskSuggestions();
     showToast("Answer ready");
   } catch (error) {
     rememberAskQuestion(question);
+    clearAskDraft({ silent: true });
     renderAskAnswer(buildLocalAskAnswer(question, context.items), question);
     renderAskSuggestions();
     showToast("Local answer ready");
@@ -3562,6 +3601,12 @@ els.sparkButton.addEventListener("click", sparkIdeas);
 els.focusButton.addEventListener("click", briefFocus);
 els.sweepButton.addEventListener("click", sweepItems);
 els.askForm.addEventListener("submit", askKeeply);
+els.askInput.addEventListener("input", saveAskDraft);
+els.askDraftClear.addEventListener("click", () => {
+  els.askInput.value = "";
+  clearAskDraft();
+  els.askInput.focus();
+});
 els.filterClearButton.addEventListener("click", clearActiveFilters);
 els.filterSummaryChips.addEventListener("click", (event) => {
   const target = event.target instanceof Element ? event.target : null;
@@ -3647,5 +3692,6 @@ applyViewPreferences();
 setSyncStatus(state.syncStatus);
 render();
 restoreComposerDraft();
+restoreAskDraft();
 loadRemoteData();
 initWhatsNew();
