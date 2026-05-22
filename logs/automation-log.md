@@ -1,4 +1,18 @@
 
+## 2026-05-22 07:03:21 MDT
+
+- Added mobile-first Relative Task Hints for faster task scheduling during quick capture.
+- Task capture now understands `in 3 days` and `in 2 weeks` style phrases in both single-task titles and pasted task lists, sets the matching due date, and strips the timing phrase from saved titles.
+- Updated What's New metadata with latest id `2026-05-22-relative-task-hints`, title `Relative Task Hints`, and 3 user-facing bullets.
+- UI/code areas touched: deterministic relative-date parsing in `task-bulk-entry.mjs`, single-task capture coverage through existing `task-capture-hints.mjs`, release metadata, and parser/capture tests in `test/task-bulk-entry.test.mjs` plus `test/task-capture-hints.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task-date parsing only.
+- Verification: full `npm test` passed with 242 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4212 npm start` served `http://127.0.0.1:4212/` with HTTP 200. Browser verification confirmed the `Relative Task Hints` What's New popup/dismissal persistence, dynamic-imported local parsing for `Renew SSL in 3 days @work` to title `Renew SSL`, Work label, and due date `2026-05-21`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-relative-task-hints` in the What's New popup, dynamically imported `task-bulk-entry.mjs` and parsed `Renew SSL in 3 days @work` to title `Renew SSL`, Work label, and due date `2026-05-21`, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed metadata/parser/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex match for `task-scheduled-time-badges` in release metadata was reviewed as a false positive.
+- Git status: feature commit `5cc5e2e` (`Add relative task due hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a1053fcc694516be367bff2` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a1053fcc694516be367bff2--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 05:07:43 MDT
 
 - Added mobile-first Ask Draft Resume so in-progress Ask Keeply questions survive reloads and mobile context switches.
