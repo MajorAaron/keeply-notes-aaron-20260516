@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-mention-badges",
+    title: "Mention Badges",
+    bullets: [
+      "Notes and tasks now show compact @mention badges when text calls out a person or group.",
+      "Multiple mentions summarize from the first handle so mobile scanning stays fast.",
+      "Email addresses are ignored, keeping badges focused on standalone @mentions."
+    ]
+  },
+  {
     id: "2026-05-22-task-repeat-badges",
     title: "Task Repeat Badges",
     bullets: [
