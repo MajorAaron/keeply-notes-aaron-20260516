@@ -81,6 +81,7 @@ import { getItemCodeMeta } from "./item-code-meta.mjs";
 import { getItemSectionMeta } from "./item-section-meta.mjs";
 import { getItemQuoteMeta } from "./item-quote-meta.mjs";
 import { getItemUrgencyMeta } from "./item-urgency-meta.mjs";
+import { getItemTravelMeta } from "./item-travel-meta.mjs";
 import { getOverdueTaskNudge } from "./overdue-task-actions.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
@@ -2067,6 +2068,12 @@ function renderNote(note) {
   urgencyMetaElement.textContent = urgencyMeta.label;
   urgencyMetaElement.setAttribute("aria-label", urgencyMeta.ariaLabel);
   urgencyMetaElement.dataset.tone = urgencyMeta.tone || "";
+  const travelMeta = getItemTravelMeta(noteSearchText);
+  const travelMetaElement = node.querySelector(".note-travel-meta");
+  travelMetaElement.hidden = !travelMeta.available;
+  travelMetaElement.textContent = travelMeta.label;
+  travelMetaElement.setAttribute("aria-label", travelMeta.ariaLabel);
+  travelMetaElement.dataset.tone = travelMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(noteSearchText);
   const decisionMetaElement = node.querySelector(".note-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
@@ -2367,6 +2374,12 @@ function renderTask(task) {
   urgencyMetaElement.textContent = urgencyMeta.label;
   urgencyMetaElement.setAttribute("aria-label", urgencyMeta.ariaLabel);
   urgencyMetaElement.dataset.tone = urgencyMeta.tone || "";
+  const travelMeta = getItemTravelMeta(taskSearchText);
+  const travelMetaElement = node.querySelector(".task-travel-meta");
+  travelMetaElement.hidden = !travelMeta.available;
+  travelMetaElement.textContent = travelMeta.label;
+  travelMetaElement.setAttribute("aria-label", travelMeta.ariaLabel);
+  travelMetaElement.dataset.tone = travelMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(taskSearchText);
   const decisionMetaElement = node.querySelector(".task-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;

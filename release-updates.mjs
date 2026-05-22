@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-travel-badges",
+    title: "Travel Badges",
+    bullets: [
+      "Notes and tasks now show compact Flight, Hotel, Transit, or Trip badges for travel plans.",
+      "Mobile review can spot itineraries, reservations, and transit details without opening every card.",
+      "Common non-travel terminal and check-in phrases stay quiet to keep badges focused."
+    ]
+  },
+  {
     id: "2026-05-22-urgency-badges",
     title: "Urgency Badges",
     bullets: [
