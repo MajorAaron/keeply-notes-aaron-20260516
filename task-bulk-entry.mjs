@@ -35,6 +35,13 @@ export function parseBulkTaskLine(line, options = {}) {
 
   let clearsDue = false;
 
+  title = title.replace(/\bin\s+(\d{1,2})\s+(days?|weeks?)\b/gi, (match, amount, unit) => {
+    if (!clearsDue && !dueAt) {
+      dueAt = getOffsetDate(Number(amount), unit, baseDate);
+    }
+    return " ";
+  });
+
   title = title.replace(
     /\b(next\s+week|this\s+weekend|weekend|today|tonight|eod|end\s+of\s+day|tomorrow|(?:this|next)\s+(?:sunday|monday|tuesday|wednesday|thursday|friday|saturday)|sunday|monday|tuesday|wednesday|thursday|friday|saturday|no\s+date|unscheduled|someday)\b/gi,
     (match) => {
@@ -146,6 +153,14 @@ function getRelativeDate(value, baseDate) {
   } else if (value === "next-week") {
     date.setDate(date.getDate() + 7);
   }
+  return toDateInput(date);
+}
+
+function getOffsetDate(amount, unit, baseDate) {
+  const date = new Date(baseDate);
+  const normalizedAmount = Number.isFinite(amount) ? Math.max(1, Math.min(90, Math.trunc(amount))) : 1;
+  const multiplier = String(unit || "").toLowerCase().startsWith("week") ? 7 : 1;
+  date.setDate(date.getDate() + normalizedAmount * multiplier);
   return toDateInput(date);
 }
 

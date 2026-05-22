@@ -161,6 +161,22 @@ test("buildTaskCaptureFields applies same-day evening title hints", () => {
   );
 });
 
+test("buildTaskCaptureFields applies relative duration title hints", () => {
+  const task = buildTaskCaptureFields(
+    { title: "Review vendor options in 2 weeks @work", details: "", label: "ideas", priority: "normal", dueAt: "2026-05-19" },
+    { today: "2026-05-18" }
+  );
+
+  assert.deepEqual(task, {
+    title: "Review vendor options",
+    details: "",
+    label: "work",
+    priority: "normal",
+    dueAt: "2026-06-01",
+    usedHints: true
+  });
+});
+
 test("buildTaskCaptureFields applies no-date title hints over selected due presets", () => {
   const task = buildTaskCaptureFields({
     title: "Inventory freezer someday @home",

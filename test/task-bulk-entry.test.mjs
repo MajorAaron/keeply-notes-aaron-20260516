@@ -177,6 +177,29 @@ test("same-day capture hints strip evening and EOD scheduling words", () => {
   assert.equal(tasks[1].dueAt, "2026-05-18");
 });
 
+test("parseBulkTaskLine extracts relative day and week scheduling hints", () => {
+  assert.deepEqual(parseBulkTaskLine("Renew SSL in 3 days @work", { today: "2026-05-18" }), {
+    title: "Renew SSL",
+    dueAt: "2026-05-21",
+    priority: "",
+    label: "work"
+  });
+
+  const tasks = buildBulkTasksFromText("Order filters in 2 weeks\nCall plumber in 5 days", {
+    label: "home",
+    priority: "normal",
+    dueAt: "2026-05-30",
+    today: "2026-05-18",
+    now: "2026-05-18T12:00:00.000Z",
+    createId: (index) => `task-${index}`
+  });
+
+  assert.equal(tasks[0].title, "Order filters");
+  assert.equal(tasks[0].dueAt, "2026-06-01");
+  assert.equal(tasks[1].title, "Call plumber");
+  assert.equal(tasks[1].dueAt, "2026-05-23");
+});
+
 test("no-date hints strip scheduling words and clear shared due dates", () => {
   assert.deepEqual(parseBulkTaskLine("Refill travel kit someday @home"), {
     title: "Refill travel kit",

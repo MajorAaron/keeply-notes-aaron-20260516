@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-relative-task-hints",
+    title: "Relative Task Hints",
+    bullets: [
+      "Task capture now understands phrases like in 3 days and in 2 weeks.",
+      "Single tasks and pasted task lists set the matching due date automatically.",
+      "The timing phrase is stripped from saved titles so quick mobile capture stays clean."
+    ]
+  },
+  {
     id: "2026-05-22-ask-draft-resume",
     title: "Ask Draft Resume",
     bullets: [
