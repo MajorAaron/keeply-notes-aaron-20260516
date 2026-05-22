@@ -1,4 +1,18 @@
 
+## 2026-05-21 19:05:38 MDT
+
+- Added mobile-first Next Weekday Task Hints for faster future task capture.
+- Task capture now understands `next Friday`, `next Monday`, and other `next <weekday>` phrases in both single-task titles and pasted task lists, sets the matching next-week due date, and strips the hint text from saved titles.
+- Updated What's New metadata with latest id `2026-05-21-next-weekday-task-hints`, title `Next Weekday Task Hints`, and 3 user-facing bullets.
+- UI/code areas touched: deterministic task hint parsing in `task-bulk-entry.mjs`, single-task capture coverage through `task-capture-hints.mjs`, release metadata, and parser/capture tests in `test/task-bulk-entry.test.mjs` plus `test/task-capture-hints.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local task date parsing only.
+- Verification: full `npm test` passed with 235 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4202 npm start` served `http://127.0.0.1:4202/` with HTTP 200. Browser verification confirmed the `Next Weekday Task Hints` What's New popup/dismissal persistence, dynamic-imported local parsing for `Send budget next Friday @work` to title `Send budget`, Work label, and due date `2026-05-29`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-21-next-weekday-task-hints` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `task-bulk-entry.mjs` and parsed `Draft launch notes next Friday @work` to title `Draft launch notes`, Work label, and due date `2026-05-29`, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed metadata/parser/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `2e0e758` (`Add next weekday task hints`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0fabaf643688c1d1164c5e` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0fabaf643688c1d1164c5e--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-21 18:08:32 MDT
 
 - Added mobile-first Amount Badges for faster money-related scanning across notes and tasks.
