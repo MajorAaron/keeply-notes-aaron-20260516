@@ -69,6 +69,7 @@ import { getTaskScheduledTimeMeta } from "./task-scheduled-time-meta.mjs";
 import { getItemContactMeta } from "./item-contact-meta.mjs";
 import { getItemMeetingMeta } from "./item-meeting-meta.mjs";
 import { getItemLocationMeta } from "./item-location-meta.mjs";
+import { getItemAmountMeta } from "./item-amount-meta.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1939,6 +1940,12 @@ function renderNote(note) {
   locationMetaElement.textContent = locationMeta.label;
   locationMetaElement.setAttribute("aria-label", locationMeta.ariaLabel);
   locationMetaElement.dataset.tone = locationMeta.tone || "";
+  const amountMeta = getItemAmountMeta(noteSearchText);
+  const amountMetaElement = node.querySelector(".note-amount-meta");
+  amountMetaElement.hidden = !amountMeta.available;
+  amountMetaElement.textContent = amountMeta.label;
+  amountMetaElement.setAttribute("aria-label", amountMeta.ariaLabel);
+  amountMetaElement.dataset.tone = amountMeta.tone || "";
   const checklistMeta = getNoteChecklistMeta(noteBody);
   const checklistMetaElement = node.querySelector(".note-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;
@@ -2179,6 +2186,12 @@ function renderTask(task) {
   locationMetaElement.textContent = locationMeta.label;
   locationMetaElement.setAttribute("aria-label", locationMeta.ariaLabel);
   locationMetaElement.dataset.tone = locationMeta.tone || "";
+  const amountMeta = getItemAmountMeta(taskSearchText);
+  const amountMetaElement = node.querySelector(".task-amount-meta");
+  amountMetaElement.hidden = !amountMeta.available;
+  amountMetaElement.textContent = amountMeta.label;
+  amountMetaElement.setAttribute("aria-label", amountMeta.ariaLabel);
+  amountMetaElement.dataset.tone = amountMeta.tone || "";
   const blockerMeta = getTaskBlockerMeta(task);
   const blockerMetaElement = node.querySelector(".task-blocker-meta");
   blockerMetaElement.hidden = !blockerMeta.available;

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-21-amount-badges",
+    title: "Amount Badges",
+    bullets: [
+      "Notes and tasks now show compact amount badges when text includes prices, reimbursements, or budgets.",
+      "Mobile review can spot money-related items without opening every card.",
+      "Multiple amounts are summarized with accessible labels that include the first detected amount."
+    ]
+  },
+  {
     id: "2026-05-21-location-badges",
     title: "Location Badges",
     bullets: [
