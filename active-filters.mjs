@@ -55,31 +55,31 @@ export function getActiveFilterSummary(filters = {}) {
   const query = String(filters.query || "").trim();
 
   if (label !== "all") {
-    chips.push({ key: "label", label: LABELS[label] || titleCase(label) });
+    chips.push(buildFilterChip("label", LABELS[label] || titleCase(label)));
   }
 
   if (filters.view === "tasks" && taskWindow !== "all") {
-    chips.push({ key: "taskWindow", label: TASK_WINDOWS[taskWindow] || titleCase(taskWindow) });
+    chips.push(buildFilterChip("taskWindow", TASK_WINDOWS[taskWindow] || titleCase(taskWindow)));
   }
 
   if (filters.view === "tasks" && taskPriority !== "all") {
-    chips.push({ key: "taskPriority", label: TASK_PRIORITIES[taskPriority] || titleCase(taskPriority) });
+    chips.push(buildFilterChip("taskPriority", TASK_PRIORITIES[taskPriority] || titleCase(taskPriority)));
   }
 
   if (filters.view === "tasks" && taskCompletion !== "all") {
-    chips.push({ key: "taskCompletion", label: TASK_COMPLETIONS[taskCompletion] || titleCase(taskCompletion) });
+    chips.push(buildFilterChip("taskCompletion", TASK_COMPLETIONS[taskCompletion] || titleCase(taskCompletion)));
   }
 
   if (filters.view === "active" && noteColor !== "all") {
-    chips.push({ key: "noteColor", label: NOTE_COLORS[noteColor] || titleCase(noteColor) });
+    chips.push(buildFilterChip("noteColor", NOTE_COLORS[noteColor] || titleCase(noteColor)));
   }
 
   if (filters.view === "active" && notePin !== "all") {
-    chips.push({ key: "notePin", label: NOTE_PINS[notePin] || titleCase(notePin) });
+    chips.push(buildFilterChip("notePin", NOTE_PINS[notePin] || titleCase(notePin)));
   }
 
   if (query) {
-    chips.push({ key: "query", label: `Search: ${truncateQuery(query)}` });
+    chips.push(buildFilterChip("query", `Search: ${truncateQuery(query)}`));
   }
 
   return {
@@ -90,6 +90,31 @@ export function getActiveFilterSummary(filters = {}) {
 
 export function shouldShowFilterSummary(filters = {}) {
   return getActiveFilterSummary(filters).active;
+}
+
+export function getFilterRemovalPatch(key) {
+  const resetKey = String(key || "");
+  const resetValues = {
+    label: "all",
+    taskWindow: "all",
+    taskPriority: "all",
+    taskCompletion: "all",
+    noteColor: "all",
+    notePin: "all",
+    query: ""
+  };
+
+  if (!Object.hasOwn(resetValues, resetKey)) return null;
+  return { key: resetKey, value: resetValues[resetKey] };
+}
+
+function buildFilterChip(key, label) {
+  return {
+    key,
+    label,
+    removeLabel: `Remove ${label} filter`,
+    title: `Remove ${label}`
+  };
 }
 
 function truncateQuery(query) {

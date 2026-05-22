@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-removable-filter-chips",
+    title: "Removable Filter Chips",
+    bullets: [
+      "Active filter chips are now tap targets with a small remove affordance.",
+      "Clear one label, date, priority, color, pin, status, or search filter without resetting the whole view.",
+      "Mobile filter cleanup is faster with accessible remove labels on every chip."
+    ]
+  },
+  {
     id: "2026-05-22-attachment-badges",
     title: "Attachment Badges",
     bullets: [

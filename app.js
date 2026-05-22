@@ -23,7 +23,7 @@ import { buildTaskCaptureFields } from "./task-capture-hints.mjs";
 import { formatLabelCount, getLabelCounts } from "./label-counts.mjs";
 import { buildViewPreferences, parseViewPreferences } from "./view-preferences.mjs";
 import { getSearchHighlightTerms, splitHighlightedText } from "./search-highlights.mjs";
-import { getActiveFilterSummary } from "./active-filters.mjs";
+import { getActiveFilterSummary, getFilterRemovalPatch } from "./active-filters.mjs";
 import { buildNoteSharePayload, buildTaskSharePayload } from "./item-share.mjs";
 import { getArchiveRestoreAction, getTrashAction } from "./item-status-actions.mjs";
 import { duplicateNote, duplicateTask } from "./duplicate-items.mjs";
@@ -827,12 +827,35 @@ function renderFilterSummary() {
   els.filterSummary.hidden = !summary.active;
   els.filterSummaryChips.replaceChildren(
     ...summary.chips.map((chip) => {
-      const item = document.createElement("span");
+      const item = document.createElement("button");
       item.className = "filter-summary-chip";
-      item.textContent = chip.label;
+      item.type = "button";
+      item.dataset.filterKey = chip.key;
+      item.setAttribute("aria-label", chip.removeLabel);
+      item.title = chip.title;
+      const label = document.createElement("span");
+      label.textContent = chip.label;
+      const remove = document.createElement("span");
+      remove.className = "filter-summary-remove";
+      remove.setAttribute("aria-hidden", "true");
+      remove.textContent = "×";
+      item.append(label, remove);
       return item;
     })
   );
+}
+
+function removeActiveFilter(key) {
+  const patch = getFilterRemovalPatch(key);
+  if (!patch) return;
+  state[patch.key] = patch.value;
+  if (patch.key === "query") {
+    els.searchInput.value = "";
+  }
+  syncNav();
+  saveViewPreferences();
+  render();
+  showToast("Filter removed");
 }
 
 function clearActiveFilters() {
@@ -3494,6 +3517,12 @@ els.focusButton.addEventListener("click", briefFocus);
 els.sweepButton.addEventListener("click", sweepItems);
 els.askForm.addEventListener("submit", askKeeply);
 els.filterClearButton.addEventListener("click", clearActiveFilters);
+els.filterSummaryChips.addEventListener("click", (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  const chip = target?.closest(".filter-summary-chip");
+  if (!chip) return;
+  removeActiveFilter(chip.dataset.filterKey);
+});
 els.emptyStateAction.addEventListener("click", clearActiveFilters);
 els.emptyStateCapture.addEventListener("click", captureSearchDraft);
 els.searchClearButton.addEventListener("click", clearSearchQuery);

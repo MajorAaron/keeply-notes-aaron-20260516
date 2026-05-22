@@ -515,16 +515,46 @@ h1 {
 }
 
 .filter-summary-chip {
+  display: inline-flex;
   max-width: 100%;
+  min-height: 30px;
+  align-items: center;
+  gap: 5px;
   padding: 6px 9px;
   overflow: hidden;
+  border: 0;
   border-radius: 999px;
   background: rgba(35, 36, 38, 0.08);
   color: var(--muted);
+  font: inherit;
   font-size: 0.76rem;
   font-weight: 900;
-  text-overflow: ellipsis;
+  text-align: left;
   white-space: nowrap;
+}
+
+.filter-summary-chip span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filter-summary-remove {
+  display: inline-grid;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(35, 36, 38, 0.12);
+  color: var(--ink);
+  font-size: 0.82rem;
+  line-height: 1;
+}
+
+.filter-summary-chip:focus-visible {
+  outline: 3px solid rgba(35, 36, 38, 0.22);
+  outline-offset: 2px;
 }
 
 .filter-clear-button {
