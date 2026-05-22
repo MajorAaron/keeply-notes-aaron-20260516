@@ -1,4 +1,18 @@
 
+## 2026-05-22 13:08:20 MDT
+
+- Added mobile-first Food Badges for faster scanning of grocery lists, recipes, meal prep, and dining plans across notes and tasks.
+- Notes and tasks now show compact `Groceries`, `Recipe`, `Meal`, `Dining`, or combined food-count pills when text includes explicit food planning cues; common app-menu, delivery-pipeline, and idiom phrases stay quiet.
+- Updated What's New metadata with latest id `2026-05-22-food-badges`, title `Food Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared deterministic food detector in `item-food-meta.mjs`, note/task metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-food-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local food-cue detection only.
+- Verification: focused `node --check item-food-meta.mjs && node --test test/item-food-meta.test.mjs && node scripts/check-release-updates.mjs` passed with 5 food tests; full `npm test` passed; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran successfully and as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4218 npm start` served `http://127.0.0.1:4218/` with HTTP 200. Browser verification confirmed the `Food Badges` What's New popup/dismissal persistence, dynamic-imported local food metadata returning `4 food` for mixed meal/grocery/recipe/dining cues, false-positive suppression for browser-menu and delivery-pipeline text, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-food-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-food-meta.mjs` and returned `4 food` for mixed food cues while suppressing the browser-menu/delivery-pipeline false positive, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible food cards, so the deployed helper/import path was smoke-tested directly without mutating remote data.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives.
+- Git status: feature commit `6e2f321` (`Add food context badges`) was pushed to `origin main`; unrelated untracked `.DS_Store` and `backups/` were left untouched.
+- Netlify production deploy succeeded with the globally installed Netlify CLI after `npx netlify deploy` initially hit local ENOSPC while trying to install a fresh CLI. Feature deploy `6a10a97bbb4a0f859d3bee8f` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a10a97bbb4a0f859d3bee8f--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 12:06:12 MDT
 
 - Added mobile-first Travel Badges for faster scanning of itineraries, reservations, and transit details across notes and tasks.
