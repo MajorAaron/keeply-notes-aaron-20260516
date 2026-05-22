@@ -1,4 +1,18 @@
 
+## 2026-05-22 14:06:32 MDT
+
+- Added mobile-first Billing Badges for faster scanning of invoices, renewals, payment-due items, receipts, and refunds across notes and tasks.
+- Notes and tasks now show compact `Invoice`, `Payment`, `Subscription`, `Refund`, or combined billing-count pills when text includes explicit money follow-up cues; common engineering/product phrases such as payment pipelines, reactive subscriptions, invoice components, and receipt parsers stay quiet.
+- Updated What's New metadata with latest id `2026-05-22-billing-badges`, title `Billing Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared deterministic billing detector in `item-billing-meta.mjs`, note/task metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-billing-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local billing-cue detection only.
+- Verification: focused `node --check item-billing-meta.mjs && node --test test/item-billing-meta.test.mjs && node scripts/check-release-updates.mjs` passed with 5 billing tests; full `npm test` passed; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran successfully and as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4220 npm start` served `http://127.0.0.1:4220/` with HTTP 200. Dynamic-import smoke verification confirmed latest update id `2026-05-22-billing-badges`, note/task billing template hooks, billing CSS, `4 billing` for mixed invoice/payment/subscription/refund text, and false-positive suppression for payment-pipeline/reactive-subscription text. The local server was stopped after verification. Browser visual verification was not run in this cron environment; the markup/CSS smoke check covered obvious mobile badge hooks.
+- Production verification: deploy permalink loaded with HTTP 200, exposed latest update id `2026-05-22-billing-badges`, included note/task billing hooks and CSS, dynamically imported `item-billing-meta.mjs`, returned `4 billing` for mixed billing cues, and suppressed the payment-pipeline/reactive-subscription false positive. Production seed data did not include visible billing cards, so the deployed helper/import path was smoke-tested directly without mutating remote data.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives.
+- Git status: feature commit `2a2e15d` (`Add billing context badges`) was pushed to `origin main`; unrelated untracked `.DS_Store` and `backups/` were left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a10b72971cbaa81f359d40e` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a10b72971cbaa81f359d40e--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 13:08:20 MDT
 
 - Added mobile-first Food Badges for faster scanning of grocery lists, recipes, meal prep, and dining plans across notes and tasks.
