@@ -2358,6 +2358,7 @@ select {
 .task-blocker-meta,
 .task-time-estimate-meta,
 .task-scheduled-time-meta,
+.task-repeat-meta,
 .task-checklist-meta {
   padding: 4px 8px;
   border-radius: 999px;
@@ -2560,6 +2561,23 @@ select {
   background: rgba(248, 215, 95, 0.4);
   color: #6f5210;
   letter-spacing: 0.01em;
+}
+
+.task-repeat-meta {
+  background: rgba(156, 224, 182, 0.24);
+  color: #315d40;
+  letter-spacing: 0.01em;
+}
+
+.task-repeat-meta[data-tone="monthly"],
+.task-repeat-meta[data-tone="yearly"] {
+  background: rgba(129, 199, 238, 0.18);
+  color: #315569;
+}
+
+.task-repeat-meta[data-tone="multiple"] {
+  background: rgba(248, 215, 95, 0.36);
+  color: #6f5210;
 }
 
 .task-due-badge {

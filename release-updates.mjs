@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-task-repeat-badges",
+    title: "Task Repeat Badges",
+    bullets: [
+      "Open task cards now show Daily, Weekly, Monthly, or Yearly badges when text mentions repeat schedules.",
+      "Mobile task scanning can spot recurring work without opening every card.",
+      "Completed tasks stay quiet so repeat badges focus on active routines."
+    ]
+  },
+  {
     id: "2026-05-22-relative-task-hints",
     title: "Relative Task Hints",
     bullets: [
