@@ -1,4 +1,18 @@
 
+## 2026-05-22 04:06:28 MDT
+
+- Added mobile-first Section Badges for faster scanning of structured notes and task details.
+- Notes and tasks now show compact `Section` / `N sections` pills when their body/details include markdown heading lines such as `# Agenda` or `## Next steps`; inline hashtags such as `#Launch` stay separate and do not count.
+- Updated What's New metadata with latest id `2026-05-22-section-badges`, title `Section Badges`, and 3 user-facing bullets.
+- UI/code areas touched: deterministic heading parser/helper in `item-section-meta.mjs`, note/task metadata rendering in `app.js`, card templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-section-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local markdown-heading detection only.
+- Verification: focused `node --test test/item-section-meta.test.mjs` passed with 4 tests; full `npm test` passed, including the new section metadata tests in the final metadata group; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4210 npm start` served `http://127.0.0.1:4210/` with HTTP 200. Browser verification confirmed the `Section Badges` What's New popup/dismissal persistence, dynamic-imported local section metadata returning `2 sections` while ignoring inline hashtags, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-section-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-section-meta.mjs` and returned `2 sections` while ignoring inline hashtags, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible markdown-heading cards, so the deployed helper/import path was smoke-tested directly without mutating remote data.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives.
+- Git status: feature commit `53f6e1f` (`Add markdown section badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a102a7d5dbac6e688feca72` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a102a7d5dbac6e688feca72--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 03:08:03 MDT
 
 - Added mobile-first Overdue Task Nudges for faster triage of late tasks in the Tasks view.
