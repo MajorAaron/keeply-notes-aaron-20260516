@@ -1,4 +1,18 @@
 
+## 2026-05-22 12:06:12 MDT
+
+- Added mobile-first Travel Badges for faster scanning of itineraries, reservations, and transit details across notes and tasks.
+- Notes and tasks now show compact `Flight`, `Hotel`, `Transit`, `Trip`, or combined travel-count pills when text includes travel cues such as flights, boarding passes, hotels, rental cars, passports, or itineraries; common non-travel terminal/check-in phrases stay quiet.
+- Updated What's New metadata with latest id `2026-05-22-travel-badges`, title `Travel Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared deterministic travel detector in `item-travel-meta.mjs`, note/task metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-travel-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local travel-cue detection only.
+- Verification: focused `node --check item-travel-meta.mjs && node --test test/item-travel-meta.test.mjs && node scripts/check-release-updates.mjs` passed with 5 travel tests; full `npm test` passed with 248 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran successfully and as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4217 npm start` served `http://127.0.0.1:4217/` with HTTP 200. Browser verification confirmed the `Travel Badges` What's New popup/dismissal persistence, dynamic-imported local travel metadata returning `4 travel` for mixed flight/hotel/transit/itinerary cues, false-positive suppression for `Quarterly check-in recap and terminal command`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-travel-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-travel-meta.mjs` and returned `4 travel` for mixed travel cues while suppressing the check-in/terminal false positive, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible travel cards, so the deployed helper/import path was smoke-tested directly without mutating remote data.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives.
+- Git status: feature commit `bd8c267` (`Add travel context badges`) was pushed to `origin main`; unrelated untracked `.DS_Store` and `backups/` were left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a109aec3bc53e4e4ac4e8ec` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a109aec3bc53e4e4ac4e8ec--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 11:11:25 MDT
 
 - Added mobile-first Urgency Badges for faster scanning of time-sensitive notes and tasks.
