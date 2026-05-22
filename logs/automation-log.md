@@ -1,4 +1,18 @@
 
+## 2026-05-21 18:08:32 MDT
+
+- Added mobile-first Amount Badges for faster money-related scanning across notes and tasks.
+- Notes and tasks now show compact amount badges for currency symbols and common currency codes such as `$42`, `€1.3k`, `CA$320`, or a summarized `2 amounts` badge for repeated budget/reimbursement text.
+- Updated What's New metadata with latest id `2026-05-21-amount-badges`, title `Amount Badges`, and 3 user-facing bullets.
+- UI/code areas touched: note/task card metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and new helper/test files `item-amount-meta.mjs` plus `test/item-amount-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local currency-amount detection only.
+- Verification: full `npm test` passed with 235 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4201 npm start` served `http://127.0.0.1:4201/` with HTTP 200. Browser verification confirmed the `Amount Badges` What's New popup/dismissal persistence, dynamic-imported local amount metadata returning `2 amounts` for mixed currency text, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-21-amount-badges` in the What's New popup, dynamically imported `item-amount-meta.mjs` and returned `2 amounts` with `$12.50` preserved for cents, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible money cards, so the deployed helper/import path was smoke-tested directly.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commits `e2e9a74` (`Add amount context badges`) and `867c20a` (`Polish amount badge decimals`) were pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Final feature deploy `6a0f9e57dd7855a1a78d8575` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0f9e57dd7855a1a78d8575--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-21 17:06:24 MDT
 
 - Added mobile-first Location Badges for faster place-aware scanning across notes and tasks.
