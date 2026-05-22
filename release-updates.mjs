@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-21-question-badges",
+    title: "Question Badges",
+    bullets: [
+      "Notes and tasks now show a compact Question badge when text includes a question.",
+      "Cards with multiple questions summarize the count for faster mobile review.",
+      "Accessible labels announce question counts so unresolved asks are easier to find."
+    ]
+  },
+  {
     id: "2026-05-21-hashtag-badges",
     title: "Hashtag Badges",
     bullets: [

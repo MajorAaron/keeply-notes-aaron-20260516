@@ -71,6 +71,7 @@ import { getItemMeetingMeta } from "./item-meeting-meta.mjs";
 import { getItemLocationMeta } from "./item-location-meta.mjs";
 import { getItemAmountMeta } from "./item-amount-meta.mjs";
 import { getItemTagMeta } from "./item-tag-meta.mjs";
+import { getItemQuestionMeta } from "./item-question-meta.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1953,6 +1954,12 @@ function renderNote(note) {
   tagMetaElement.textContent = tagMeta.label;
   tagMetaElement.setAttribute("aria-label", tagMeta.ariaLabel);
   tagMetaElement.dataset.tone = tagMeta.tone || "";
+  const questionMeta = getItemQuestionMeta(noteSearchText);
+  const questionMetaElement = node.querySelector(".note-question-meta");
+  questionMetaElement.hidden = !questionMeta.available;
+  questionMetaElement.textContent = questionMeta.label;
+  questionMetaElement.setAttribute("aria-label", questionMeta.ariaLabel);
+  questionMetaElement.dataset.tone = questionMeta.tone || "";
   const checklistMeta = getNoteChecklistMeta(noteBody);
   const checklistMetaElement = node.querySelector(".note-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;
@@ -2205,6 +2212,12 @@ function renderTask(task) {
   tagMetaElement.textContent = tagMeta.label;
   tagMetaElement.setAttribute("aria-label", tagMeta.ariaLabel);
   tagMetaElement.dataset.tone = tagMeta.tone || "";
+  const questionMeta = getItemQuestionMeta(taskSearchText);
+  const questionMetaElement = node.querySelector(".task-question-meta");
+  questionMetaElement.hidden = !questionMeta.available;
+  questionMetaElement.textContent = questionMeta.label;
+  questionMetaElement.setAttribute("aria-label", questionMeta.ariaLabel);
+  questionMetaElement.dataset.tone = questionMeta.tone || "";
   const blockerMeta = getTaskBlockerMeta(task);
   const blockerMetaElement = node.querySelector(".task-blocker-meta");
   blockerMetaElement.hidden = !blockerMeta.available;
