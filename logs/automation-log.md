@@ -1,4 +1,18 @@
 
+## 2026-05-21 21:24:53 MDT
+
+- Added mobile-first Hashtag Badges for faster project/context scanning across notes and tasks.
+- Notes and tasks now show compact hashtag pills for text such as `#Launch`, summarize multiple unique hashtags as `#Launch +1`, and expose accessible labels for screen readers.
+- Updated What's New metadata with latest id `2026-05-21-hashtag-badges`, title `Hashtag Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared hashtag parser/helper in `item-tag-meta.mjs`, note/task card metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-tag-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local hashtag detection only.
+- Verification: full `npm test` passed with 235 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4203 npm start` served `http://127.0.0.1:4203/` with HTTP 200. Browser verification confirmed the `Hashtag Badges` What's New popup/dismissal persistence, dynamic-imported local hashtag metadata returning `#Launch` and `#Launch +1`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-21-hashtag-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-tag-meta.mjs` and returned `#Launch` / `#Launch +1`, reported no document horizontal overflow, and had no browser console errors. Production sample data did not include visible hashtag cards, so the deployed helper/import path was smoke-tested directly.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives.
+- Git status: feature commit `e1b12f8` (`Add hashtag context badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0fcc670f2ca80cfcf43f44` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0fcc670f2ca80cfcf43f44--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-21 19:05:38 MDT
 
 - Added mobile-first Next Weekday Task Hints for faster future task capture.
