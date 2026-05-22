@@ -1,4 +1,18 @@
 
+## 2026-05-21 22:06:12 MDT
+
+- Added mobile-first Question Badges for faster unresolved-ask scanning across notes and tasks.
+- Notes and tasks now show compact `Question` or `N questions` pills when titles/bodies/details include question marks, with accessible labels announcing question counts.
+- Updated What's New metadata with latest id `2026-05-21-question-badges`, title `Question Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared question detector/helper in `item-question-meta.mjs`, note/task card metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-question-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local question detection only.
+- Verification: full `npm test` passed with 235 passing tests; focused `node --test test/item-question-meta.test.mjs` passed; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4204 npm start` served `http://127.0.0.1:4204/` with HTTP 200. Browser verification confirmed the `Question Badges` What's New popup/dismissal persistence, dynamic-imported local question metadata returning `2 questions`, visible existing question badges, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-21-question-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-question-meta.mjs` and returned `2 questions`, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible question cards, so the deployed helper/import path was smoke-tested directly.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `37fa522` (`Add question context badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0fd614f3a342f1ec912924` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0fd614f3a342f1ec912924--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-21 21:24:53 MDT
 
 - Added mobile-first Hashtag Badges for faster project/context scanning across notes and tasks.
