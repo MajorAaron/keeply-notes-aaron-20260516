@@ -1,4 +1,18 @@
 
+## 2026-05-22 08:06:52 MDT
+
+- Added mobile-first Task Repeat Badges for faster scanning of recurring open tasks.
+- Open task cards now show compact `Daily`, `Weekly`, `Monthly`, `Yearly`, or `Repeats` pills when titles/details mention repeat schedules such as `every day`, `every Friday`, `monthly`, or `annually`; completed tasks stay quiet.
+- Updated What's New metadata with latest id `2026-05-22-task-repeat-badges`, title `Task Repeat Badges`, and 3 user-facing bullets.
+- UI/code areas touched: deterministic repeat-cue helper in `task-repeat-meta.mjs`, task-card rendering in `app.js`, task template markup in `index.html`, mobile badge styling in `styles.css`, release metadata, package test wiring, and `test/task-repeat-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local recurrence detection only.
+- Verification: focused `node --test test/task-repeat-meta.test.mjs` passed with 6 tests; full `npm test` passed with 248 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4213 npm start` served `http://127.0.0.1:4213/` with HTTP 200. Browser verification confirmed the `Task Repeat Badges` What's New popup/dismissal persistence, dynamic-imported local repeat metadata returning `Daily` for `Water basil every day`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-task-repeat-badges` in the What's New popup, dynamically imported `task-repeat-meta.mjs` and returned `Daily` for `Water basil every day`, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible recurring tasks, so the deployed helper/import path was smoke-tested directly without mutating remote data.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives.
+- Git status: feature commit `ae53f83` (`Add task repeat badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a1062d993256e91435060ff` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a1062d993256e91435060ff--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 07:03:21 MDT
 
 - Added mobile-first Relative Task Hints for faster task scheduling during quick capture.
