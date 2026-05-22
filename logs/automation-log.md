@@ -1,4 +1,18 @@
 
+## 2026-05-22 00:05:59 MDT
+
+- Added mobile-first Attachment Badges for faster file/handoff scanning across notes and tasks.
+- Notes and tasks now show compact `PDF`, `Doc`, `Sheet`, `Deck`, `Image`, `File`, or `N files` pills when titles/bodies/details mention common attachment names, extensions, or file-sharing cues.
+- Updated What's New metadata with latest id `2026-05-22-attachment-badges`, title `Attachment Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared attachment detector/helper in `item-attachment-meta.mjs`, note/task card metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-attachment-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local attachment/file-cue detection only.
+- Verification: full `npm test` passed with 235 existing aggregate tests plus the final attachment/context metadata group reporting 21 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4206 npm start` served `http://127.0.0.1:4206/` with HTTP 200. Browser verification confirmed the `Attachment Badges` What's New popup/dismissal persistence, dynamic-imported local attachment metadata returning `3 files`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-attachment-badges` in the What's New popup, dynamically imported `item-attachment-meta.mjs` and returned `3 files`, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible attachment cards, so the deployed helper/import path was smoke-tested directly.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives.
+- Git status: feature commit `7b11b3f` (`Add attachment context badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0ff22dda213730c9431177` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0ff22dda213730c9431177--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-21 23:06:24 MDT
 
 - Added mobile-first Decision Badges for faster scanning of outcomes and sign-offs across notes and tasks.
