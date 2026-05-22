@@ -80,6 +80,7 @@ import { getItemAttachmentMeta } from "./item-attachment-meta.mjs";
 import { getItemCodeMeta } from "./item-code-meta.mjs";
 import { getItemSectionMeta } from "./item-section-meta.mjs";
 import { getItemQuoteMeta } from "./item-quote-meta.mjs";
+import { getItemUrgencyMeta } from "./item-urgency-meta.mjs";
 import { getOverdueTaskNudge } from "./overdue-task-actions.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
@@ -2060,6 +2061,12 @@ function renderNote(note) {
   quoteMetaElement.textContent = quoteMeta.label;
   quoteMetaElement.setAttribute("aria-label", quoteMeta.ariaLabel);
   quoteMetaElement.dataset.tone = quoteMeta.tone || "";
+  const urgencyMeta = getItemUrgencyMeta(noteSearchText);
+  const urgencyMetaElement = node.querySelector(".note-urgency-meta");
+  urgencyMetaElement.hidden = !urgencyMeta.available;
+  urgencyMetaElement.textContent = urgencyMeta.label;
+  urgencyMetaElement.setAttribute("aria-label", urgencyMeta.ariaLabel);
+  urgencyMetaElement.dataset.tone = urgencyMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(noteSearchText);
   const decisionMetaElement = node.querySelector(".note-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
@@ -2354,6 +2361,12 @@ function renderTask(task) {
   quoteMetaElement.textContent = quoteMeta.label;
   quoteMetaElement.setAttribute("aria-label", quoteMeta.ariaLabel);
   quoteMetaElement.dataset.tone = quoteMeta.tone || "";
+  const urgencyMeta = getItemUrgencyMeta(taskSearchText);
+  const urgencyMetaElement = node.querySelector(".task-urgency-meta");
+  urgencyMetaElement.hidden = !urgencyMeta.available;
+  urgencyMetaElement.textContent = urgencyMeta.label;
+  urgencyMetaElement.setAttribute("aria-label", urgencyMeta.ariaLabel);
+  urgencyMetaElement.dataset.tone = urgencyMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(taskSearchText);
   const decisionMetaElement = node.querySelector(".task-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;

@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-urgency-badges",
+    title: "Urgency Badges",
+    bullets: [
+      "Notes and tasks now show compact Urgent, ASAP, or Critical badges when text includes urgency cues.",
+      "Mobile review can spot time-sensitive items without opening every card.",
+      "Negated phrases like not urgent stay quiet so badges only highlight real pressure."
+    ]
+  },
+  {
     id: "2026-05-22-quote-badges",
     title: "Quote Badges",
     bullets: [
