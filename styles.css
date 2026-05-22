@@ -2060,6 +2060,7 @@ select {
 .note-question-meta,
 .note-attachment-meta,
 .note-code-meta,
+.note-section-meta,
 .note-decision-meta,
 .note-checklist-meta {
   display: inline-flex;
@@ -2220,6 +2221,7 @@ select {
 .note-card[data-color="ink"] .note-question-meta,
 .note-card[data-color="ink"] .note-attachment-meta,
 .note-card[data-color="ink"] .note-code-meta,
+.note-card[data-color="ink"] .note-section-meta,
 .note-card[data-color="ink"] .note-decision-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
@@ -2321,6 +2323,7 @@ select {
 .task-question-meta,
 .task-attachment-meta,
 .task-code-meta,
+.task-section-meta,
 .task-decision-meta,
 .task-blocker-meta,
 .task-time-estimate-meta,
@@ -2472,6 +2475,19 @@ select {
 .task-code-meta[data-tone="mixed"] {
   background: rgba(248, 215, 95, 0.34);
   color: #6f5210;
+}
+
+.note-section-meta,
+.task-section-meta {
+  background: rgba(156, 224, 182, 0.24);
+  color: #315d40;
+  letter-spacing: 0.01em;
+}
+
+.note-section-meta[data-tone="multiple"],
+.task-section-meta[data-tone="multiple"] {
+  background: rgba(129, 199, 238, 0.2);
+  color: #315569;
 }
 
 .note-decision-meta,

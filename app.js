@@ -75,6 +75,7 @@ import { getItemQuestionMeta } from "./item-question-meta.mjs";
 import { getItemDecisionMeta } from "./item-decision-meta.mjs";
 import { getItemAttachmentMeta } from "./item-attachment-meta.mjs";
 import { getItemCodeMeta } from "./item-code-meta.mjs";
+import { getItemSectionMeta } from "./item-section-meta.mjs";
 import { getOverdueTaskNudge } from "./overdue-task-actions.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
@@ -1999,6 +2000,12 @@ function renderNote(note) {
   codeMetaElement.textContent = codeMeta.label;
   codeMetaElement.setAttribute("aria-label", codeMeta.ariaLabel);
   codeMetaElement.dataset.tone = codeMeta.tone || "";
+  const sectionMeta = getItemSectionMeta(noteBody);
+  const sectionMetaElement = node.querySelector(".note-section-meta");
+  sectionMetaElement.hidden = !sectionMeta.available;
+  sectionMetaElement.textContent = sectionMeta.label;
+  sectionMetaElement.setAttribute("aria-label", sectionMeta.ariaLabel);
+  sectionMetaElement.dataset.tone = sectionMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(noteSearchText);
   const decisionMetaElement = node.querySelector(".note-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
@@ -2275,6 +2282,12 @@ function renderTask(task) {
   codeMetaElement.textContent = codeMeta.label;
   codeMetaElement.setAttribute("aria-label", codeMeta.ariaLabel);
   codeMetaElement.dataset.tone = codeMeta.tone || "";
+  const sectionMeta = getItemSectionMeta(task.details || "");
+  const sectionMetaElement = node.querySelector(".task-section-meta");
+  sectionMetaElement.hidden = !sectionMeta.available;
+  sectionMetaElement.textContent = sectionMeta.label;
+  sectionMetaElement.setAttribute("aria-label", sectionMeta.ariaLabel);
+  sectionMetaElement.dataset.tone = sectionMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(taskSearchText);
   const decisionMetaElement = node.querySelector(".task-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;

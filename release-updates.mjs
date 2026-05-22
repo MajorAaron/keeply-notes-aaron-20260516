@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-section-badges",
+    title: "Section Badges",
+    bullets: [
+      "Notes and tasks now show a compact Section badge when details use markdown headings.",
+      "Cards with multiple headings summarize the section count for faster mobile scanning.",
+      "Hashtags stay separate because only heading lines like # Agenda count as sections."
+    ]
+  },
+  {
     id: "2026-05-22-overdue-task-nudges",
     title: "Overdue Task Nudges",
     bullets: [
