@@ -70,6 +70,7 @@ import { getItemContactMeta } from "./item-contact-meta.mjs";
 import { getItemMeetingMeta } from "./item-meeting-meta.mjs";
 import { getItemLocationMeta } from "./item-location-meta.mjs";
 import { getItemAmountMeta } from "./item-amount-meta.mjs";
+import { getItemTagMeta } from "./item-tag-meta.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1946,6 +1947,12 @@ function renderNote(note) {
   amountMetaElement.textContent = amountMeta.label;
   amountMetaElement.setAttribute("aria-label", amountMeta.ariaLabel);
   amountMetaElement.dataset.tone = amountMeta.tone || "";
+  const tagMeta = getItemTagMeta(noteSearchText);
+  const tagMetaElement = node.querySelector(".note-tag-meta");
+  tagMetaElement.hidden = !tagMeta.available;
+  tagMetaElement.textContent = tagMeta.label;
+  tagMetaElement.setAttribute("aria-label", tagMeta.ariaLabel);
+  tagMetaElement.dataset.tone = tagMeta.tone || "";
   const checklistMeta = getNoteChecklistMeta(noteBody);
   const checklistMetaElement = node.querySelector(".note-checklist-meta");
   checklistMetaElement.hidden = !checklistMeta.available;
@@ -2192,6 +2199,12 @@ function renderTask(task) {
   amountMetaElement.textContent = amountMeta.label;
   amountMetaElement.setAttribute("aria-label", amountMeta.ariaLabel);
   amountMetaElement.dataset.tone = amountMeta.tone || "";
+  const tagMeta = getItemTagMeta(taskSearchText);
+  const tagMetaElement = node.querySelector(".task-tag-meta");
+  tagMetaElement.hidden = !tagMeta.available;
+  tagMetaElement.textContent = tagMeta.label;
+  tagMetaElement.setAttribute("aria-label", tagMeta.ariaLabel);
+  tagMetaElement.dataset.tone = tagMeta.tone || "";
   const blockerMeta = getTaskBlockerMeta(task);
   const blockerMetaElement = node.querySelector(".task-blocker-meta");
   blockerMetaElement.hidden = !blockerMeta.available;

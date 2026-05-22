@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-21-hashtag-badges",
+    title: "Hashtag Badges",
+    bullets: [
+      "Notes and tasks now show compact hashtag badges when titles or details include tags like #Launch.",
+      "Mobile review can spot tagged projects and contexts without opening each card.",
+      "Multiple unique hashtags are summarized with accessible labels for quick scanning."
+    ]
+  },
+  {
     id: "2026-05-21-next-weekday-task-hints",
     title: "Next Weekday Task Hints",
     bullets: [
