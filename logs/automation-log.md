@@ -1,4 +1,18 @@
 
+## 2026-05-22 01:07:28 MDT
+
+- Added mobile-first Removable Filter Chips for faster filter cleanup without resetting the whole Keeply view.
+- Active filter summary chips now render as accessible tap targets with remove labels and a small `×` affordance; tapping one resets only that label/date/priority/status/color/pin/search filter.
+- Updated What's New metadata with latest id `2026-05-22-removable-filter-chips`, title `Removable Filter Chips`, and 3 user-facing bullets.
+- UI/code areas touched: active filter summary helper/removal patch in `active-filters.mjs`, filter-chip rendering and delegated click handling in `app.js`, chip styling in `styles.css`, release metadata, and `test/active-filters.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local UI/filter behavior only.
+- Verification: full `npm test` passed with 236 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4207 npm start` served `http://127.0.0.1:4207/` with HTTP 200. Browser verification confirmed the `Removable Filter Chips` What's New popup/dismissal persistence, a visible `Remove Sky notes filter` chip, one-chip removal clearing only the selected filter, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-removable-filter-chips` in the What's New popup, dismissed to `keeply-last-seen-update`, showed a visible `Remove Work filter` chip, one-chip removal cleared the active chip, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed app/style/metadata/helper/test files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives.
+- Git status: feature commit `79e6bb0` (`Add removable filter chips`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a10007b88e4c2284ca60b48` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a10007b88e4c2284ca60b48--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 00:05:59 MDT
 
 - Added mobile-first Attachment Badges for faster file/handoff scanning across notes and tasks.
