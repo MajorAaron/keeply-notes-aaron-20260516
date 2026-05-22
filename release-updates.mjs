@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-food-badges",
+    title: "Food Badges",
+    bullets: [
+      "Notes and tasks now show compact Grocery, Recipe, Meal, or Dining badges for food plans.",
+      "Mobile review can spot shopping lists, meal prep, recipes, and reservations without opening every card.",
+      "Common app-menu and delivery-pipeline phrases stay quiet so food badges remain focused."
+    ]
+  },
+  {
     id: "2026-05-22-travel-badges",
     title: "Travel Badges",
     bullets: [

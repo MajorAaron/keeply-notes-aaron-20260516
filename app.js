@@ -82,6 +82,7 @@ import { getItemSectionMeta } from "./item-section-meta.mjs";
 import { getItemQuoteMeta } from "./item-quote-meta.mjs";
 import { getItemUrgencyMeta } from "./item-urgency-meta.mjs";
 import { getItemTravelMeta } from "./item-travel-meta.mjs";
+import { getItemFoodMeta } from "./item-food-meta.mjs";
 import { getOverdueTaskNudge } from "./overdue-task-actions.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
@@ -2074,6 +2075,12 @@ function renderNote(note) {
   travelMetaElement.textContent = travelMeta.label;
   travelMetaElement.setAttribute("aria-label", travelMeta.ariaLabel);
   travelMetaElement.dataset.tone = travelMeta.tone || "";
+  const foodMeta = getItemFoodMeta(noteSearchText);
+  const foodMetaElement = node.querySelector(".note-food-meta");
+  foodMetaElement.hidden = !foodMeta.available;
+  foodMetaElement.textContent = foodMeta.label;
+  foodMetaElement.setAttribute("aria-label", foodMeta.ariaLabel);
+  foodMetaElement.dataset.tone = foodMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(noteSearchText);
   const decisionMetaElement = node.querySelector(".note-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
@@ -2380,6 +2387,12 @@ function renderTask(task) {
   travelMetaElement.textContent = travelMeta.label;
   travelMetaElement.setAttribute("aria-label", travelMeta.ariaLabel);
   travelMetaElement.dataset.tone = travelMeta.tone || "";
+  const foodMeta = getItemFoodMeta(taskSearchText);
+  const foodMetaElement = node.querySelector(".task-food-meta");
+  foodMetaElement.hidden = !foodMeta.available;
+  foodMetaElement.textContent = foodMeta.label;
+  foodMetaElement.setAttribute("aria-label", foodMeta.ariaLabel);
+  foodMetaElement.dataset.tone = foodMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(taskSearchText);
   const decisionMetaElement = node.querySelector(".task-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
