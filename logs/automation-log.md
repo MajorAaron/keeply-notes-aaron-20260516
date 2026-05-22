@@ -1,4 +1,18 @@
 
+## 2026-05-22 09:05:19 MDT
+
+- Added mobile-first Mention Badges for faster scanning of people and group callouts across notes and tasks.
+- Notes and tasks now show compact standalone `@mention` pills, summarize multiple unique mentions from the first handle, and ignore email addresses so contact text does not create noisy badges.
+- Updated What's New metadata with latest id `2026-05-22-mention-badges`, title `Mention Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared deterministic mention detector in `item-mention-meta.mjs`, note/task metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-mention-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local @mention detection only.
+- Verification: focused `node --check item-mention-meta.mjs && node --test test/item-mention-meta.test.mjs` passed with 4 tests; full `npm test` passed with 248 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4214 npm start` served `http://127.0.0.1:4214/` with HTTP 200. Browser verification confirmed the `Mention Badges` What's New popup/dismissal persistence, dynamic-imported local mention metadata returning `@Maya +1` while ignoring `alex@example.com`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-mention-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `item-mention-meta.mjs` and returned `@Maya +1` while ignoring `alex@example.com`, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible @mention cards, so the deployed helper/import path was smoke-tested directly without mutating remote data.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `3cae286` (`Add mention context badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a107093b9378fb0be8ad0e3` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a107093b9378fb0be8ad0e3--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 08:06:52 MDT
 
 - Added mobile-first Task Repeat Badges for faster scanning of recurring open tasks.
