@@ -74,6 +74,7 @@ import { getItemTagMeta } from "./item-tag-meta.mjs";
 import { getItemQuestionMeta } from "./item-question-meta.mjs";
 import { getItemDecisionMeta } from "./item-decision-meta.mjs";
 import { getItemAttachmentMeta } from "./item-attachment-meta.mjs";
+import { getItemCodeMeta } from "./item-code-meta.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -1991,6 +1992,12 @@ function renderNote(note) {
   attachmentMetaElement.textContent = attachmentMeta.label;
   attachmentMetaElement.setAttribute("aria-label", attachmentMeta.ariaLabel);
   attachmentMetaElement.dataset.tone = attachmentMeta.tone || "";
+  const codeMeta = getItemCodeMeta(noteSearchText);
+  const codeMetaElement = node.querySelector(".note-code-meta");
+  codeMetaElement.hidden = !codeMeta.available;
+  codeMetaElement.textContent = codeMeta.label;
+  codeMetaElement.setAttribute("aria-label", codeMeta.ariaLabel);
+  codeMetaElement.dataset.tone = codeMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(noteSearchText);
   const decisionMetaElement = node.querySelector(".note-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;
@@ -2261,6 +2268,12 @@ function renderTask(task) {
   attachmentMetaElement.textContent = attachmentMeta.label;
   attachmentMetaElement.setAttribute("aria-label", attachmentMeta.ariaLabel);
   attachmentMetaElement.dataset.tone = attachmentMeta.tone || "";
+  const codeMeta = getItemCodeMeta(taskSearchText);
+  const codeMetaElement = node.querySelector(".task-code-meta");
+  codeMetaElement.hidden = !codeMeta.available;
+  codeMetaElement.textContent = codeMeta.label;
+  codeMetaElement.setAttribute("aria-label", codeMeta.ariaLabel);
+  codeMetaElement.dataset.tone = codeMeta.tone || "";
   const decisionMeta = getItemDecisionMeta(taskSearchText);
   const decisionMetaElement = node.querySelector(".task-decision-meta");
   decisionMetaElement.hidden = !decisionMeta.available;

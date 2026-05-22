@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-code-cue-badges",
+    title: "Code Cue Badges",
+    bullets: [
+      "Notes and tasks now show compact Code or Cmd badges when text mentions snippets, files, or commands.",
+      "Mobile scanning can spot developer handoffs without opening every card.",
+      "Mixed code and command references summarize as a combined cue with accessible labels."
+    ]
+  },
+  {
     id: "2026-05-22-removable-filter-chips",
     title: "Removable Filter Chips",
     bullets: [

@@ -2059,6 +2059,7 @@ select {
 .note-tag-meta,
 .note-question-meta,
 .note-attachment-meta,
+.note-code-meta,
 .note-decision-meta,
 .note-checklist-meta {
   display: inline-flex;
@@ -2218,6 +2219,7 @@ select {
 .note-card[data-color="ink"] .note-tag-meta,
 .note-card[data-color="ink"] .note-question-meta,
 .note-card[data-color="ink"] .note-attachment-meta,
+.note-card[data-color="ink"] .note-code-meta,
 .note-card[data-color="ink"] .note-decision-meta,
 .note-card[data-color="ink"] .note-checklist-meta {
   background: rgba(255, 255, 255, 0.1);
@@ -2318,6 +2320,7 @@ select {
 .task-tag-meta,
 .task-question-meta,
 .task-attachment-meta,
+.task-code-meta,
 .task-decision-meta,
 .task-blocker-meta,
 .task-time-estimate-meta,
@@ -2450,6 +2453,25 @@ select {
 .task-attachment-meta[data-tone="image"] {
   background: rgba(156, 224, 182, 0.26);
   color: #315d40;
+}
+
+.note-code-meta,
+.task-code-meta {
+  background: rgba(34, 45, 58, 0.1);
+  color: #314153;
+  letter-spacing: 0.01em;
+}
+
+.note-code-meta[data-tone="command"],
+.task-code-meta[data-tone="command"] {
+  background: rgba(129, 199, 238, 0.2);
+  color: #315569;
+}
+
+.note-code-meta[data-tone="mixed"],
+.task-code-meta[data-tone="mixed"] {
+  background: rgba(248, 215, 95, 0.34);
+  color: #6f5210;
 }
 
 .note-decision-meta,
