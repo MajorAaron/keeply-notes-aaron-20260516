@@ -127,6 +127,21 @@ test("buildTaskCaptureFields applies weekday title hints", () => {
     dueAt: "2026-05-22",
     usedHints: true
   });
+
+  assert.deepEqual(
+    buildTaskCaptureFields(
+      { title: "Draft launch notes next Friday @work", details: "", label: "ideas", priority: "normal", dueAt: "2026-05-19" },
+      { today: "2026-05-18" }
+    ),
+    {
+      title: "Draft launch notes",
+      details: "",
+      label: "work",
+      priority: "normal",
+      dueAt: "2026-05-29",
+      usedHints: true
+    }
+  );
 });
 
 test("buildTaskCaptureFields applies same-day evening title hints", () => {

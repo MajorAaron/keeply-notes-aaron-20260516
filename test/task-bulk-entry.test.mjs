@@ -122,6 +122,20 @@ test("parseBulkTaskLine extracts weekday scheduling hints", () => {
     priority: "",
     label: "home"
   });
+
+  assert.deepEqual(parseBulkTaskLine("Send budget next Friday @work", { today: "2026-05-18" }), {
+    title: "Send budget",
+    dueAt: "2026-05-29",
+    priority: "",
+    label: "work"
+  });
+
+  assert.deepEqual(parseBulkTaskLine("Renew parking next Monday", { today: "2026-05-18" }), {
+    title: "Renew parking",
+    dueAt: "2026-05-25",
+    priority: "",
+    label: ""
+  });
 });
 
 test("bulk task weekday hints override shared due dates per line", () => {

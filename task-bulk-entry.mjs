@@ -36,7 +36,7 @@ export function parseBulkTaskLine(line, options = {}) {
   let clearsDue = false;
 
   title = title.replace(
-    /\b(next\s+week|this\s+weekend|weekend|today|tonight|eod|end\s+of\s+day|tomorrow|this\s+(?:sunday|monday|tuesday|wednesday|thursday|friday|saturday)|sunday|monday|tuesday|wednesday|thursday|friday|saturday|no\s+date|unscheduled|someday)\b/gi,
+    /\b(next\s+week|this\s+weekend|weekend|today|tonight|eod|end\s+of\s+day|tomorrow|(?:this|next)\s+(?:sunday|monday|tuesday|wednesday|thursday|friday|saturday)|sunday|monday|tuesday|wednesday|thursday|friday|saturday|no\s+date|unscheduled|someday)\b/gi,
     (match) => {
       const hint = match.toLowerCase().replace(/\s+/g, "-");
       if (isNoDateHint(hint)) {
@@ -136,7 +136,7 @@ function getRelativeDate(value, baseDate) {
   const date = new Date(baseDate);
   const weekday = getWeekdayHint(value);
   if (weekday !== null) {
-    return toDateInput(getUpcomingWeekdayDate(date, weekday));
+    return toDateInput(getUpcomingWeekdayDate(date, weekday, value.startsWith("next-")));
   }
 
   if (value === "tomorrow") {
@@ -150,14 +150,14 @@ function getRelativeDate(value, baseDate) {
 }
 
 function getWeekdayHint(value) {
-  const normalized = String(value || "").replace(/^this-/, "");
+  const normalized = String(value || "").replace(/^(?:this|next)-/, "");
   return weekdayHints.has(normalized) ? weekdayHints.get(normalized) : null;
 }
 
-function getUpcomingWeekdayDate(date, weekday) {
+function getUpcomingWeekdayDate(date, weekday, forceFollowingWeek = false) {
   const next = new Date(date);
   const daysUntilWeekday = (weekday - next.getDay() + 7) % 7;
-  next.setDate(next.getDate() + daysUntilWeekday);
+  next.setDate(next.getDate() + daysUntilWeekday + (forceFollowingWeek ? 7 : 0));
   return next;
 }
 

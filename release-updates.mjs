@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-21-next-weekday-task-hints",
+    title: "Next Weekday Task Hints",
+    bullets: [
+      "Task capture now understands phrases like next Friday and next Monday.",
+      "Single tasks and pasted task lists set the matching next-week due date automatically.",
+      "The hint text is stripped from saved titles so quick mobile capture stays clean."
+    ]
+  },
+  {
     id: "2026-05-21-amount-badges",
     title: "Amount Badges",
     bullets: [
