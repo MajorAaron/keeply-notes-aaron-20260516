@@ -1,4 +1,18 @@
 
+## 2026-05-22 03:08:03 MDT
+
+- Added mobile-first Overdue Task Nudges for faster triage of late tasks in the Tasks view.
+- Overdue task cards now show a focused nudge panel with large `Snooze to tomorrow` and `No date` actions; completed, archived, trash, today, future, and unscheduled tasks stay quiet.
+- Updated What's New metadata with latest id `2026-05-22-overdue-task-nudges`, title `Overdue Task Nudges`, and 3 user-facing bullets.
+- UI/code areas touched: deterministic helper in `overdue-task-actions.mjs`, task-card rendering in `app.js`, task template markup in `index.html`, mobile nudge styling in `styles.css`, release metadata, package test wiring, and `test/overdue-task-actions.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local overdue-task action logic only.
+- Verification: full `npm test` passed with 236 passing tests plus the final metadata/action group including the 2 new overdue-nudge tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4209 npm start` served `http://127.0.0.1:4209/` with HTTP 200. Browser verification confirmed the `Overdue Task Nudges` What's New popup/dismissal persistence, two visible overdue nudge panels in Tasks with `Snooze to tomorrow` and `No date` actions, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-overdue-task-nudges` in the What's New popup, dismissed to `keeply-last-seen-update`, dynamically imported `overdue-task-actions.mjs` and returned the expected visible nudge actions for an overdue task, reported no document horizontal overflow, and had no browser console errors. Production seed data did not include visible overdue tasks, so the deployed helper/import path was smoke-tested directly without mutating remote data.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment; existing broad-regex matches for `task-composer-priority-preset` and `task-scheduled-time-badges` were reviewed as false positives.
+- Git status: feature commit `b3515af` (`Add overdue task nudges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a101cc5a2dc61cc133040c2` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a101cc5a2dc61cc133040c2--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 02:06:30 MDT
 
 - Added mobile-first Code Cue Badges for faster scanning of developer-oriented notes and tasks.
