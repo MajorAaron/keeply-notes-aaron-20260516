@@ -1,4 +1,18 @@
 
+## 2026-05-22 05:07:43 MDT
+
+- Added mobile-first Ask Draft Resume so in-progress Ask Keeply questions survive reloads and mobile context switches.
+- Ask Keeply now saves a normalized local question draft while typing, restores it on the next load, and shows a compact saved-draft row with an accessible Clear action.
+- Updated What's New metadata with latest id `2026-05-22-ask-draft-resume`, title `Ask Draft Resume`, and 3 user-facing bullets.
+- UI/code areas touched: deterministic draft helper in `ask-draft.mjs`, Ask Keeply localStorage/status wiring in `app.js`, Ask markup in `index.html`, mobile status styling in `styles.css`, release metadata, package test wiring, and `test/ask-draft.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; Ask draft persistence is deterministic localStorage behavior only, and existing Ask Claude behavior is unchanged.
+- Verification: focused `node --check ask-draft.mjs && node --test test/ask-draft.test.mjs && node scripts/check-release-updates.mjs` passed; full `npm test` passed with 240 passing tests including the new Ask draft coverage; `git diff --check` passed.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4211 npm start` served `http://127.0.0.1:4211/` with HTTP 200. Browser verification confirmed the `Ask Draft Resume` What's New popup, localStorage draft save while typing, visible saved-draft status row, restored Ask input after reload, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-22-ask-draft-resume` in the What's New popup, saved an Ask draft to `keeply-ask-draft-v1`, restored the draft after reload with the status row visible, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `e599525` (`Add Ask Keeply draft resume`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a1038deebceb527e6da4499` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a1038deebceb527e6da4499--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-22 04:06:28 MDT
 
 - Added mobile-first Section Badges for faster scanning of structured notes and task details.
