@@ -75,6 +75,7 @@ import { getItemQuestionMeta } from "./item-question-meta.mjs";
 import { getItemDecisionMeta } from "./item-decision-meta.mjs";
 import { getItemAttachmentMeta } from "./item-attachment-meta.mjs";
 import { getItemCodeMeta } from "./item-code-meta.mjs";
+import { getOverdueTaskNudge } from "./overdue-task-actions.mjs";
 import { getFocusBriefItemAction, hydrateFocusBriefActions } from "./focus-brief-actions.mjs";
 
 const STORAGE_KEY = "keeply-data-v2";
@@ -2317,6 +2318,10 @@ function renderTask(task) {
   const dueShortcutRow = node.querySelector(".task-due-shortcuts");
   const priorityShortcutRow = node.querySelector(".task-priority-shortcuts");
   const labelShortcutRow = node.querySelector(".task-label-shortcuts");
+  const overdueNudge = node.querySelector(".task-overdue-nudge");
+  const overdueTitle = node.querySelector(".task-overdue-title");
+  const overdueSummary = node.querySelector(".task-overdue-summary");
+  const overdueButtons = node.querySelector(".task-overdue-buttons");
 
   checkButton.hidden = state.view !== "tasks";
   checkButton.setAttribute("aria-label", task.completed ? "Reopen task" : "Complete task");
@@ -2324,6 +2329,21 @@ function renderTask(task) {
   dueShortcutRow.hidden = state.view !== "tasks" || task.completed;
   priorityShortcutRow.hidden = state.view !== "tasks" || task.completed;
   labelShortcutRow.hidden = state.view !== "tasks" || task.completed;
+  const overdueNudgeState = getOverdueTaskNudge(task);
+  overdueNudge.hidden = state.view !== "tasks" || !overdueNudgeState.visible;
+  overdueTitle.textContent = overdueNudgeState.title;
+  overdueSummary.textContent = overdueNudgeState.summary;
+  overdueButtons.replaceChildren(
+    ...overdueNudgeState.actions.map((action) => {
+      const button = document.createElement("button");
+      button.className = "task-overdue-button";
+      button.type = "button";
+      button.textContent = action.label;
+      button.setAttribute("aria-label", action.ariaLabel);
+      button.addEventListener("click", () => updateTask(task.id, { dueAt: action.dueAt }, action.toast));
+      return button;
+    })
+  );
   dueShortcutRow.replaceChildren(
     ...getVisibleTaskDueShortcuts(task).map((shortcut) => {
       const button = document.createElement("button");

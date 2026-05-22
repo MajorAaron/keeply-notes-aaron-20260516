@@ -1,5 +1,14 @@
 export const appUpdates = [
   {
+    id: "2026-05-22-overdue-task-nudges",
+    title: "Overdue Task Nudges",
+    bullets: [
+      "Overdue task cards now surface a focused nudge panel in the Tasks view.",
+      "Snooze a late task to tomorrow or clear its date from larger mobile tap targets.",
+      "Completed and archived tasks stay quiet so nudges focus on work that still needs attention."
+    ]
+  },
+  {
     id: "2026-05-22-code-cue-badges",
     title: "Code Cue Badges",
     bullets: [
