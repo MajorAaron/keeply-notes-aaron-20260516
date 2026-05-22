@@ -1,4 +1,18 @@
 
+## 2026-05-21 23:06:24 MDT
+
+- Added mobile-first Decision Badges for faster scanning of outcomes and sign-offs across notes and tasks.
+- Notes and tasks now show compact `Decision`, `Approved`, or `Rejected` pills when titles/bodies/details include decision language such as `final call`, `signed off`, or `rejected`.
+- Updated What's New metadata with latest id `2026-05-21-decision-badges`, title `Decision Badges`, and 3 user-facing bullets.
+- UI/code areas touched: shared decision detector/helper in `item-decision-meta.mjs`, note/task card metadata rendering in `app.js`, note/task templates in `index.html`, badge styling in `styles.css`, release metadata, package test wiring, and `test/item-decision-meta.test.mjs`. No new dependencies or Netlify functions were added.
+- AI/API behavior: no new AI endpoint or API key usage was added; the improvement is deterministic local decision-cue detection only.
+- Verification: full `npm test` passed with 235 passing tests; `git diff --check` passed; `node scripts/check-release-updates.mjs` ran as part of `npm test`.
+- Local smoke verification: `HOST=127.0.0.1 PORT=4205 npm start` served `http://127.0.0.1:4205/` with HTTP 200. Browser verification confirmed the `Decision Badges` What's New popup/dismissal persistence, dynamic-imported local decision metadata returning `Approved`, no document-level horizontal overflow, and no browser console errors. The local server was stopped after verification.
+- Production verification: deploy permalink loaded, exposed latest update id `2026-05-21-decision-badges` in the What's New popup, dismissed to `keeply-last-seen-update`, showed visible `Decision` badges on seed notes, dynamically imported `item-decision-meta.mjs` and returned `Approved`, reported no document horizontal overflow, and had no browser console errors.
+- Secret scan of changed app/index/style/metadata/helper/test/package files found no committed `ANTHROPIC_API_KEY`, long `sk-` key, secret assignment, token assignment, or API key assignment.
+- Git status: feature commit `832d683` (`Add decision context badges`) was pushed to `origin main`; unrelated untracked `backups/` was left untouched.
+- Netlify production deploy succeeded with `npx netlify deploy --prod --dir . --no-build --json`. Feature deploy `6a0fe4299b7ee83f00d42475` is live at `https://keeply-notes-aaron-20260516.netlify.app`; deploy permalink: `https://6a0fe4299b7ee83f00d42475--keeply-notes-aaron-20260516.netlify.app`
+
 ## 2026-05-21 22:06:12 MDT
 
 - Added mobile-first Question Badges for faster unresolved-ask scanning across notes and tasks.
